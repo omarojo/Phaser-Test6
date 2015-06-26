@@ -15,11 +15,13 @@
         }
     </style>
     <script src="../phaser.min.js"></script>
+    <script src="scripts/socket.io.js"></script>
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
     <script type="text/javascript" src="scripts/Boot.js"></script>
     <script type="text/javascript" src="scripts/Preloader.js"></script>
     <script type="text/javascript" src="scripts/MainMenu.js"></script>
     <script type="text/javascript" src="scripts/SlideShow.js"></script>
+    <script type="text/javascript" src="scripts/Tutorial.js"></script>
     <script type="text/javascript" src="scripts/Thread.js"></script>
     <script type="text/javascript" src="scripts/Game.js"></script>
     
@@ -36,6 +38,7 @@
     game.state.add('Preloader', Kente.Preloader);
     game.state.add('MainMenu', Kente.MainMenu);
     game.state.add('SlideShow', Kente.SlideShow);
+    game.state.add('Tutorial', Kente.Tutorial);
     game.state.add('Game', Kente.Game);
 
     game.state.start('Boot');

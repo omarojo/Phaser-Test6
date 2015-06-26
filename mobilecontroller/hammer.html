@@ -1,0 +1,81 @@
+<head>
+<style type="text/css">
+	.thread{
+		background-color: red;
+		width: 100px;
+		height: 240px;
+		padding: 10px;
+		display: inline-block;
+	}
+	 body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            
+            -webkit-user-select: none;
+                    user-select: none;
+        }
+</style>
+<!-- Include meta tag to ensure proper rendering and touch zooming -->
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<!-- Include the jQuery library -->
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<!-- Hammer Touch Library -->
+<script src="https://hammerjs.github.io/dist/hammer.js"></script>
+
+<!-- <script src="https://cdn.socket.io/socket.io-1.3.5.js"></script> -->
+<script src="/socket.io.js"></script>
+</head>
+
+
+<body>
+	<div id="thread1" class="thread"></div>
+	<div id="thread2" class="thread" ></div>
+	<div id="thread3" class="thread"></div>
+	<div id="thread4" class="thread"></div>
+	<div id="thread5" class="thread"></div>
+
+</body>
+
+<script type="text/javascript">
+window.onload = function () {
+	var socket = io('http://10.159.23.140:3000');
+
+	var thread1 = document.getElementById('thread1');
+	var thread2 = document.getElementById('thread2');
+	var thread3 = document.getElementById('thread3');
+	var thread4 = document.getElementById('thread4');
+	var thread5 = document.getElementById('thread5');
+
+	// create a simple instance
+	// by default, it only adds horizontal recognizers
+	var t1 = new Hammer(thread1);
+	var t2 = new Hammer(thread2);
+	var t3 = new Hammer(thread3);
+	var t4 = new Hammer(thread4);
+	var t5 = new Hammer(thread5);
+
+	t1.get('press').set({ time: 0 });
+	t2.get('press').set({ time: 100 });
+	t3.get('press').set({ time: 100 });
+	t4.get('press').set({ time: 100 });
+	t5.get('press').set({ time: 100 });
+
+	// listen to events...
+	t1.on("press pressup", function(ev) {
+	    if(ev.type == 'press'){
+	    	console.log('::Thread1 press');
+			socket.emit('threadTouch', {thread:1,state:'held'});
+			$('#thread1').css( 'background-color', 'blue' );
+	    }else if(ev.type == 'pressup'){
+	    	console.log('::Thread1 pressup');
+			socket.emit('threadTouch', {thread:1,state:'loose'});
+			$('#thread1').css( 'background-color', 'red' );
+	    }
+	  		  	
+	});
+	    
+
+}
+
+</script>

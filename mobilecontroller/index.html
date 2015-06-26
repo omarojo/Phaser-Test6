@@ -1,0 +1,162 @@
+<head>
+<style type="text/css">
+	.thread{
+		background-color: red;
+		width: 100px;
+		height: 150px;
+		padding: 10px;
+		display: inline-block;
+	}
+	#beaterDown{
+		background-color: green;
+		width: 285px;
+		height: 70px;
+		padding: 10px;
+		display: inline-block;
+	}
+	#beaterUp{
+		background-color: green;
+		width: 290px;
+		height: 70px;
+		padding: 10px;
+		display: inline-block;
+	}
+	.shuttle{
+		background-color: orange;
+		width: 600px;
+		height: 100px;
+		padding: 10px;
+		display: inline-block;
+	}
+	 body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            
+            -webkit-user-select: none;
+                    user-select: none;
+        }
+</style>
+<!-- Include meta tag to ensure proper rendering and touch zooming -->
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+
+<!-- Include jQuery Mobile stylesheets -->
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+
+<!-- Include the jQuery library -->
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<!-- Include the jQuery Mobile library -->
+<!-- <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> -->
+<script src="jquery.mobile-events.min.js"></script>
+<!-- <script src="https://cdn.socket.io/socket.io-1.3.5.js"></script> -->
+<script src="/socket.io.js"></script>
+</head>
+
+
+<body>
+	<div id="thread1" class="thread">Thread 1</div>
+	<div id="thread2" class="thread">Thread 2</div>
+	<div id="thread3" class="thread">Thread 3</div>
+	<div id="thread4" class="thread">Thread 4</div>
+	<div id="thread5" class="thread">thread 5</div>
+
+	<div id="beaterDown" class="beater">BEATER Down</div>
+	<div id="beaterUp" class="beater">BEATER Up</div>
+	<div id="shuttle" class="shuttle">SHUTTLE</div>
+
+</body>
+
+<script type="text/javascript">
+window.onload = function () {
+	var socket = io('http://10.159.23.21:3000');
+
+	$('#thread1').on('tapstart', function(e) { 
+		console.log('::Thread1 tapstart');
+		socket.emit('threadTouch', {thread:1,state:'held'});
+		$( this ).css( 'background-color', 'blue' );
+	});
+	$('#thread1').on('tapend', function(e) { 
+		console.log('::Thread2 tapsEnd');
+		socket.emit('threadTouch', {thread:1,state:'loose'});
+		$( this ).css( 'background-color', 'red' );
+	});
+
+	$('#thread2').on('tapstart', function(e) {
+		console.log('::Thread2 tapstart');
+		socket.emit('threadTouch', {thread:2,state:'held'});
+		$( this ).css( 'background-color', 'blue' );
+	});
+	$('#thread2').on('tapend', function(e) {
+		console.log('::Thread2 tapsEnd');
+		socket.emit('threadTouch', {thread:2,state:'loose'});
+		$( this ).css( 'background-color', 'red' );
+	});
+
+	$('#thread3').on('tapstart', function(e) {
+		console.log('::Thread3 tapstart');
+		socket.emit('threadTouch', {thread:3,state:'held'});
+		$( this ).css( 'background-color', 'blue' );
+	});
+	$('#thread3').on('tapend', function(e) { 
+		console.log('::Thread3 tapsEnd');
+		socket.emit('threadTouch', {thread:3,state:'loose'});
+		$( this ).css( 'background-color', 'red' );
+	});
+
+	$('#thread4').on('tapstart', function(e) {
+		console.log('::Thread4 tapstart');
+		socket.emit('threadTouch', {thread:4,state:'held'});
+		$( this ).css( 'background-color', 'blue' );
+	});
+	$('#thread4').on('tapend', function(e) { 
+		console.log('::Thread4 tapsEnd');
+		socket.emit('threadTouch', {thread:4,state:'loose'});
+		$( this ).css( 'background-color', 'red' );
+	});
+
+	$('#thread5').on('tapstart', function(e) {
+		console.log('::Thread5 tapstart');
+		socket.emit('threadTouch', {thread:5,state:'held'});
+		$( this ).css( 'background-color', 'blue' );
+	});
+	$('#thread5').on('tapend', function(e) { 
+		console.log('::Thread5 tapsEnd');
+		socket.emit('threadTouch', {thread:5,state:'loose'});
+		$( this ).css( 'background-color', 'red' );
+	});
+
+	//Beater
+	$('#beaterUp').on('tapstart', function(e) { 
+		console.log('::BeaterUp tapstart');
+		socket.emit('beaterClick', {state:'up'});
+		$( this ).css( 'background-color', 'blue' );
+	});
+	$('#beaterUp').on('tapend', function(e) { 
+		// console.log('::BeaterUp tapstart');
+		// socket.emit('beaterClick', {state:'up'});
+		$( this ).css( 'background-color', 'green' );
+	});
+	$('#beaterDown').on('tapstart', function(e) { 
+		console.log('::BeaterDown tapstart');
+		socket.emit('beaterClick', {state:'down'});
+		$( this ).css( 'background-color', 'blue' );
+	});
+	$('#beaterDown').on('tapend', function(e) { 
+		// console.log('::BeaterDown tapstart');
+		// socket.emit('beaterClick', {state:'down'});
+		$( this ).css( 'background-color', 'green' );
+	});
+	$('#shuttle').on('tapstart', function(e) { 
+		console.log('::Shuttle tapstart');
+		socket.emit('shuttleTouch', {state:'touched'});
+		$( this ).css( 'background-color', 'blue' );
+	});
+	$('#shuttle').on('tapend', function(e) { 
+		// console.log('::BeaterDown tapstart');
+		// socket.emit('beaterClick', {state:'down'});
+		$( this ).css( 'background-color', 'orange' );
+	});
+}
+
+</script>

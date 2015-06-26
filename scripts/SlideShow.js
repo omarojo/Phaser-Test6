@@ -1,7 +1,9 @@
 Kente.SlideShow = function (game) {
+	var self = this;
+	this.slides = []; //Array of slides
+	this.photos; //Group container, has all the slide objects for rendering
 
-	this.slides = [];
-	this.photos;
+	
 };
 
 Kente.SlideShow.prototype = {
@@ -15,18 +17,16 @@ Kente.SlideShow.prototype = {
 	},
 	create: function () {
 		console.log('::SlideShow Loaded');
+		// Kente.socket.removeAllListeners('threadTouch'); //Remove all previous listeners
+		Kente.removeAllSocketListeners();
+		var self = this;
+		Kente.socket.on('threadTouch', function(data){
+			self.threadTouched(data);
+		});
+
 		//this.add.sprite(0,0,'background');
-		this.add.existing(Kente.background);
-		Kente.background.events.onInputDown.removeAll(); //removes all events (the click event)
-	    //Position all Photos
-	    // var slide1 = this.add.sprite(0,0, 'slide6');
-	    // slide1.scale.set(2.0);
-	    // this.add.tween(slide1.scale).to( { x: 2, y: 2 }, 2000, Phaser.Easing.Linear.None, true);
-	    // var slide2 = this.add.sprite(0,0, 'slide2');
-	    // var slide3 = this.add.sprite(0,0, 'slide3');
-	    // var slide4 = this.add.sprite(0,0, 'slide4');
-	    // var slide5 = this.add.sprite(0,0, 'slide5');
-	    // var slide6 = this.add.sprite(0,0, 'slide6');
+		// this.add.existing(Kente.background);
+		//Kente.background.events.onInputDown.removeAll(); //removes all events (the click event)
 
 	    this.photos = this.add.group();
 	    
@@ -47,23 +47,36 @@ Kente.SlideShow.prototype = {
 
 	    this.slides[5].twAlpha.start();
 	    this.slides[5].twPos.start();
-	    // this.slides[5].tw2.start();
-	    console.log(this.slides);
+	    // console.log(this.slides);
 		
-		var style = { font: "65px Arial", fill: "#ff0044", align: "center" };
-	    var text = this.game.add.text(this.game.world.centerX, this.game.world.centerY, "Pull a String \nto begin", style);
-	    text.anchor.set(0.5);
+		// var style = { font: "65px Arial", fill: "#ff0044", align: "center" };
+	 //    var text = this.game.add.text(this.game.world.centerX, this.game.world.centerY, "Pull a String \nto begin", style);
+	 //    text.anchor.set(0.5);
 
-	    var button = new Phaser.Sprite(this.game,1000,1400,'btn');
-	    this.add.existing(button);
-	    button.inputEnabled = true;
-	    button.events.onInputDown.add(this.crop,this);
+	 	// Button to crop and scale
+	    // var button = new Phaser.Sprite(this.game,1000,1400,'btn');
+	    // this.add.existing(button);
+	    // button.inputEnabled = true;
+	    // button.events.onInputDown.add(this.crop,this);
 
+	    // Instructional Timer 1 
+	    Kente.sounds[0].active = false;
 	},
 	update: function(){
-		// this.slides.forEach(function(item){
-		// 	item.x -= 10;
-		// });
+		//Replay Instruction #1 every 5 seconds
+		if(!Kente.sounds[0].isPlaying && Kente.sounds[0].active == false){
+			Kente.sounds[0].active = true;
+			console.log(':: Will Play Instruction 1 in 5 secs');
+			this.game.time.events.add(5000,function (){
+					this.playInstructionAudio(0);
+			}, this);
+		}
+	},
+	threadTouched: function(data){
+		console.log(data);
+		Kente.sounds[0].stop();
+		this.game.state.start('Tutorial', true, false);
+		// console.log(this.slides);
 	},
 	crop:function(){
 		var copyText = this.photos.generateTexture(1,this.game.renderer);
@@ -73,7 +86,7 @@ Kente.SlideShow.prototype = {
 	    copy.updateCrop();
 	    copy.scale.setTo (0.5,0.5);
 	    
-	 //    copy.inputEnabled = true;
+	    // copy.inputEnabled = true;
 		// copy.events.onInputDown.add(this.crop, this);
 
 	    this.add.existing(copy);
@@ -82,5 +95,15 @@ Kente.SlideShow.prototype = {
 		this.photos.sendToBack(this.photos.getTop());
 		this.photos.getBottom().alpha = 1;
 		this.photos.getTop().twAlpha.start();
+	},
+	playInstructionAudio: function(id){
+		switch (id){
+			case 0:{
+				Kente.sounds[0].play();
+				Kente.sounds[0].active = false;
+				break;
+			}
+		}
+
 	}
 };
