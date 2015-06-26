@@ -23,6 +23,9 @@ Kente.SlideShow.prototype = {
 		Kente.socket.on('threadTouch', function(data){
 			self.threadTouched(data);
 		});
+		
+		this.key2 = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
+	    this.key2.onDown.add(this.threadTouched, this);
 
 		//this.add.sprite(0,0,'background');
 		// this.add.existing(Kente.background);
