@@ -37,11 +37,11 @@ Kente.Tutorial.prototype = {
 			self.shuttleTouched(data);
 		});
 		// KeyBoard
-		this.key1 = game.input.keyboard.addKey(Phaser.Keyboard.ONE);
-	    this.key1.onDown.add(this.threadTouched(), this);
+		this.key1 = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
+	    this.key1.onDown.add(this.threadTouched, this);
 
-	    this.key2 = game.input.keyboard.addKey(Phaser.Keyboard.TWO);
-	    this.key2.onDown.add(this.shuttleTouched(), this);
+	    this.key2 = this.game.input.keyboard.addKey(Phaser.Keyboard.TWO);
+	    this.key2.onDown.add(this.shuttleTouched, this);
 
 
 		//Add the Background
