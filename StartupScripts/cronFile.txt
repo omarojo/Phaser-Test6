@@ -1,0 +1,1 @@
+@reboot /bin/sh /Users/omar_juarez/Documents/WebDev/Phaser/Phaser-Test6/StartupScripts/runServerScript.sh

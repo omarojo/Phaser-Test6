@@ -1,0 +1,12 @@
+{
+  "name": "SensateSocketServer",
+  "description": "Fabricate project",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "4.x",
+    "socket.io": "latest",
+    "cors": "latest",
+    "body-parser": "latest"
+  }
+}
