@@ -20,22 +20,27 @@
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
     <script type="text/javascript" src="scripts/Boot.js"></script>
     <script type="text/javascript" src="scripts/Preloader.js"></script>
+    <script type="text/javascript" src="scripts/InstructionsGroup.js"></script>
+    <script type="text/javascript" src="scripts/Thread.js"></script>
+    <script type="text/javascript" src="scripts/WarpGroup.js"></script>
     <script type="text/javascript" src="scripts/MainMenu.js"></script>
     <script type="text/javascript" src="scripts/SlideShow.js"></script>
     <script type="text/javascript" src="scripts/Tutorial.js"></script>
-    <script type="text/javascript" src="scripts/Thread.js"></script>
     <script type="text/javascript" src="scripts/Game.js"></script>
     
 </head>
 <body>
 <div id='app' class="app"><div>
+<div id='second_game' class="app"><div>
 
 <script type="text/javascript">
     window.onload = function () {
-
+        
+   
     var game = new Phaser.Game(1200, 1920, Phaser.AUTO, 'app');
-    game.preserveDrawingBuffer = true;
+    game.preserveDrawingBuffer = true; //for the screenshots, but people say this can make the game slow.
     
+
     game.state.add('Boot', Kente.Boot);
     game.state.add('Preloader', Kente.Preloader);
     game.state.add('MainMenu', Kente.MainMenu);
@@ -44,6 +49,10 @@
     game.state.add('Game', Kente.Game);
 
     game.state.start('Boot');
+
+
+
+
 
 }
 </script>

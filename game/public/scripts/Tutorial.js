@@ -1,16 +1,5 @@
 /*
-	In this state, the user is presented with a introduction sound..when sounds finishes 
-	It Starts a timer and If the user doesnt do anything for 15 seconds, it plays a sound asking if you are there in a loop of 15 seconds each 
-	If the user makes an action, it plays another sound and the timer for the previous notice gets reInstantiated with a nother timer that plays a different notice ("Are you ready to start?")
-	If the user makes the last action... the timer stop(true), destroy() and removeAll(). 
-	If the user doesnt make anything for 1 minute (this is a different timer), the notice timer gets stop(true), destroy() and removeAll(). 
-	and it goes to MainMenu state.
-	When the user gets back to the Tutorial screen, everything starts again but the timers
-	start behaving super weird. If you wait for the first notice to do something and you press a Key while sound is playing..
-	it doesnt recognize the sound is playing (it should stop the sound).. and then you get overlapping sounds.
-
-	Looks like timers never completely die. They keep playing the NOTICE sounds again and again.
-	stop(true), destroy() and removeAll(). Make nothing to the timer.
+	THE FIRST PART OF TH TUTORIAL 
 
 
 */
@@ -18,7 +7,9 @@ Kente.Tutorial = function(game){
 	this.upperContainer;
 	this.lowerContainer;
 	this.subtitles;
+	this.currentInstruction;
 	this.shuttleSprite;
+	this.warp;
 };
 
 Kente.Tutorial.prototype = {
@@ -39,18 +30,26 @@ Kente.Tutorial.prototype = {
 		Kente.socket.on('shuttleTouch', function(data){
 			self.shuttleTouched(data);
 		});
+		//Send Screenshot
+		var keyScreenshot = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
+    	keyScreenshot.onDown.add(function(){Kente.postImage(this.game)}, this);
+
 		// KeyBoard
 		this.key1 = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
 	    this.key1.onDown.add(this.threadTouched, this);
 
-	    this.key2 = this.game.input.keyboard.addKey(Phaser.Keyboard.TWO);
-	    this.key2.onDown.add(this.shuttleTouched, this);
+	    this.keyZ = this.game.input.keyboard.addKey(Phaser.Keyboard.Z);
+	    this.keyZ.onDown.add(this.shuttleTouched, this);
 
-	    this.key9 = this.game.input.keyboard.addKey(Phaser.Keyboard.NINE);
-	    this.key9.onDown.add(this.canisterTouched, this);
-	    this.key0 = this.game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
-	    this.key0.onDown.add(this.canisterTouched, this);
+	    this.keyQ = this.game.input.keyboard.addKey(Phaser.Keyboard.Q);
+	    this.keyQ.onDown.add(this.canisterTouched, this);
+	    this.keyW = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
+	    this.keyW.onDown.add(this.canisterTouched, this);
 
+	    // this.keyU = this.game.input.keyboard.addKey(Phaser.Keyboard.U);
+	    // this.keyU.thread = 2;
+	    // this.keyU.onDown.add(this.glowThread, this);
+	    // this.keyU.onUp.add(this.glowThread, this);
 
 		//Add the Background
 		this.add.sprite(0,0,'background');
@@ -62,11 +61,15 @@ Kente.Tutorial.prototype = {
 		this.upperContainer.height = this.game.world.height/2;
 		this.upperContainer.width = this.game.world.width;
 
+		//Upper container bg
+		this.upperContainer.create(0,0,'kente_bg');
+		this.upperContainer.create(0,950,'wooden_divider');
+
 		// TEXT
-	   	var style = { font: "30px Arial", fill: "#ffffff", align: "center" };
-	    this.subtitles = this.game.make.text(this.game.world.centerX, this.game.world.centerY/2, "Welcome to the interactive weaving exhibit.\n Today you're going to experience a traditional weaving practice.\nThe principles of loom weaving are nearly universal to all cultures of the world.\nWhen you are ready to weave, touch the device to your right on the table.", style);
-	    this.subtitles.anchor.set(0.5);
-	    this.upperContainer.addChild(this.subtitles);
+	   	// var style = { font: "30px Arial", fill: "#ffffff", align: "center" };
+	    // this.subtitles = this.game.make.text(this.game.world.centerX, this.game.world.centerY/2, "Welcome to the interactive weaving exhibit.\n Today you're going to experience a traditional weaving practice.\nThe principles of loom weaving are nearly universal to all cultures of the world.\nWhen you are ready to weave, touch the device to your right on the table.", style);
+	    // this.subtitles.anchor.set(0.5);
+	    // this.upperContainer.addChild(this.subtitles);
 
 	    // TEXT TIME
 	   	var style = { font: "20px Arial", fill: "#fffeee", align: "center" };
@@ -74,24 +77,31 @@ Kente.Tutorial.prototype = {
 	    this.upperContainer.addChild(this.timeText);
 
 	    //Shuttle Image
-	    this.shuttleSprite = this.game.make.sprite(this.game.world.centerX,this.game.world.centerY/2+200,'shuttle');
+	    this.shuttleSprite = this.game.make.sprite(this.game.world.centerX,this.game.world.centerY/2+200,'shuttle_vector');
 	    this.shuttleSprite.anchor.set(0.5);
 	    this.upperContainer.addChild(this.shuttleSprite);
 
-	    
+	    //Subtitles
+	    this.showInstruction("Welcome to the interactive weaving exhibit.\n Today you're going to experience a traditional weaving practice.\nThe principles of loom weaving are nearly universal to all cultures of the world.\nWhen you are ready to weave, touch the device to your right on the table.");
+
 		//LOWER Container
-		this.lowerContainer.y = this.game.world.centerY;
-		this.warpSprite = this.make.sprite(0,0,'warp_placeholder');
-		this.lowerContainer.addChild(this.warpSprite);
+		// this.lowerContainer.y = this.game.world.centerY;
+		// this.warpSprite = this.make.sprite(0,0,'warp_placeholder');
+		// this.lowerContainer.addChild(this.warpSprite);
+		this.warp = new WarpGroup(this.game);
+		this.lowerContainer.addChild(this.warp);
+
+
+
 		
 		//Start the Global timer
 		this.resetGameResetTimer();
 
 		
 
-		//Play Instruction #2
-		Kente.sounds[1].play(); 
-		Kente.sounds[1].onStop.add(function(){ //Welcome to the interactive...
+		//Play Instruction #1
+		Kente.theSounds['1-start'].play(); 
+		Kente.theSounds['1-start'].onStop.add(function(){ //Welcome to the interactive...
 			// this.timer_AreYouThere = this.game.time.events.add(10000, this.playInstructionAudio(3), this);
 			this.resetAreYouThere();
 		}, this);
@@ -112,18 +122,24 @@ Kente.Tutorial.prototype = {
 		//Reset Global timer
 		this.resetGameResetTimer();
 	},
+	glowThread: function(key){
+		if(key.isDown)
+			this.warp.glowThread(key.thread, true);
+		if(key.isUp)
+			this.warp.glowThread(key.thread, false);
+	},
 	shuttleTouched: function(data){
 		console.log(data);
 		
 		//Reset global timer
 		this.resetGameResetTimer();
 		
-		if(this.tutorial_step == 1 && !Kente.sounds[1].isPlaying){ //Finished - Welcome to the interactive.. 
+		if(this.tutorial_step == 1 && !Kente.theSounds['1-start'].isPlaying){ //Finished - Welcome to the interactive.. 
 			// this.stopAreYouThere();
 			this.playInstructionAudio(2); //Play - These vertical threads here are called...
 			this.tutorial_step = 2;
 		}
-		if(this.tutorial_step == 2 && !Kente.sounds[2].isPlaying){ //Finished - These vertical threads here ...
+		if(this.tutorial_step == 2 && !Kente.theSounds["2-0-1"].isPlaying){ //Finished - These vertical threads here ...
 			// this.stopAreYouThere();
 			//Weft moves down
 			console.log(":: Shuttle animating Right to Left");
@@ -131,11 +147,16 @@ Kente.Tutorial.prototype = {
 			
 		}
 		
-		if(Kente.sounds[3].isPlaying){ //Are you there ?
-			Kente.sound[3].onStop.removeAll();
-			Kente.sounds[3].stop();
+		if(Kente.theSounds["1-1"].isPlaying){ //Are you there ?
+			Kente.theSounds["1-1"].onStop.removeAll();
+			Kente.theSounds["1-1"].stop();
 		};
-		console.log('::Current Tutorial Step:'+ this.tutorial_step); 	 	
+		console.log('::Current Tutorial Step:'+ this.tutorial_step); 
+
+		var colors = [];
+		colors[1] = '0xFFFF00'; //yellow
+		colors[0] = '0x47D147'; //green
+		this.warp.sendShuttles(null,colors);	 	
 	},
 	resetGameResetTimer : function(){
 			if(this.timer_resetGame){
@@ -158,7 +179,7 @@ Kente.Tutorial.prototype = {
 	},
 	resetAreYouThere: function(){
 		this.game.time.events.remove(this.timer_AreYouThere);
-		this.timer_AreYouThere = this.game.time.events.add(20000, this.playInstructionAudio, this,3);
+		this.timer_AreYouThere = this.game.time.events.add(20000, this.playInstructionAudio, this,1);
 		console.log(':: Are You There Timer reseted');
 	},
 	showWarp: function(){
@@ -174,9 +195,9 @@ Kente.Tutorial.prototype = {
 	},
 	playInstructionAudio: function(id){
 		switch (id){
-			case 3:{
+			case 1:{
 				console.log(':: Playing are you there');
-				Kente.sounds[id].play(); //are you there
+				Kente.theSounds['1-1'].play(); //are you there
 				// Kente.sounds[id].onStop.add(function(){
 				// 	// this.timer_AreYouThere = this.game.time.events.add(10000, this.resetGame, this);
 				// },this);
@@ -185,30 +206,21 @@ Kente.Tutorial.prototype = {
 			case 2:{
 				this.game.time.events.remove(this.timer_AreYouThere);
 				console.log(':: Playing These Vertical Threads');
-				Kente.sounds[id].play(); //these vertical threads
-				Kente.sounds[id].onStop.add(function(){
+				Kente.theSounds["2-0-1"].play(); //these vertical threads
+				Kente.theSounds["2-0-1"].onStop.add(function(){
 					this.resetAreYouThere();
 				},this);
 				break;
 			}
 		}
-
 	},
-	playAreYourThere: function(){
-		console.log(':: Playing are you there');
-		Kente.sounds[3].play(); //are you there
-	},
-	playReadyToStart: function(){
-		console.log(':: Playing Ready to start?');
-		Kente.sounds[4].play(); //Are you ready to start...
-	},
-	stopAreYouThere: function(){
-		//Should we remove it from the Kente.sounds[3] events too ? sound.onStop.removeAll();
-		this.game.time.events.remove(this.timer_AreYouThere);
-
-		// this.timer_AreYouThere.stop(true);
-		// this.timer_AreYouThere.destroy();
-		// this.timer_AreYouThere.removeAll();
+	showInstruction: function(text) {
+		if(this.currentInstruction) this.currentInstruction.destroy();
+		var intrBox = new InstructionsGroup(this.game, text,
+	    					25);
+		intrBox.present();
+		this.currentInstruction = intrBox;
 	}
+
 
 };

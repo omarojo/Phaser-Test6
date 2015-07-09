@@ -1,0 +1,104 @@
+<head>
+<style type="text/css">
+	
+</style>
+<!-- Include meta tag to ensure proper rendering and touch zooming -->
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+
+<!-- Include the jQuery library -->
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<!-- Include the jQuery Mobile Stylesheetlibrary -->
+<!-- <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> -->
+
+<script src="blocksit.min.js"></script>
+<script src="/scripts/vendor/socket.io.js"></script>
+<style>
+body{
+	margin:0;
+	padding:0;
+	color:#333;
+	overflow-x:hidden;
+}
+#container{
+	position:relative;
+	width:1750px;
+	margin:0;
+	padding:0;
+}
+img { max-width: 175px; }
+</style>
+</head>
+
+
+<body>
+<div id='container'>
+	<!-- <div class="grid">
+			<img src="http://www.inwebson.com/demo/blocksit-js/demo2/images/img21.jpg" />
+	</div> -->
+</div>
+</body>
+
+<script type="text/javascript">
+
+
+$(document).ready(function() {
+	var socket = io();
+	socket.on('patternSaved', function(data){
+		console.log(data);
+		$('#container').append("<div class='grid'><img src='../community_uploads/"+data.url+"'/></div>");
+		$('#container').BlocksIt({
+			numOfCol: 10,
+			offsetX: 0,
+			offsetY: 0,
+			blockElement: '.grid'
+		});
+	});
+
+
+		//blocksit define
+	$(window).load( function() {
+		$('#container').BlocksIt({
+			numOfCol: 10,
+			offsetX: 0,
+			offsetY: 0,
+			blockElement: '.grid'
+		});
+	});
+	
+	// //window resize
+	// var currentWidth = 1100;
+	// $(window).resize(function() {
+	// 	var winWidth = $(window).width();
+	// 	var conWidth;
+	// 	if(winWidth < 660) {
+	// 		conWidth = 440;
+	// 		col = 2
+	// 	} else if(winWidth < 880) {
+	// 		conWidth = 660;
+	// 		col = 3
+	// 	} else if(winWidth < 1100) {
+	// 		conWidth = 880;
+	// 		col = 4;
+	// 	} else {
+	// 		conWidth = 1100;
+	// 		col = 5;
+	// 	}
+		
+	// 	if(conWidth != currentWidth) {
+	// 		currentWidth = conWidth;
+	// 		$('#container').width(conWidth);
+	// 		$('#container').BlocksIt({
+	// 			numOfCol: col,
+	// 			offsetX: 0,
+	// 			offsetY: 0,
+	// 			blockElement: '.grid'
+	// 		});
+	// 	}
+	// });
+
+});
+	
+
+
+</script>

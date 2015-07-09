@@ -25,8 +25,12 @@ Kente.SlideShow.prototype = {
 			self.threadTouched(data);
 		});
 		
-		this.key2 = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
-	    this.key2.onDown.add(this.threadTouched, this);
+		this.keyQ = this.game.input.keyboard.addKey(Phaser.Keyboard.Q);
+	    this.keyQ.onDown.add(this.threadTouched, this);
+
+	    //Send Screenshot
+		var keyScreenshot = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
+    	keyScreenshot.onDown.add(this.crop, this);
 
 		//this.add.sprite(0,0,'background');
 		// this.add.existing(Kente.background);
@@ -75,15 +79,8 @@ Kente.SlideShow.prototype = {
 	    // console.log(this.slides);
 		
 
-
-	 	// Button to crop and scale
-	    // var button = new Phaser.Sprite(this.game,1000,1400,'btn');
-	    // this.add.existing(button);
-	    // button.inputEnabled = true;
-	    // button.events.onInputDown.add(this.crop,this);
-
 	    // Instructional Timer 1 
-	    Kente.sounds[0].active = false;
+	    // Kente.sounds[0].active = false;
 	},
 	update: function(){
 		//Replay Instruction #1 every 5 seconds
@@ -97,22 +94,30 @@ Kente.SlideShow.prototype = {
 	},
 	threadTouched: function(data){
 		console.log(data);
-		Kente.sounds[0].stop();
+		// Kente.sounds[0].stop();
 		this.game.state.start('Tutorial', true, false);
 		//this.postImage();
 	},
 	crop:function(){
+		var second_game = new Phaser.Game(175, 300, Phaser.CANVAS, 'second_game');
+        second_game.preserveDrawingBuffer = true;
+
 		var copyText = this.photos.generateTexture(1,this.game.renderer);
-	    var copy = new Phaser.Sprite(this.game,0,0,copyText);
-	    var graph = new Phaser.Rectangle(0,0, 1200,1920);
+	    var copy = new Phaser.Sprite(second_game,0,0,copyText);
+	    var graph = new Phaser.Rectangle(0,0, 175,300);
 	    copy.cropRect = graph;
 	    copy.updateCrop();
-	    copy.scale.setTo (0.5,0.5);
+	    // copy.scale.setTo (0.5,0.5); //Scale the sprite, this could be useful later
 	    
 	    // copy.inputEnabled = true;
 		// copy.events.onInputDown.add(this.crop, this);
 
-	    this.add.existing(copy);
+		
+	    second_game.add.existing(copy);
+
+	    this.postImage(second_game);
+
+
 	},
 	reStack: function(){
 		this.photos.sendToBack(this.photos.getTop());
@@ -122,15 +127,15 @@ Kente.SlideShow.prototype = {
 	playInstructionAudio: function(id){
 		switch (id){
 			case 0:{
-				Kente.sounds[0].play();
-				Kente.sounds[0].active = false;
+				// Kente.sounds[0].play();
+				// Kente.sounds[0].active = false;
 				break;
 			}
 		}
 
 	},
-	postImage: function(){
-		var image64 = this.game.canvas.toDataURL('image/png');
+	postImage: function(s_game){
+		var image64 = s_game.canvas.toDataURL('image/png');
 		console.log(image64);
 		$.ajax({
 		    url: 'http://localhost:3000/kente',

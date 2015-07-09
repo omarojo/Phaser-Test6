@@ -2,22 +2,27 @@ Kente.MainMenu = function (game) {
 	var here = this;
 	this.music = null;
 	this.playButton = null;
-	//Sockets Test
-	this.socket = Kente.socket;	
-
-	this.socket.on('threadTouch', function (data) {
-    	console.log(data);
-    	here.threadTouched(data);
- 	});
+	//Sockets Test this design pattern is not being used right now
+	this.socket = Kente.socket;		
 };
 
 Kente.MainMenu.prototype = {
 
 	create: function () {
 		console.log('::MainMenu Loaded');
+		
 		Kente.removeAllSocketListeners();
-		this.key2 = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
-	    this.key2.onDown.add(this.postImage, this);
+		var self = this;
+		Kente.socket.on('threadTouch', function (data) {
+	    	console.log(data);
+	    	//self.threadTouched(data);
+	 	});
+	 	Kente.socket.on('patternSaved', function (data) {
+	    	console.log(data);
+	 	});
+	 	//Send Screenshot
+		var keyScreenshot = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
+    	keyScreenshot.onDown.add(function(){Kente.postImage(this.game)}, this);
 
 		//this.game.time.events.add(Phaser.Timer.SECOND * 4, this.emitSomething, this);
 
@@ -52,21 +57,24 @@ Kente.MainMenu.prototype = {
 		
 	},
 	postImage: function(){
-		var image64 = this.game.canvas.toDataURL('image/png');
-		console.log(image64);
-		$.ajax({
-		    url: 'http://localhost:3000/kente',
-		    dataType: 'json',
-		    type: 'post',
-		    contentType: 'application/json',
-		    data: JSON.stringify( { "image64": image64}),
-		    processData: false,
-		    success: function( data, textStatus, jQxhr ){
-		        console.log(JSON.stringify( data ) );
-		    },
-		    error: function( jqXhr, textStatus, errorThrown ){
-		        console.log( errorThrown );
-		    }
-		});
+		Kente.postImage(this.game);
+
+		
+		// var image64 = this.game.canvas.toDataURL('image/png');
+		// // console.log(image64);
+		// $.ajax({
+		//     url: 'http://localhost:3000/kente',
+		//     dataType: 'json',
+		//     type: 'post',
+		//     contentType: 'application/json',
+		//     data: JSON.stringify( { "image64": image64}),
+		//     processData: false,
+		//     success: function( data, textStatus, jQxhr ){
+		//         console.log(JSON.stringify( data ) );
+		//     },
+		//     error: function( jqXhr, textStatus, errorThrown ){
+		//         console.log( errorThrown );
+		//     }
+		// });
 	}
 };
