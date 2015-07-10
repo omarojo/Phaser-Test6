@@ -35,10 +35,10 @@ Kente.Tutorial.prototype = {
     	keyScreenshot.onDown.add(function(){Kente.postImage(this.game)}, this);
 
 		// KeyBoard
-		this.key1 = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
-	    this.key1.onDown.add(this.threadTouched, this);
+		// this.key1 = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
+	 //    this.key1.onDown.add(this.threadTouched, this);
 
-	    this.keyZ = this.game.input.keyboard.addKey(Phaser.Keyboard.Z);
+	    this.keyZ = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 	    this.keyZ.onDown.add(this.shuttleTouched, this);
 
 	    this.keyQ = this.game.input.keyboard.addKey(Phaser.Keyboard.Q);
@@ -63,7 +63,7 @@ Kente.Tutorial.prototype = {
 
 		//Upper container bg
 		this.upperContainer.create(0,0,'kente_bg');
-		this.upperContainer.create(0,950,'wooden_divider');
+		this.upperContainer.create(0,905,'wooden_divider');
 
 		// TEXT
 	   	// var style = { font: "30px Arial", fill: "#ffffff", align: "center" };
@@ -116,7 +116,7 @@ Kente.Tutorial.prototype = {
 
 	},
 	threadTouched: function(data){
-		console.log(data);
+		//console.log(data);
 		// this.game.state.start('MainMenu', true, false);
 		// console.log(this.slides);
 		//Reset Global timer
@@ -129,7 +129,7 @@ Kente.Tutorial.prototype = {
 			this.warp.glowThread(key.thread, false);
 	},
 	shuttleTouched: function(data){
-		console.log(data);
+		// console.log(data);
 		
 		//Reset global timer
 		this.resetGameResetTimer();
@@ -156,6 +156,7 @@ Kente.Tutorial.prototype = {
 		var colors = [];
 		colors[1] = '0xFFFF00'; //yellow
 		colors[0] = '0x47D147'; //green
+		console.log('pre shut');
 		this.warp.sendShuttles(null,colors);	 	
 	},
 	resetGameResetTimer : function(){
@@ -168,7 +169,7 @@ Kente.Tutorial.prototype = {
 			// this.timer_resetGame = this.game.time.create(false);
 			// this.timer_resetGame.add(60000, this.resetGame, this);
 			// this.timer_resetGame.start();
-			this.timer_resetGame = this.game.time.events.add(60000, this.resetGame, this);
+			this.timer_resetGame = this.game.time.events.add(240000, this.resetGame, this);
 			console.log(':: Global Timer reseted');
 	},
 	resetGame: function(){

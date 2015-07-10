@@ -1,7 +1,9 @@
 ThreadGroup = function (game, liftedThreads, color, isPatternThread) {
 	Phaser.Group.call(this, game, null); //pass second parameter as null if you need the group not be added to the game automatically
 	this.thegame = game;
+	this.isTight = false;
 	this.chunks = [];
+	this.visibleUpperThreads = [];
 	if(isPatternThread != undefined) this.isPatternThread = isPatternThread; else
 	this.isPatternThread = false; //is this the lower thread or the upper thread ?
 	
@@ -9,13 +11,19 @@ ThreadGroup = function (game, liftedThreads, color, isPatternThread) {
 	//Add the weft threads on group
 	for(var i= 0; i<19; i++){
 		if(i==0 || i==18){ //First and last long Chunks
-			var x = (i == 0 ? 0 : game.world.centerX+127);
-			// this.chunks[i] = this.chunksGroup.create(x,1250,'weftChunk_large');
+			var x = (i == 0 ? 0 : game.world.centerX+WarpGroup.warpWidth/2);
+			
 			this.chunks[i] = this.chunksGroup.create(x,0,'weftChunk_large');
+			this.chunks[i].width = game.world.centerX-WarpGroup.warpWidth/2;	
+			 this.chunks[i].height = WarpGroup.threadWidth;
 		}
 		else{ //Normal chunk
-			// this.chunks[i] = this.create((i*15)+game.world.centerX-142, 1250, 'weftChunk');
-			this.chunks[i] = this.chunksGroup.create((i*15)+game.world.centerX-142, 0, 'weftChunk');
+			// i-1 because the little chunks start at 1 and not 0, 0 is the first large chunk
+			this.chunks[i] = this.chunksGroup.create(((i-1)*WarpGroup.threadWidth)+(game.world.centerX-WarpGroup.warpWidth/2), 0, 'weftChunk');
+			this.chunks[i].width = WarpGroup.threadWidth;
+			this.chunks[i].height = WarpGroup.threadWidth;
+			// this.chunks[i].tint = color;
+			// this.chunks[i].blendMode = PIXI.blendModes.MULTIPLY;
 		}
 		this.chunks[i].tint = color;
 		
@@ -25,24 +33,41 @@ ThreadGroup = function (game, liftedThreads, color, isPatternThread) {
 	if(liftedThreads != undefined){
 			console.log(liftedThreads);
 			if(this.isPatternThread){ //Thransparent chunks for the UPPER Thread
-				console.log('Im thread 2');
-				for(var i=1; i<=18; i++){ 
-					if(i%2 != 0) this.chunks[i].alpha = 0.0;
+				console.log('Im weft 2');
+				for(var i=1; i<=18; i++){ //MAKE ALL THE PAIRs invisible
+					if(i%2 != 0) {
+						this.chunks[i].alpha = 0.0;
+					}
+				}
+				for(var i=1; i<=18; i++){ //Make the selected threads visible
 					if(liftedThreads.indexOf(i) != -1) // is in array
 					{
-						this.chunks[i].alpha = 1.0;
+						var y = i + (i-1);	
+						// this.chunks[y].tint = Math.random() * 0xffffff;
+						this.chunks[y].alpha = 1.0;
+						this.visibleUpperThreads.push(this.chunks[y]); //Save the threads that are visble for later use in the hiding animation
+						if((y+1) != 18 && (y-1) != 0 ){
+							this.visibleUpperThreads.push(this.chunks[y+1]);
+							this.visibleUpperThreads.push(this.chunks[y-1]);
+						}
+						this.chunks[y].tint = this.shadeColor(-0.1,color);
 					}
 				}
 			}else{ //Transparent chunks for the LOWER thread
-				console.log('Im thread 1');
+				console.log('Im weft 1');
+				//Apply dark shade over ODD chunks
+				for(var i=1;i<18;i++){
+					if(i%2 !=0)
+						this.chunks[i].tint = this.shadeColor(-0.1,color);
+				}
+				//Make transparent the proper cunks for LOWER thread
 				for(var i=0; i<liftedThreads.length; i++){
 					//console.log(liftedThreads[i]);
 					var t = liftedThreads[i];
 					var y = t + (t-1);
 					this.chunks[y].alpha = 0.0;	
 				}	
-			}
-			
+			}		
 	}
 	
 	this.addChild(this.chunksGroup);
@@ -61,15 +86,43 @@ ThreadGroup.prototype.glowThread = function(threadnum, status){
 	
 }
 ThreadGroup.prototype.revealToLeft = function(){
-	var maskTween = this.thegame.add.tween(this.mask).to( { x: -466 }, 2000, Phaser.Easing.Quadratic.InOut, true, 200);
+	var maskTween = this.thegame.add.tween(this.mask).to( { x: -466 }, 1000, Phaser.Easing.Quadratic.InOut, true, 200);
 }
 ThreadGroup.prototype.revealToRight = function(){
-	this.mask.x = -this.mask.width; //First move the mask all the way to the left outside screen, because its default position is on the right
+	this.mask.x = -(this.game.world.width+466); //First move the mask all the way to the left outside screen, because its default position is on the right
 	//Then we animate it back to the right
-	var maskTween = this.thegame.add.tween(this.mask).to( { x: this.game.world.width }, 2000, Phaser.Easing.Quadratic.InOut, true, 200);
+	var maskTween = this.thegame.add.tween(this.mask).to( { x: 0 }, 1000, Phaser.Easing.Quadratic.InOut, true, 200);
+}
+ThreadGroup.prototype.tightUpTo_Y = function(ypos, currentWovenThreads){
+	if(this.isTight == false)//Thread is still up.. lets bring it down.
+	{	
+		var animDuration = 2000 - (currentWovenThreads/20)*2000;
+		if(this.isPatternThread){
+			for(i=0;i<19;i++){
+				if(this.visibleUpperThreads.indexOf(this.chunks[i]) == -1){ //Is not there
+
+					this.thegame.add.tween(this.chunks[i]).to( { alpha: 0 }, animDuration, Phaser.Easing.Quadratic.InOut, true, 200);	
+				}
+				
+			}
+		}
+		var dTween = this.thegame.add.tween(this).to( { y: ypos }, animDuration, Phaser.Easing.Quadratic.InOut, true, 200);
+	}
+
 }
 
-
+ThreadGroup.prototype.shadeColor = function(p,colorHex,c1){
+	//0x63C6FF
+	var c0 = '#'+colorHex.substring(2,8);
+	var n=p<0?p*-1:p,u=Math.round,w=parseInt;
+    if(c0.length>7){
+        var f=c0.split(","),t=(c1?c1:p<0?"rgb(0,0,0)":"rgb(255,255,255)").split(","),R=w(f[0].slice(4)),G=w(f[1]),B=w(f[2]);
+        return "rgb("+(u((w(t[0].slice(4))-R)*n)+R)+","+(u((w(t[1])-G)*n)+G)+","+(u((w(t[2])-B)*n)+B)+")"
+    }else{
+        var f=w(c0.slice(1),16),t=w((c1?c1:p<0?"#000000":"#FFFFFF").slice(1),16),R1=f>>16,G1=f>>8&0x00FF,B1=f&0x0000FF;
+        return "0x"+(0x1000000+(u(((t>>16)-R1)*n)+R1)*0x10000+(u(((t>>8&0x00FF)-G1)*n)+G1)*0x100+(u(((t&0x0000FF)-B1)*n)+B1)).toString(16).slice(1)
+    }
+}
 
 
 

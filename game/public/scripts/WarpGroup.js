@@ -1,12 +1,22 @@
 WarpGroup = function (game) {
+	var threadWidth = 22;
+	var warpWidth = threadWidth * 17; //number of columns
 	Phaser.Group.call(this, game, null); //pass second parameter as null if you need the group not be added to the game automatically
 	this.thegame = game;
 	this.threads = [];
 	this.liftedThreads = [];
+	this.currentWovenThreads = 0;
+
+	// var g = game.add.graphics();
+	// 	g.beginFill(0xFFFF334);
+	// 	g.drawCircle(game.world.centerX-warpWidth/2,game.world.centerY, 10);
 	
+
 	//Add the weft threads on screen
 	for(var i= 0; i<9; i++){
-		this.threads[i] = this.create((i*30)+game.world.centerX-127, 1010, 'thread');
+		this.threads[i] = this.create((i*threadWidth*2)+(game.world.centerX-(warpWidth/2)), 
+			1010, 'thread');
+		this.threads[i].width = threadWidth;
 	}
 	var sWidth = 672;
 	var sHeight = 144;
@@ -110,6 +120,10 @@ WarpGroup = function (game) {
 WarpGroup.prototype = Object.create(Phaser.Group.prototype);
 WarpGroup.prototype.constructor = WarpGroup;
 
+WarpGroup.threadWidth = 22;
+WarpGroup.warpWidth = WarpGroup.threadWidth * 17;
+
+
 WarpGroup.prototype.glowThread = function(threadnum, status){
 	// console.log(this.liftedThreads);
 	if(threadnum >= 0 && threadnum <= this.threads.length){
@@ -121,36 +135,53 @@ WarpGroup.prototype.glowThread = function(threadnum, status){
 	}
 }
 WarpGroup.prototype.sendShuttles = function(liftedThreads, colors){
+	console.log("Sending shuttles");
 	if(this.shuttle1.isRight == true){ //With this, we prevent the user from overlaping thread animations
+		
 		var lockedLiftedThreads = this.liftedThreads; //Lets lock the threads that are liften when the shuttle was pressed
 		//Draw the Thread #1
-		var thread = new ThreadGroup(this.thegame, lockedLiftedThreads, colors[0]);
-		thread.y = this.shuttle1.y + this.shuttle1.height/2; 
-		this.addChild(thread);
-		thread.revealToLeft();
+		var thread_low = new ThreadGroup(this.thegame, lockedLiftedThreads, colors[0]);
+		thread_low.y = this.shuttle1.y + this.shuttle1.height/2; 
+		this.addChild(thread_low);
+		thread_low.revealToLeft();
 
 		//Bring Shuttle to front
-		var ind = this.getChildIndex(thread);
+		var ind = this.getChildIndex(thread_low);
 		this.setChildIndex(this.shuttle1,ind);
 
 
 		this.shuttle1.isRight = false;
 		//Animate shuttle 1 to the left
-		tween1 = this.thegame.add.tween(this.shuttle1).to( { x: this.shuttle2.x }, 2000, Phaser.Easing.Quadratic.InOut, true);
+		tween1 = this.thegame.add.tween(this.shuttle1).to( { x: this.shuttle2.x }, 1000, Phaser.Easing.Quadratic.InOut, true);
 		tween1.onComplete.addOnce(function(){
 			//Draw the Thread #2
-			var thread = new ThreadGroup(this.thegame, lockedLiftedThreads, colors[1], true);
-			thread.y = this.shuttle2.y + this.shuttle1.height/2; 
-			this.addChild(thread);
-			thread.revealToLeft();
+			var thread_upper = new ThreadGroup(this.thegame, lockedLiftedThreads, colors[1], true);
+			thread_upper.y = this.shuttle2.y + this.shuttle1.height/2; 
+			this.addChild(thread_upper);
+			thread_upper.revealToRight();
+			//Bring Shuttle to front
+			var ind = this.getChildIndex(thread_upper);
+			this.setChildIndex(this.shuttle2,ind);
+
 			//Animate shuttle 2 to the right
-			tween2 = this.thegame.add.tween(this.shuttle2).to( { x: this.thegame.world.width }, 2000, Phaser.Easing.Quadratic.InOut, true);
+			tween2 = this.thegame.add.tween(this.shuttle2).to( { x: this.thegame.world.width }, 1000, Phaser.Easing.Quadratic.InOut, true);
 			tween2.onComplete.addOnce(function(){
 				this.shuttle1.x = this.thegame.world.width;
 				this.shuttle2.x = -this.shuttle2.width;
 
 				this.shuttle1.isRight = true;
 				this.shuttle2.isRight = false;
+				
+				this.currentWovenThreads++;
+				
+				var ypos = this.thegame.world.height-(WarpGroup.threadWidth*this.currentWovenThreads);
+				//Tight up the 2 threads
+				thread_upper.tightUpTo_Y(ypos, this.currentWovenThreads);
+				thread_low.tightUpTo_Y(ypos, this.currentWovenThreads);
+				
+
+				
+
 			}, this);
 		},this);
 		
