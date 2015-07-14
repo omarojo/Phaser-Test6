@@ -5,12 +5,13 @@ WarpGroup = function (game) {
 	this.thegame = game;
 	this.threads = [];
 	this.liftedThreads = [];
+	this.requiredThreadsToWeave = 2;
 	this.currentWovenThreads = 0;
 
 	// var g = game.add.graphics();
 	// 	g.beginFill(0xFFFF334);
 	// 	g.drawCircle(game.world.centerX-warpWidth/2,game.world.centerY, 10);
-	
+	// this.mainContainer = this.thegame.make.group();
 
 	//Add the weft threads on screen
 	for(var i= 0; i<9; i++){
@@ -18,6 +19,7 @@ WarpGroup = function (game) {
 			1010, 'thread');
 		this.threads[i].width = threadWidth;
 	}
+	// this.addChild(this.mainContainer);
 	var sWidth = 672;
 	var sHeight = 144;
 	//Add the shuttle 1 on screen (THE LOWER one)
@@ -136,7 +138,7 @@ WarpGroup.prototype.glowThread = function(threadnum, status){
 }
 WarpGroup.prototype.sendShuttles = function(liftedThreads, colors){
 	console.log("Sending shuttles");
-	if(this.shuttle1.isRight == true){ //With this, we prevent the user from overlaping thread animations
+	if(this.shuttle1.isRight == true && this.currentWovenThreads <this.requiredThreadsToWeave){ //With this, we prevent the user from overlaping thread animations
 		
 		var lockedLiftedThreads = this.liftedThreads; //Lets lock the threads that are liften when the shuttle was pressed
 		//Draw the Thread #1
@@ -176,15 +178,33 @@ WarpGroup.prototype.sendShuttles = function(liftedThreads, colors){
 				
 				var ypos = this.thegame.world.height-(WarpGroup.threadWidth*this.currentWovenThreads);
 				//Tight up the 2 threads
-				thread_upper.tightUpTo_Y(ypos, this.currentWovenThreads);
-				thread_low.tightUpTo_Y(ypos, this.currentWovenThreads);
-				
-
-				
-
+				thread_upper.tightUpTo_Y(ypos, this.currentWovenThreads, this);
+				thread_low.tightUpTo_Y(ypos, this.currentWovenThreads, this);
 			}, this);
-		},this);
+		},this);	
+	}
+}
+WarpGroup.prototype.threadFinishedWeaving = function(){
+	console.log('Finished weaving thread');
+	//Lets check if the users has finished weaving all the required threads
+	console.log(this.currentWovenThreads+" "+this.requiredThreadsToWeave);
+	if(this.currentWovenThreads == this.requiredThreadsToWeave){
+		console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n>>>> Generating REPLICATION >>>>>>>>>");
 		
+		var s = this.thegame.make.sprite(this.thegame.world.width/2, this.thegame.height/2, 'shuttle_vector');
+		this.addChild(s);
+		
+		var copyText = this.thegame.world.generateTexture(1,this.thegame.renderer);
+	    var copy = new Phaser.Sprite(this.thegame,0,0,copyText);
+	    var graph = new Phaser.Rectangle(this.thegame.world.centerX-(WarpGroup.warpWidth/2)+this.shuttle2.width,1010, WarpGroup.warpWidth , this.height);
+	    // copy.cropRect = graph;
+	    // copy.updateCrop();
+	    // copy.scale.setTo (0.5,0.5); //Scale the sprite, this could be useful later
+	    
+	    // copy.inputEnabled = true;
+		// copy.events.onInputDown.add(this.crop, this);
+
+	    this.thegame.add.existing(copy);
 	}
 }
 WarpGroup.prototype.addThread = function(liftedThreads, color){

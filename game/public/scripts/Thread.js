@@ -93,10 +93,13 @@ ThreadGroup.prototype.revealToRight = function(){
 	//Then we animate it back to the right
 	var maskTween = this.thegame.add.tween(this.mask).to( { x: 0 }, 1000, Phaser.Easing.Quadratic.InOut, true, 200);
 }
-ThreadGroup.prototype.tightUpTo_Y = function(ypos, currentWovenThreads){
+ThreadGroup.prototype.tightUpTo_Y = function(ypos, currentWovenThreads, parentWarp){
 	if(this.isTight == false)//Thread is still up.. lets bring it down.
 	{	
 		var animDuration = 2000 - (currentWovenThreads/20)*2000;
+		//Hide the lateral threads begining and end
+			this.thegame.add.tween(this.chunks[18]).to( { alpha: 0 }, animDuration, Phaser.Easing.Quadratic.InOut, true, 200);	
+			this.thegame.add.tween(this.chunks[0]).to( { alpha: 0 }, animDuration, Phaser.Easing.Quadratic.InOut, true, 200);	
 		if(this.isPatternThread){
 			for(i=0;i<19;i++){
 				if(this.visibleUpperThreads.indexOf(this.chunks[i]) == -1){ //Is not there
@@ -107,6 +110,12 @@ ThreadGroup.prototype.tightUpTo_Y = function(ypos, currentWovenThreads){
 			}
 		}
 		var dTween = this.thegame.add.tween(this).to( { y: ypos }, animDuration, Phaser.Easing.Quadratic.InOut, true, 200);
+		//Simulate a signal, and tell the WARP that the weaved thread has finished animating.
+		//This is used at the end of the weaving process to start the replication of pattern on screen
+		dTween.onComplete.add(function(){
+			if(parentWarp != undefined && this.isPatternThread)
+				parentWarp.threadFinishedWeaving();
+		}, this);
 	}
 
 }

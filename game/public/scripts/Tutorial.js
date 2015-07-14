@@ -90,7 +90,7 @@ Kente.Tutorial.prototype = {
 		// this.lowerContainer.addChild(this.warpSprite);
 		this.warp = new WarpGroup(this.game);
 		this.lowerContainer.addChild(this.warp);
-
+		this.warp.x = 100;
 
 
 		
