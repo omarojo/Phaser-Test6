@@ -57,6 +57,7 @@ Kente.Boot.prototype = {
         this.load.image('wooden_divider', 'assets/woodendivider.png');
         this.load.image('kente_bg', 'assets/kentebg.png');
         this.load.image('btn', 'assets/button.jpeg');
+        this.load.image('halfbg', 'assets/half-background.png');
         
         //Load all Sounds
         this.load.audio('1-start', 'assets/audio/1-start.mp3');// 0 Welcome to the interactive weaving exhibit
@@ -65,7 +66,6 @@ Kente.Boot.prototype = {
         
 
     },
-
     create: function () {
         Kente.theSounds = {
             '1-start': this.game.add.audio('1-start'),
@@ -84,7 +84,7 @@ Kente.Boot.prototype = {
         this.game.sound.setDecodedCallback(Kente.sounds, this.loadMainMenuState, this);
     }, 
     loadMainMenuState : function(){
-        this.state.start('MainMenu',true,false);
+        this.state.start('SlideShow',true,false);
     }
 
 };

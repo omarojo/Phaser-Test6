@@ -27,9 +27,12 @@ Kente.Tutorial.prototype = {
 		Kente.socket.on('threadTouch', function(data){
 			self.threadTouched(data);
 		});
-		Kente.socket.on('shuttleTouch', function(data){
-			self.shuttleTouched(data);
+		Kente.socket.on('beaterClick', function(data){
+			// self.threadTouched(data);
 		});
+		// Kente.socket.on('shuttleTouch', function(data){
+		// 	self.shuttleTouched(data);
+		// });
 		//Send Screenshot
 		var keyScreenshot = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
     	keyScreenshot.onDown.add(function(){Kente.postImage(this.game)}, this);
@@ -85,12 +88,11 @@ Kente.Tutorial.prototype = {
 	    this.showInstruction("Welcome to the interactive weaving exhibit.\n Today you're going to experience a traditional weaving practice.\nThe principles of loom weaving are nearly universal to all cultures of the world.\nWhen you are ready to weave, touch the device to your right on the table.");
 
 		//LOWER Container
-		// this.lowerContainer.y = this.game.world.centerY;
-		// this.warpSprite = this.make.sprite(0,0,'warp_placeholder');
-		// this.lowerContainer.addChild(this.warpSprite);
+		
 		this.warp = new WarpGroup(this.game);
 		this.lowerContainer.addChild(this.warp);
-		this.warp.x = 100;
+
+		
 
 
 		
@@ -114,13 +116,27 @@ Kente.Tutorial.prototype = {
 		//Reset Global timer
 		this.resetGameResetTimer();
 
+		// var thread_upper = new ThreadGroup(this.game, [], '0xFFFFF', false);
+		// thread_upper.y = 500; 
+		// // this.game.add.existing(thread_upper);
+		// thread_upper.revealToRight();
+
+		// var copyText = this.game.world.generateTexture(1,this.game.renderer);
+	 //    var copy = new Phaser.Sprite(this.game,0,0,copyText);
+	    // var graph = new Phaser.Rectangle(this.game.world.centerX-(this.warp.warpWidth/2)+466,1010, this.warp.warpWidth , 1900);
+	  
+
+	    this.game.add.existing(copy);
+
 	},
 	threadTouched: function(data){
-		//console.log(data);
-		// this.game.state.start('MainMenu', true, false);
-		// console.log(this.slides);
 		//Reset Global timer
 		this.resetGameResetTimer();
+
+		if(this.warp != undefined){
+			this.warp.threadTouched(data);
+		}
+
 	},
 	glowThread: function(key){
 		if(key.isDown)
@@ -176,7 +192,7 @@ Kente.Tutorial.prototype = {
 		Kente.sounds.forEach(function(sound) { //Clean functions added to the onStop Phaser.signal
 		    sound.onStop.removeAll();
 		});
-		this.game.state.start('MainMenu', true,false);
+		this.game.state.start('SlideShow', true,false);
 	},
 	resetAreYouThere: function(){
 		this.game.time.events.remove(this.timer_AreYouThere);

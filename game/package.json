@@ -8,6 +8,7 @@
     "socket.io": "latest",
     "cors": "latest",
     "body-parser": "latest",
-    "mongoose": "latest"
+    "mongoose": "latest",
+    "johnny-five": "latest"
   }
 }

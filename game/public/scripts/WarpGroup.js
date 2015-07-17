@@ -1,17 +1,20 @@
-WarpGroup = function (game) {
+WarpGroup = function (game, tutorial) {
+	if(tutorial != undefined ) this.isTutorial = tutorial; else this.isTutorial = false;
 	var threadWidth = 22;
 	var warpWidth = threadWidth * 17; //number of columns
 	Phaser.Group.call(this, game, null); //pass second parameter as null if you need the group not be added to the game automatically
 	this.thegame = game;
 	this.threads = [];
 	this.liftedThreads = [];
-	this.requiredThreadsToWeave = 2;
+	this.requiredThreadsToWeave = 17;
 	this.currentWovenThreads = 0;
 
-	// var g = game.add.graphics();
-	// 	g.beginFill(0xFFFF334);
-	// 	g.drawCircle(game.world.centerX-warpWidth/2,game.world.centerY, 10);
-	// this.mainContainer = this.thegame.make.group();
+	if(this.isTutorial == true){ 
+		this.requiredThreadsToWeave = 6
+	}
+
+
+	 this.weftContainer = this.game.make.group();
 
 	//Add the weft threads on screen
 	for(var i= 0; i<9; i++){
@@ -19,6 +22,7 @@ WarpGroup = function (game) {
 			1010, 'thread');
 		this.threads[i].width = threadWidth;
 	}
+	this.add(this.weftContainer);
 	// this.addChild(this.mainContainer);
 	var sWidth = 672;
 	var sHeight = 144;
@@ -33,6 +37,15 @@ WarpGroup = function (game) {
 	this.shuttle2.height = sHeight;
 	this.shuttle2.isRight = false;
 	this.shuttle2.tint = Math.random() * 0xffffff;
+
+	//Counter
+	var style = { font: "25px Arial", fill: "#fffeee", align: "center", wordWrap: true, wordWrapWidth: 550};
+	this.tcounter = this.thegame.add.text(0, 0, "", style);
+	this.tcounter.anchor.set(0.5);
+	this.tcounter.y = 955;
+	this.tcounter.x = this.game.world.centerX;
+	// this.add(tcounter);
+
 
 	//Temporal Keyboard triggers
 	this.key1 = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
@@ -125,7 +138,15 @@ WarpGroup.prototype.constructor = WarpGroup;
 WarpGroup.threadWidth = 22;
 WarpGroup.warpWidth = WarpGroup.threadWidth * 17;
 
-
+WarpGroup.prototype.threadTouched = function(data){
+	if(data.state == 'held'){
+		this.glowThread(data.thread-1, true);
+		this.liftedThreads.push(data.thread);
+	}else if(data.state == 'loose'){
+		this.glowThread(data.thread-1,false);
+		this.removeLiftedThread(data.thread);
+	}
+}
 WarpGroup.prototype.glowThread = function(threadnum, status){
 	// console.log(this.liftedThreads);
 	if(threadnum >= 0 && threadnum <= this.threads.length){
@@ -144,12 +165,14 @@ WarpGroup.prototype.sendShuttles = function(liftedThreads, colors){
 		//Draw the Thread #1
 		var thread_low = new ThreadGroup(this.thegame, lockedLiftedThreads, colors[0]);
 		thread_low.y = this.shuttle1.y + this.shuttle1.height/2; 
-		this.addChild(thread_low);
+		this.weftContainer.addChild(thread_low);
 		thread_low.revealToLeft();
+		thread_low.nombre = 'pelos1';
 
 		//Bring Shuttle to front
-		var ind = this.getChildIndex(thread_low);
-		this.setChildIndex(this.shuttle1,ind);
+		// var ind = this.getChildIndex(thread_low);
+		// this.setChildIndex(this.shuttle1,ind);
+		// this.setChildIndex(this.shuttle1,this.children.length-1);
 
 
 		this.shuttle1.isRight = false;
@@ -159,11 +182,12 @@ WarpGroup.prototype.sendShuttles = function(liftedThreads, colors){
 			//Draw the Thread #2
 			var thread_upper = new ThreadGroup(this.thegame, lockedLiftedThreads, colors[1], true);
 			thread_upper.y = this.shuttle2.y + this.shuttle1.height/2; 
-			this.addChild(thread_upper);
+			this.weftContainer.addChild(thread_upper);
 			thread_upper.revealToRight();
+			thread_upper.nombre = 'pelos2';
 			//Bring Shuttle to front
-			var ind = this.getChildIndex(thread_upper);
-			this.setChildIndex(this.shuttle2,ind);
+			// var ind = this.getChildIndex(thread_upper);
+			// this.setChildIndex(this.shuttle2,this.children.length-1);
 
 			//Animate shuttle 2 to the right
 			tween2 = this.thegame.add.tween(this.shuttle2).to( { x: this.thegame.world.width }, 1000, Phaser.Easing.Quadratic.InOut, true);
@@ -175,7 +199,7 @@ WarpGroup.prototype.sendShuttles = function(liftedThreads, colors){
 				this.shuttle2.isRight = false;
 				
 				this.currentWovenThreads++;
-				
+				this.tcounter.text = this.currentWovenThreads + "/" + this.requiredThreadsToWeave;
 				var ypos = this.thegame.world.height-(WarpGroup.threadWidth*this.currentWovenThreads);
 				//Tight up the 2 threads
 				thread_upper.tightUpTo_Y(ypos, this.currentWovenThreads, this);
@@ -191,20 +215,44 @@ WarpGroup.prototype.threadFinishedWeaving = function(){
 	if(this.currentWovenThreads == this.requiredThreadsToWeave){
 		console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n>>>> Generating REPLICATION >>>>>>>>>");
 		
-		var s = this.thegame.make.sprite(this.thegame.world.width/2, this.thegame.height/2, 'shuttle_vector');
-		this.addChild(s);
-		
-		var copyText = this.thegame.world.generateTexture(1,this.thegame.renderer);
+
+		// var mask = this.game.make.graphics(0, 0);
+	 //    mask.beginFill(0xffffff); //	Shapes drawn to the Graphics object must be filled.
+	 //    mask.drawRect(0, 0, 100, 100);
+	 //    this.weftContainer.addChild(mask);
+
+		var copyText = this.weftContainer.generateTexture(1,this.thegame.renderer);
 	    var copy = new Phaser.Sprite(this.thegame,0,0,copyText);
-	    var graph = new Phaser.Rectangle(this.thegame.world.centerX-(WarpGroup.warpWidth/2)+this.shuttle2.width,1010, WarpGroup.warpWidth , this.height);
-	    // copy.cropRect = graph;
-	    // copy.updateCrop();
+	    // var graph = new Phaser.Rectangle(this.thegame.world.centerX-(WarpGroup.warpWidth/2),0, WarpGroup.warpWidth , this.height);
+	    var graph = new Phaser.Rectangle(879,0, WarpGroup.warpWidth , this.height);
+	    copy.cropRect = graph;
+	    copy.updateCrop();
 	    // copy.scale.setTo (0.5,0.5); //Scale the sprite, this could be useful later
 	    
 	    // copy.inputEnabled = true;
 		// copy.events.onInputDown.add(this.crop, this);
 
-	    this.thegame.add.existing(copy);
+		var w = this.game.world.width/5;
+		var h = (this.game.world.height/2 - 52)/3;
+
+		copy.height = h;
+		copy.width = w;
+
+		var cTexture = copy.generateTexture(1,this.game.renderer);
+		// var s = new Phaser.Sprite(this.game,0,0,cTexture);
+		// this.game.add.existing(s);
+
+		for(var i=0; i<5; i++){
+			var x = i * (w);
+			for(var j=0; j<3; j++){
+				var y = j * h;
+				var s = new Phaser.Sprite(this.game,x,y,cTexture);
+				s.width = w;
+				s.height = h;
+				this.game.add.existing(s);
+			}
+		}
+	    // this.thegame.add.existing(copy);
 	}
 }
 WarpGroup.prototype.addThread = function(liftedThreads, color){

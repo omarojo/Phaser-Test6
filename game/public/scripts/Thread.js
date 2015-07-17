@@ -1,5 +1,6 @@
 ThreadGroup = function (game, liftedThreads, color, isPatternThread) {
 	Phaser.Group.call(this, game, null); //pass second parameter as null if you need the group not be added to the game automatically
+	console.log("ESTOY SIENDO CREADO");
 	this.thegame = game;
 	this.isTight = false;
 	this.chunks = [];
@@ -7,6 +8,7 @@ ThreadGroup = function (game, liftedThreads, color, isPatternThread) {
 	if(isPatternThread != undefined) this.isPatternThread = isPatternThread; else
 	this.isPatternThread = false; //is this the lower thread or the upper thread ?
 	
+
 	this.chunksGroup = game.make.group();
 	//Add the weft threads on group
 	for(var i= 0; i<19; i++){
@@ -96,7 +98,7 @@ ThreadGroup.prototype.revealToRight = function(){
 ThreadGroup.prototype.tightUpTo_Y = function(ypos, currentWovenThreads, parentWarp){
 	if(this.isTight == false)//Thread is still up.. lets bring it down.
 	{	
-		var animDuration = 2000 - (currentWovenThreads/20)*2000;
+		var animDuration = 2000 - (currentWovenThreads/30)*2000;
 		//Hide the lateral threads begining and end
 			this.thegame.add.tween(this.chunks[18]).to( { alpha: 0 }, animDuration, Phaser.Easing.Quadratic.InOut, true, 200);	
 			this.thegame.add.tween(this.chunks[0]).to( { alpha: 0 }, animDuration, Phaser.Easing.Quadratic.InOut, true, 200);	
@@ -113,6 +115,9 @@ ThreadGroup.prototype.tightUpTo_Y = function(ypos, currentWovenThreads, parentWa
 		//Simulate a signal, and tell the WARP that the weaved thread has finished animating.
 		//This is used at the end of the weaving process to start the replication of pattern on screen
 		dTween.onComplete.add(function(){
+			this.isTight = true;
+			// this.chunks[0].kill();
+			this.mask.destroy();
 			if(parentWarp != undefined && this.isPatternThread)
 				parentWarp.threadFinishedWeaving();
 		}, this);

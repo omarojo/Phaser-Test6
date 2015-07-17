@@ -35,29 +35,39 @@ Kente.SlideShow.prototype = {
 		//this.add.sprite(0,0,'background');
 		// this.add.existing(Kente.background);
 		//Kente.background.events.onInputDown.removeAll(); //removes all events (the click event)
-
-		//UPPER CONTAINER SETUP
+		this.add.sprite(0,0,'background');
+		this.add.sprite(0,0,'kente_bg');
+		//CONTAINERa SETUP
 		this.upperContainer = this.add.group();
 		this.lowerContainer = this.add.group();
+
+		
 
 		//Upper Mask
 		var mask = this.game.add.graphics(0, 0);
 	    mask.beginFill(0xffffff); //	Shapes drawn to the Graphics object must be filled.
-	    mask.drawRect(0, 0, this.game.world.width, this.game.world.height/2);
+	    // mask.drawRect(0, 0, this.game.world.width, this.game.world.height/2+49);
+	    mask.drawRect(0, 0, this.game.world.width, this.game.world.height);
 	    this.upperContainer.mask = mask;
 
 	    // TEXT
 	   	var style = { font: "50px Arial", fill: "#ffffff", align: "center" };
-	    var text = this.game.add.text(this.game.world.centerX, 500, "Touch any canister\nto create your own Kente-inspired pattern", style);
-	    text.anchor.set(0.5);
+	    this.welcomeText = this.game.add.text(this.game.world.centerX, 500, "Touch any canister\nto create your own Kente-inspired pattern", style);
+	    this.welcomeText.anchor.set(0.5);
 
+	    
 	    this.photos = this.add.group();
 	    this.upperContainer.addChild(this.photos);
 
 	    //LOWER CONTAINER
-	    this.lowerContainer.y = this.game.world.centerY;
-	    var warpPlahceholderSprite = this.game.make.sprite(0,0,'warp_placeholder');
-	    this.lowerContainer.addChild(warpPlahceholderSprite); 
+	    this.lowerContainer.y = this.game.world.height-50//this.game.world.centerY;
+	    //Upper container bg
+		// this.lowerContainer.create(0,905,'wooden_divider');
+		this.lowerContainer.create(0,52,'halfbg');
+		this.lowerContainer.create(0,-52,'wooden_divider');
+
+	    // var warpPlahceholderSprite = this.game.make.sprite(0,0,'warp_placeholder');
+	    // this.lowerContainer.addChild(warpPlahceholderSprite); 
 
 	    for(var i=0;i<6;i++){
 	    	var slide = this.make.sprite(this.game.world.centerX,this.game.world.centerY,'slide'+(i+1));
@@ -79,6 +89,12 @@ Kente.SlideShow.prototype = {
 	    // console.log(this.slides);
 		
 
+
+		//ADD THE WARP... although in this scene it is not used.
+		this.warp = new WarpGroup(this.game);
+		this.warp.y = -958;
+		this.lowerContainer.addChild(this.warp);
+
 	    // Instructional Timer 1 
 	    // Kente.sounds[0].active = false;
 	},
@@ -94,26 +110,34 @@ Kente.SlideShow.prototype = {
 	},
 	threadTouched: function(data){
 		console.log(data);
-		// Kente.sounds[0].stop();
-		this.game.state.start('Tutorial', true, false);
-		//this.postImage();
+		
+		var tween = this.add.tween(this.lowerContainer).to({y: this.game.world.centerY},2000,Phaser.Easing.Quadratic.InOut, true, 200);
+		tween.onComplete.add(function(){
+			this.add.tween(this.welcomeText).to({alpha: 0},1000,Phaser.Easing.Quadratic.InOut, true, 200);	
+			this.add.tween(this.upperContainer).to({alpha: 0},1000,Phaser.Easing.Quadratic.InOut, true, 200).onComplete.add(function(){
+				this.game.state.start('Tutorial', true, false);	
+			},this);
+			
+
+			
+		},this);
 	},
 	crop:function(){
-		var second_game = new Phaser.Game(175, 300, Phaser.CANVAS, 'second_game');
-        second_game.preserveDrawingBuffer = true;
+		// var second_game = new Phaser.Game(175, 300, Phaser.CANVAS, 'second_game');
+  //       second_game.preserveDrawingBuffer = true;
 
-		var copyText = this.photos.generateTexture(1,this.game.renderer);
-	    var copy = new Phaser.Sprite(second_game,0,0,copyText);
-	    var graph = new Phaser.Rectangle(0,0, 175,300);
-	    copy.cropRect = graph;
-	    copy.updateCrop();
-	    // copy.scale.setTo (0.5,0.5); //Scale the sprite, this could be useful later
+		// var copyText = this.photos.generateTexture(1,this.game.renderer);
+	 //    var copy = new Phaser.Sprite(second_game,0,0,copyText);
+	 //    var graph = new Phaser.Rectangle(0,0, 175,300);
+	 //    copy.cropRect = graph;
+	 //    copy.updateCrop();
+	 //    // copy.scale.setTo (0.5,0.5); //Scale the sprite, this could be useful later
 	    
-	    // copy.inputEnabled = true;
-		// copy.events.onInputDown.add(this.crop, this);
+	 //    // copy.inputEnabled = true;
+		// // copy.events.onInputDown.add(this.crop, this);
 
 		
-	    second_game.add.existing(copy);
+	 //    second_game.add.existing(copy);
 
 	    this.postImage(second_game);
 

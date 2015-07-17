@@ -91,6 +91,163 @@ function sendErrorResponse(res, statuscode, message){
     res.status(statuscode).send({'feedback':feedback});
 }
 
+/**********************************************************
+
+Arduino + Johnny Five module to read states of sensors
+
+************************************************************/
+// Johnny-Five module install
+var five = require("johnny-five");
+
+// A board needs to be initialized for handling components using Johnny-Five
+var board = new five.Board();;
+
+// Defining pin numbers for switches. Change following values to reflect connection of switches attached to pins on the board
+var thread1Pin = 2;
+var thread2Pin = 3;
+var thread3Pin = 4;
+var thread4Pin = 5;
+var thread5Pin = 6;
+var thread6Pin = 7;
+var thread7Pin = 8;
+var thread8Pin = 9;
+var thread9Pin = 10;
+var beaterTopPin = 11;
+var beaterBottomPin = 12;
+
+board.on("ready", function() {
+
+  	console.log(">> Board is on");
+
+//  Initializing Components of Johnny-Five
+//  Note - Switches are READ-ONLY
+    var thread1 = new five.Switch(thread1Pin);
+    var thread2 = new five.Switch(thread2Pin);
+    var thread3 = new five.Switch(thread3Pin);
+    var thread4 = new five.Switch(thread4Pin);
+    var thread5 = new five.Switch(thread5Pin);
+    var thread6 = new five.Switch(thread6Pin);
+    var thread7 = new five.Switch(thread7Pin);
+    var thread8 = new five.Switch(thread8Pin);
+    var thread9 = new five.Switch(thread9Pin);
+
+    var beaterTop = new five.Switch(beaterTopPin);
+    var beaterBottom = new five.Switch(beaterBottomPin);
+/*
+// Events are triggered based on the state of switches attached to board.
+// Switch.on("open", function() {
+      // Switch is read open
+// })
+// Switch.on("close", function() {
+      // Switch is read close
+// })
+*/
+    thread1.on("open", function() {
+      console.log("Thread 1 released");
+      emitSocket_ThreadState(1,'loose');
+    });
+    thread1.on("close", function() {
+      console.log("Thread 1 pulled");
+      emitSocket_ThreadState(1,'held');
+    });
+
+    thread2.on("open", function() {
+      console.log("Thread 2");
+      emitSocket_ThreadState(2,'loose');
+    });
+    thread2.on("close", function() {
+      console.log("Thread 2");
+      emitSocket_ThreadState(2,'held');
+    });
+
+    thread3.on("open", function() {
+      console.log("Thread 3");
+      emitSocket_ThreadState(3,'loose');
+    });
+    thread3.on("close", function() {
+      console.log("Thread 3");
+      emitSocket_ThreadState(3,'held');
+    });
+
+    thread4.on("open", function() {
+      console.log("Thread 4");
+      emitSocket_ThreadState(4,'loose');
+    });
+    thread4.on("close", function() {
+      console.log("Thread 4");
+      emitSocket_ThreadState(4,'held');
+    });
+
+    thread5.on("open", function() {
+      console.log("Thread 5");
+      emitSocket_ThreadState(5,'loose');
+    });
+    thread5.on("close", function() {
+      console.log("Thread 5");
+      emitSocket_ThreadState(5,'held');
+    });
+
+    thread6.on("open", function() {
+      console.log("Thread 6");
+      emitSocket_ThreadState(6,'loose');
+    });
+    thread6.on("close", function() {
+      console.log("Thread 6");
+      emitSocket_ThreadState(6,'held');
+    });
+
+    thread7.on("open", function() {
+      console.log("Thread 7");
+      emitSocket_ThreadState(7,'loose');
+    });
+    thread7.on("close", function() {
+      console.log("Thread 7");
+      emitSocket_ThreadState(7,'held');
+    });
+
+    thread8.on("open", function() {
+      console.log("Thread 8");
+      emitSocket_ThreadState(8,'loose');
+    });
+    thread8.on("close", function() {
+      console.log("Thread 8");
+      emitSocket_ThreadState(8,'held');
+    });
+
+    thread9.on("open", function() {
+      console.log("Thread 9");
+      emitSocket_ThreadState(9,'loose');
+    });
+    thread9.on("close", function() {
+      console.log("Thread 9");
+      emitSocket_ThreadState(9,'held');
+    });
+
+    beaterTop.on("open", function() {
+      console.log("Top Beater open circuit");
+
+    });
+    beaterTop.on("close", function() {
+      console.log("Top Beater close circuit");
+      emitSocket_BeaterState('up');
+    });
+
+    beaterBottom.on("open", function() {
+      console.log("Bottom Beater open circuit");
+    });
+    beaterBottom.on("close", function() {
+      console.log("Bottom Beater close circuit");
+      emitSocket_BeaterState('down');
+    });
+});
+
+
+/**********************************************************
+
+WebSockets Callbacks (Socket.IO)
+
+************************************************************/
+
 io.on('connection', function (socket) {
   console.log("Someone connected");
   //socket.emit('string_1', { string: 1, state: 'held' });
@@ -108,3 +265,10 @@ io.on('connection', function (socket) {
   });
   
 });
+
+function emitSocket_ThreadState(threadNum, status){ //threadNum 1-9 status 'held' or 'loose'
+	io.emit('threadTouch',{thread:threadNum,state:status});
+}
+function emitSocket_BeaterState(status){ //status: 'up' or 'down'
+	io.emit('beaterClick',{state:status});
+}
