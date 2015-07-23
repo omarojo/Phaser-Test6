@@ -63,6 +63,19 @@ Kente.Boot.prototype = {
         this.load.audio('1-start', 'assets/audio/1-start.mp3');// 0 Welcome to the interactive weaving exhibit
         this.load.audio('1-1', 'assets/audio/1-1.mp3');// Are you still there
         this.load.audio('2-0-1', 'assets/audio/2-0-1.mp3');// 2 These vertical threads are called
+        this.load.audio('2-0-2', 'assets/audio/2-0-2.mp3');// 3
+        this.load.audio('2-0-3', 'assets/audio/2-0-3.mp3');// 3
+        this.load.audio('3-0-1', 'assets/audio/3-0-1.mp3');// 3
+        this.load.audio('3-0-2', 'assets/audio/3-0-2.mp3');// 3
+        this.load.audio('3-0-3', 'assets/audio/3-0-3.mp3');// 3
+        this.load.audio('4-0', 'assets/audio/4-0.mp3');// 3
+        this.load.audio('5-0-1', 'assets/audio/5-0-1.mp3');// 3
+        this.load.audio('5-0-2', 'assets/audio/5-0-2-take1.mp3');// 3
+        this.load.audio('5-2', 'assets/audio/5-2.mp3');// 3
+        this.load.audio('5-1-0', 'assets/audio/5-1-0.mp3');// 3
+        this.load.audio('5-1-1', 'assets/audio/5-1-1.mp3');// 3
+        this.load.audio('6-0-1', 'assets/audio/6-0-1.mp3');// 3
+
         
 
     },
@@ -70,13 +83,37 @@ Kente.Boot.prototype = {
         Kente.theSounds = {
             '1-start': this.game.add.audio('1-start'),
             '1-1': this.game.add.audio('1-1'),
-            '2-0-1': this.game.add.audio('2-0-1')
+            '2-0-1': this.game.add.audio('2-0-1'),
+            '2-0-2': this.game.add.audio('2-0-2'),
+            '2-0-3': this.game.add.audio('2-0-3'),
+            '3-0-1': this.game.add.audio('3-0-1'),
+            '3-0-2': this.game.add.audio('3-0-2'),
+            '3-0-3': this.game.add.audio('3-0-3'),
+            '4-0': this.game.add.audio('4-0'),
+            '5-0-1': this.game.add.audio('5-0-1'),
+            '5-0-2': this.game.add.audio('5-0-2'),
+            '5-2': this.game.add.audio('5-2'),
+            '5-1-0': this.game.add.audio('5-1-0'),
+            '5-1-1': this.game.add.audio('5-1-1'),
+            '6-0-1': this.game.add.audio('6-0-1')
          };
 
 
         Kente.sounds.push(Kente.theSounds['1-start']);
         Kente.sounds.push(Kente.theSounds['1-1']);
         Kente.sounds.push(Kente.theSounds['2-0-1']);
+        Kente.sounds.push(Kente.theSounds['2-0-2']);
+        Kente.sounds.push(Kente.theSounds['2-0-3']);
+        Kente.sounds.push(Kente.theSounds['3-0-1']);
+        Kente.sounds.push(Kente.theSounds['3-0-2']);
+        Kente.sounds.push(Kente.theSounds['3-0-3']);
+        Kente.sounds.push(Kente.theSounds['4-0']);
+        Kente.sounds.push(Kente.theSounds['5-0-1']);
+        Kente.sounds.push(Kente.theSounds['5-0-2']);
+        Kente.sounds.push(Kente.theSounds['5-2']);
+        Kente.sounds.push(Kente.theSounds['5-1-0']);
+        Kente.sounds.push(Kente.theSounds['5-1-1']);
+        Kente.sounds.push(Kente.theSounds['6-0-1']);
         // Kente.sounds.push(this.game.add.audio('instr3_Audio'));
         // Kente.sounds.push(this.game.add.audio('stillThereShuttle_Audio'));
         // Kente.sounds.push(this.game.add.audio('stillThereShuttle1_Audio'));

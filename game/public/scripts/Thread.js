@@ -1,8 +1,9 @@
 ThreadGroup = function (game, liftedThreads, color, isPatternThread) {
 	Phaser.Group.call(this, game, null); //pass second parameter as null if you need the group not be added to the game automatically
-	console.log("ESTOY SIENDO CREADO");
+	// console.log("ESTOY SIENDO CREADO");
 	this.thegame = game;
 	this.isTight = false;
+	this.isWeaving = false;
 	this.chunks = [];
 	this.visibleUpperThreads = [];
 	if(isPatternThread != undefined) this.isPatternThread = isPatternThread; else
@@ -33,7 +34,7 @@ ThreadGroup = function (game, liftedThreads, color, isPatternThread) {
 	}
 	//Make the chunks transparent acoording to the lifted threads
 	if(liftedThreads != undefined){
-			console.log(liftedThreads);
+			console.log(">> Lifted Threads:" + liftedThreads);
 			if(this.isPatternThread){ //Thransparent chunks for the UPPER Thread
 				console.log('Im weft 2');
 				for(var i=1; i<=18; i++){ //MAKE ALL THE PAIRs invisible
@@ -76,7 +77,7 @@ ThreadGroup = function (game, liftedThreads, color, isPatternThread) {
 
 	this.mask = game.make.graphics(game.world.width+50, 0);
 	    this.mask.beginFill(0xffffff); //	Shapes drawn to the Graphics object must be filled.
-	    this.mask.drawRect(0, 0, this.game.world.width+466, this.game.world.height);
+	    this.mask.drawRect(0, 0, this.game.world.width+672, this.game.world.height);
 	    this.addChild(this.mask);
 	    this.chunksGroup.mask = this.mask;
 };
@@ -88,12 +89,20 @@ ThreadGroup.prototype.glowThread = function(threadnum, status){
 	
 }
 ThreadGroup.prototype.revealToLeft = function(){
-	var maskTween = this.thegame.add.tween(this.mask).to( { x: -466 }, 1000, Phaser.Easing.Quadratic.InOut, true, 200);
+	this.isWeaving = true;
+	var maskTween = this.thegame.add.tween(this.mask).to( { x: -672 }, 1500, Phaser.Easing.Quadratic.In, true, 200);
+	maskTween.onComplete.addOnce(function(){
+		this.isWeaving = false;
+	},this);
 }
 ThreadGroup.prototype.revealToRight = function(){
-	this.mask.x = -(this.game.world.width+466); //First move the mask all the way to the left outside screen, because its default position is on the right
+	this.isWeaving = true;
+	this.mask.x = -(this.game.world.width+672); //First move the mask all the way to the left outside screen, because its default position is on the right
 	//Then we animate it back to the right
-	var maskTween = this.thegame.add.tween(this.mask).to( { x: 0 }, 1000, Phaser.Easing.Quadratic.InOut, true, 200);
+	var maskTween = this.thegame.add.tween(this.mask).to( { x: 0 }, 1500, Phaser.Easing.Quadratic.In, true, 200);
+	maskTween.onComplete.addOnce(function(){
+		this.isWeaving = false;
+	},this);
 }
 ThreadGroup.prototype.tightUpTo_Y = function(ypos, currentWovenThreads, parentWarp){
 	if(this.isTight == false)//Thread is still up.. lets bring it down.
@@ -116,8 +125,9 @@ ThreadGroup.prototype.tightUpTo_Y = function(ypos, currentWovenThreads, parentWa
 		//This is used at the end of the weaving process to start the replication of pattern on screen
 		dTween.onComplete.add(function(){
 			this.isTight = true;
-			// this.chunks[0].kill();
-			this.mask.destroy();
+			this.remove( this.chunks[0]); //no difference :()
+			this.remove(this.mask); //this is making no difference I dont know why
+			this.mask.destroy(); // no difference :(
 			if(parentWarp != undefined && this.isPatternThread)
 				parentWarp.threadFinishedWeaving();
 		}, this);
