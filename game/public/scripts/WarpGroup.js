@@ -1,16 +1,18 @@
 WarpGroup = function (game, tutorial) {
 	if(tutorial != undefined ) this.isTutorial = tutorial; else this.isTutorial = false;
-	var threadWidth = 22;
+	var threadWidth = 25;//22;
 	var warpWidth = threadWidth * 17; //number of columns
 	Phaser.Group.call(this, game, null); //pass second parameter as null if you need the group not be added to the game automatically
 	this.thegame = game;
 	this.threads = [];
 	this.liftedThreads = [];
-	this.requiredThreadsToWeave = 6;
+	this.requiredThreadsToWeave = 2;//17;
 	this.currentWovenThreads = 0;
 	this.upperT = null; //The horizontal weaved thread
 	this.lowerT = null; // The lower horizontal weaved thread, this are the ones that get tighten down in the warp
 	this.weftWaitingTobeTighten = false;
+
+	this.onReadyForReplication = new Phaser.Signal();
 
 	if(this.isTutorial == true){ 
 		this.requiredThreadsToWeave = 6
@@ -138,7 +140,7 @@ WarpGroup = function (game, tutorial) {
 WarpGroup.prototype = Object.create(Phaser.Group.prototype);
 WarpGroup.prototype.constructor = WarpGroup;
 
-WarpGroup.threadWidth = 22;
+WarpGroup.threadWidth = 25;
 WarpGroup.warpWidth = WarpGroup.threadWidth * 17;
 
 WarpGroup.prototype.threadTouched = function(data){
@@ -234,7 +236,7 @@ WarpGroup.prototype.tightWeft = function(){
 	if(this.upperT != null){
 		console.log(this.upperT.isWeaving);
 		console.log(this.weftWaitingTobeTighten);
-		if(this.upperT.isTight == false && this.upperT.isWeaving == false){
+		if(this.upperT.isTight == false ){//&& this.upperT.isWeaving == false){
 			this.tcounter.text = this.currentWovenThreads + "/" + this.requiredThreadsToWeave;
 			var ypos = this.thegame.world.height-(WarpGroup.threadWidth*this.currentWovenThreads);
 			//Tight up the 2 threads
@@ -248,47 +250,88 @@ WarpGroup.prototype.tightWeft = function(){
 WarpGroup.prototype.threadFinishedWeaving = function(){
 	console.log('Finished weaving thread');
 	//Lets check if the users has finished weaving all the required threads
-	// console.log(this.currentWovenThreads+" "+this.requiredThreadsToWeave);
+	
+	if(this.currentWovenThreads == this.requiredThreadsToWeave){
+		this.onReadyForReplication.dispatch();
+		// this.replicatePattern();
+	}
+
+	// if(this.currentWovenThreads == this.requiredThreadsToWeave){
+	// 	//Tell the parent, that we are done and we can now replicate on screen a will.
+	// 	if(this.myparent != undefined){
+	// 		if(typeof this.myparent.readyForReplication === 'function') {
+	// 		    this.myparent.readyForReplication();
+	// 		} else if (typeof this.myparent.readyForReplication === 'undefined') {
+	// 		    alert("It's undefined");
+	// 		} else {
+	// 		    alert("It's neither undefined nor a function. It's a " + typeof myObj.prop2);
+	// 		}
+	// 	}
+		
+	//  }
+}
+WarpGroup.prototype.replicatePattern = function(){
 	if(this.currentWovenThreads == this.requiredThreadsToWeave){
 		console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n>>>> Generating REPLICATION >>>>>>>>>");
-		
+		var upperSpaceHeight = (this.game.world.height/2 - 52);
 
-		// var mask = this.game.make.graphics(0, 0);
-	 //    mask.beginFill(0xffffff); //	Shapes drawn to the Graphics object must be filled.
-	 //    mask.drawRect(0, 0, 100, 100);
-	 //    this.weftContainer.addChild(mask);
+		var maskedContainerGroup = this.game.make.group();
+		var mask = this.game.make.graphics(0, 0);
+	    mask.beginFill(0xffffff); //	Shapes drawn to the Graphics object must be filled.
+	    mask.drawRect(0, 0, this.game.world.width, upperSpaceHeight);
+	    maskedContainerGroup.addChild(mask);
+	    maskedContainerGroup.mask = mask;
 
-		var copyText = this.weftContainer.generateTexture(1,this.thegame.renderer);
-	    var copy = new Phaser.Sprite(this.thegame,0,0,copyText);
+
+		var copyText = this.weftContainer.generateTexture(1,this.game.renderer);
+		// var copyText = this.game.world.generateTexture(1,this.game.renderer);
+	    var copy = new Phaser.Sprite(this.game,0,0,copyText);
 	    // var graph = new Phaser.Rectangle(this.thegame.world.centerX-(WarpGroup.warpWidth/2),0, WarpGroup.warpWidth , this.height);
-	    var graph = new Phaser.Rectangle(1085,0, WarpGroup.warpWidth , this.height);
+	    // var graph = new Phaser.Rectangle(1085,0, WarpGroup.warpWidth , this.height);
+	    var heightOfPatternSection = WarpGroup.threadWidth * this.currentWovenThreads;
+	    var graph = new Phaser.Rectangle(387,0, WarpGroup.warpWidth , heightOfPatternSection);
 	    copy.cropRect = graph;
 	    copy.updateCrop();
 	    // copy.scale.setTo (0.5,0.5); //Scale the sprite, this could be useful later
 	    
 	    // copy.inputEnabled = true;
 		// copy.events.onInputDown.add(this.crop, this);
+		
 
 		var w = this.game.world.width/5;
-		var h = (this.game.world.height/2 - 52)/3;
+		var h = upperSpaceHeight/3; //52 is half the wooden sprite
 
-		copy.height = h;
-		copy.width = w;
-
-		var cTexture = copy.generateTexture(1,this.game.renderer);
-		// var s = new Phaser.Sprite(this.game,0,0,cTexture);
-		// this.game.add.existing(s);
-
-		for(var i=0; i<5; i++){
-			var x = i * (w);
-			for(var j=0; j<3; j++){
-				var y = j * h;
-				var s = new Phaser.Sprite(this.game,x,y,cTexture);
-				s.width = w;
-				s.height = h;
-				this.game.add.existing(s);
-			}
+		if(!this.isTutorial){
+			copy.height = h;
+			copy.width = w;
 		}
+		var cTexture = copy.generateTexture(1,this.game.renderer);
+		
+		// if(!this.isTutorial){
+		// 	for(var i=0; i<5; i++){
+		// 		var x = i * (w);
+		// 		for(var j=0; j<3; j++){
+		// 			var y = j * h;
+		// 			var s = new Phaser.Sprite(this.game,x,y,cTexture);
+		// 			s.width = w;
+		// 			s.height = h;
+		// 			this.game.add.existing(s);
+		// 		}
+		// 	}
+		// }else{ 
+			var verticalCopiesCount = this.game.world.width/WarpGroup.warpWidth;
+			var horizontalCopiesCount = upperSpaceHeight/(heightOfPatternSection);
+			for(var i=0; i<verticalCopiesCount; i++){
+				var x = i * (WarpGroup.warpWidth);
+				for(var j=0; j<horizontalCopiesCount; j++){
+					var y = j * heightOfPatternSection;
+					var s = new Phaser.Sprite(this.game,x,y,cTexture);
+					console.log('adding');
+					maskedContainerGroup.addChild(s);
+				}
+			}
+		// }
+		this.game.add.existing(maskedContainerGroup);
 	    // this.thegame.add.existing(copy);
 	}
 }

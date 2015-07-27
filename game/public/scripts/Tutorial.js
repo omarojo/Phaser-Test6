@@ -99,10 +99,20 @@ Kente.Tutorial.prototype = {
 
 		//LOWER Container
 		
-		this.warp = new WarpGroup(this.game);
+		this.warp = new WarpGroup(this.game, true);
 		this.lowerContainer.addChild(this.warp);
 
-		
+		this.warp.onReadyForReplication.addOnce(function(){
+			console.log('>> READY FOR REPLICATION >>>>>>>>>>>>>>');
+			//Temporal callback, just for this time
+			Kente.theSounds["6-0-1"].onStop.addOnce(function(){ //
+				//Lets Replicate, should be in tutorial step 15 by now
+				this.warp.replicatePattern();
+			},this);
+			
+			
+			// this.playInstructionAudio(11); // 9-0-1
+		},this);
 
 
 		
@@ -147,6 +157,7 @@ Kente.Tutorial.prototype = {
 		if(data != undefined){
 			if(data.state == 'down'){ beaterUp = false; this.beaterPosition = 'down';};
 			if(data.state == 'up'){ beaterUp = true; this.beaterPosition = 'up';};
+			Kente.beaterPosition = this.beaterPosition;
 		}
 		console.log('>> BeaterUP is ' + beaterUp.toString());
 		console.log('>> Tut step is ' + this.tutorial_step);
@@ -362,6 +373,9 @@ Kente.Tutorial.prototype = {
 					this.tutorial_step = 14;
 				}else this.announceWrongThreads();//Play wrong threads try again
 			}else{ this.stopCurrentAudio(); this.playInstructionAudio(9);}
+		}else if(this.tutorial_step == 15) // Lets leave the Tutorial
+		{	
+			this.game.state.start('Game', true, false);	
 		}
 
 		
@@ -541,15 +555,31 @@ Kente.Tutorial.prototype = {
 				break;
 			}
 			case 10: {
-				this.game.time.events.remove(this.timer_AreYouThere);
+				this.game.time.events.remove(this.timer_AreYouThere); //DIABLE THE TIMER.. until all the audio files finish and starte it again
 				console.log(':: Playing: Great! you finished your pattern .. 6-0-1');
 				Kente.theSounds["6-0-1"].play();
 				this.currentPlayingInstruction = Kente.theSounds["6-0-1"];
 				Kente.theSounds["6-0-1"].onStop.addOnce(function(){
-					this.resetAreYouThere();
+					console.log(':: Playing: In Kente this diamond .. 6-0-2');
+					Kente.theSounds["6-0-2"].play();
+					this.currentPlayingInstruction = Kente.theSounds["6-0-2"];
+					Kente.theSounds["6-0-2"].onStop.addOnce(function(){
+						console.log(':: Playing: Kente is complex .. 6-0-4');
+						Kente.theSounds["6-0-4"].play();
+						this.currentPlayingInstruction = Kente.theSounds["6-0-4"];
+						Kente.theSounds["6-0-4"].onStop.addOnce(function(){
+							console.log(':: Playing: When you are ready to move on .. 6-0-5');
+							Kente.theSounds["6-0-5"].play();
+							this.currentPlayingInstruction = Kente.theSounds["6-0-5"];
+							Kente.theSounds["6-0-5"].onStop.addOnce(function(){
+								this.resetAreYouThere();
+							},this);
+						},this);
+					},this);
 				},this);
 				break;
 			}
+
 		}
 	},
 	stopCurrentAudio: function(){

@@ -1,0 +1,48 @@
+<html>
+<head>
+    <title>Kente Community Wall</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+        }
+        #app {
+         /*width: 100%;
+         text-align:center;*/
+         /*width: 100%;*/
+         /*display:flex;justify-content:center;align-items:center;*/
+        }
+    </style>
+    <script src='../scripts/vendor/jquery-2.1.4.min.js'></script>
+    <script src="../scripts/vendor/phaser.min.js"></script>
+    <script src="../scripts/socket.io.js"></script>
+    <script type="text/javascript" src="scripts/Boot.js"></script>
+    <script type="text/javascript" src="scripts/Wall.js"></script>
+    
+</head>
+<body>
+<div id='app' class="app"><div>
+
+<script type="text/javascript">
+    window.onload = function () {
+        
+   
+    var game = new Phaser.Game(1920, 1080, Phaser.AUTO, 'app');
+    //game.preserveDrawingBuffer = true; //for the screenshots, but people say this can make the game slow.
+    
+
+    game.state.add('Boot', Kente.Boot);
+    game.state.add('Wall', Kente.Wall);
+
+    game.state.start('Boot');
+
+
+
+
+
+}
+</script>
+
+</body>
+</html>

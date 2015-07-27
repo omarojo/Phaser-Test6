@@ -13,6 +13,7 @@ Kente = {
     background: null,
     sounds: [],
     theSounds: null,
+    beaterPosition: null,
     postImage: function(game){
         var image64 = game.canvas.toDataURL('image/png');
 
@@ -75,6 +76,26 @@ Kente.Boot.prototype = {
         this.load.audio('5-1-0', 'assets/audio/5-1-0.mp3');// 3
         this.load.audio('5-1-1', 'assets/audio/5-1-1.mp3');// 3
         this.load.audio('6-0-1', 'assets/audio/6-0-1.mp3');// 3
+        this.load.audio('6-0-2', 'assets/audio/6-0-2.mp3');// 3
+        this.load.audio('6-0-4', 'assets/audio/6-0-4.mp3');// 3
+        this.load.audio('6-0-5', 'assets/audio/6-0-5.mp3');// 3
+        this.load.audio('7-0-1', 'assets/audio/7-0-1.mp3');// 3
+        this.load.audio('7-0-2', 'assets/audio/7-0-2.mp3');// 3
+        this.load.audio('7-1', 'assets/audio/7-1.mp3');// 3
+        this.load.audio('7-2', 'assets/audio/7-2.mp3');// 3
+        this.load.audio('7-3', 'assets/audio/7-3.mp3');// 3
+        this.load.audio('7-4', 'assets/audio/7-4.mp3');// 3
+        this.load.audio('7-5', 'assets/audio/7-5.mp3');// 3
+        this.load.audio('7-6', 'assets/audio/7-6.mp3');// 3
+        this.load.audio('8-0-1', 'assets/audio/8-0-1.mp3');// 3
+        this.load.audio('8-0-2', 'assets/audio/8-0-2.mp3');// 3
+        this.load.audio('8-2', 'assets/audio/8-2.mp3');// 3
+        this.load.audio('9-0-1', 'assets/audio/9-0-1.mp3');// 3
+        this.load.audio('9-0-2', 'assets/audio/9-0-2-take1.mp3');// 3
+        this.load.audio('9-0-3', 'assets/audio/9-0-3.mp3');// 3
+        this.load.audio('10-0', 'assets/audio/10-0.mp3');// 3
+        this.load.audio('11-0-1', 'assets/audio/11-0-1.mp3');// 3
+        this.load.audio('11-0-2', 'assets/audio/11-0-2.mp3');// 3
 
         
 
@@ -95,7 +116,28 @@ Kente.Boot.prototype = {
             '5-2': this.game.add.audio('5-2'),
             '5-1-0': this.game.add.audio('5-1-0'),
             '5-1-1': this.game.add.audio('5-1-1'),
-            '6-0-1': this.game.add.audio('6-0-1')
+            '6-0-1': this.game.add.audio('6-0-1'),
+            '6-0-2': this.game.add.audio('6-0-2'),
+            '6-0-4': this.game.add.audio('6-0-4'),
+            '6-0-5': this.game.add.audio('6-0-5'),
+            '7-0-1': this.game.add.audio('7-0-1'),
+            '7-0-2': this.game.add.audio('7-0-2'),
+            '7-1': this.game.add.audio('7-1'),
+            '7-2': this.game.add.audio('7-2'),
+            '7-3': this.game.add.audio('7-3'),
+            '7-4': this.game.add.audio('7-4'),
+            '7-5': this.game.add.audio('7-5'),
+            '7-6': this.game.add.audio('7-6'),
+            '8-0-1': this.game.add.audio('8-0-1'),
+            '8-0-2': this.game.add.audio('8-0-2'),
+            '8-2': this.game.add.audio('8-2'),
+            '9-0-1': this.game.add.audio('9-0-1'),
+            '9-0-2': this.game.add.audio('9-0-2'),
+            '9-0-3': this.game.add.audio('9-0-3'),
+            '10-0': this.game.add.audio('10-0'),
+            '11-0-1': this.game.add.audio('11-0-1'),
+            '11-0-2': this.game.add.audio('11-0-2')
+
          };
 
 
@@ -114,6 +156,27 @@ Kente.Boot.prototype = {
         Kente.sounds.push(Kente.theSounds['5-1-0']);
         Kente.sounds.push(Kente.theSounds['5-1-1']);
         Kente.sounds.push(Kente.theSounds['6-0-1']);
+        Kente.sounds.push(Kente.theSounds['6-0-2']);
+        Kente.sounds.push(Kente.theSounds['6-0-4']);
+        Kente.sounds.push(Kente.theSounds['6-0-5']);
+        Kente.sounds.push(Kente.theSounds['7-0-1']);
+        Kente.sounds.push(Kente.theSounds['7-0-2']);
+        Kente.sounds.push(Kente.theSounds['7-1']);
+        Kente.sounds.push(Kente.theSounds['7-2']);
+        Kente.sounds.push(Kente.theSounds['7-3']);
+        Kente.sounds.push(Kente.theSounds['7-4']);
+        Kente.sounds.push(Kente.theSounds['7-5']);
+        Kente.sounds.push(Kente.theSounds['7-6']);
+        Kente.sounds.push(Kente.theSounds['8-0-1']);
+        Kente.sounds.push(Kente.theSounds['8-0-2']);
+        Kente.sounds.push(Kente.theSounds['8-2']);
+        Kente.sounds.push(Kente.theSounds['9-0-1']);
+        Kente.sounds.push(Kente.theSounds['9-0-2']);
+        Kente.sounds.push(Kente.theSounds['9-0-3']);
+        Kente.sounds.push(Kente.theSounds['10-0']);
+        Kente.sounds.push(Kente.theSounds['11-0-1']);
+        Kente.sounds.push(Kente.theSounds['11-0-2']);
+
         // Kente.sounds.push(this.game.add.audio('instr3_Audio'));
         // Kente.sounds.push(this.game.add.audio('stillThereShuttle_Audio'));
         // Kente.sounds.push(this.game.add.audio('stillThereShuttle1_Audio'));
