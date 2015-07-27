@@ -4,6 +4,7 @@
 */
 var express = require('express'); //Web Server
 var mongoose = require('mongoose'); // Mongoose 
+var easyimg = require('easyimage'); //Cropping images
 var cors = require('cors'); //CROSS DOMAIN REQUESTS
 var bodyParser = require('body-parser'); //To ready Body JSON data
 // Load Express Server and Socket IO
@@ -59,24 +60,37 @@ app.route('/kente') //standard response
 	        var filename = Date.now();
 	        fs.writeFile("public/community_uploads/"+filename+".png", buff, function(err) {
 	          if(err == null){
-		          //SAVING IN DATA BASE
-		          var thePattern = new PatternModel({
-	                    url: filename + ".png" 
-	                    });
-	                thePattern.save(function(err){
-	                    if(!err){
-	                        console.log(">Pattern saved");
-	                        var pttrn = {id:thePattern.id,
-	                        	url:thePattern.url,
-	                        	first_color: null,
-	                        	second_color: null,
-	                        	created_at: thePattern.created_at};
-	                        io.emit('patternSaved', pttrn);
-	                        return sendErrorResponse(res, 200, 'Pattern Saved !');  
-	                    } else {
-	                        return sendErrorResponse(res, 400, err);
-	                    }
-	                });
+
+              easyimg.crop({
+                   src:"public/community_uploads/"+filename+".png", dst:"public/community_uploads/"+filename+".png",
+                   // width:260, height:260,
+                   cropwidth:426, cropheight:426,
+                   gravity: 'NorthWest',
+                   x:387, y:1494
+                }).then(
+                function(image) {
+                    console.log('Cropped');
+                    //SAVING IN DATA BASE
+                    var thePattern = new PatternModel({
+                            url: filename + ".png" 
+                            });
+                        thePattern.save(function(err){
+                            if(!err){
+                                console.log(">Pattern saved");
+                                var pttrn = {id:thePattern.id,
+                                  url:thePattern.url,
+                                  first_color: null,
+                                  second_color: null,
+                                  created_at: thePattern.created_at};
+                                io.emit('patternSaved', pttrn);
+                                return sendErrorResponse(res, 200, 'Pattern Saved !');  
+                            } else {
+                                return sendErrorResponse(res, 400, err);
+                            }
+                        });
+                }
+              );
+		          
             	}else console.log("Error Saving to Disk Image: "+ err);
 	        });
     }else{

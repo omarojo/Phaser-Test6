@@ -1,12 +1,12 @@
 WarpGroup = function (game, tutorial) {
 	if(tutorial != undefined ) this.isTutorial = tutorial; else this.isTutorial = false;
-	var threadWidth = 25;//22;
+	var threadWidth = 25;//22; If you change this  value remember to change the WarpGroup.threadWidth value too.. scroll down in this file.
 	var warpWidth = threadWidth * 17; //number of columns
 	Phaser.Group.call(this, game, null); //pass second parameter as null if you need the group not be added to the game automatically
 	this.thegame = game;
 	this.threads = [];
 	this.liftedThreads = [];
-	this.requiredThreadsToWeave = 2;//17;
+	this.requiredThreadsToWeave = 17;
 	this.currentWovenThreads = 0;
 	this.upperT = null; //The horizontal weaved thread
 	this.lowerT = null; // The lower horizontal weaved thread, this are the ones that get tighten down in the warp
