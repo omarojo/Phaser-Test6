@@ -9,12 +9,12 @@ Kente.SlideShow = function (game) {
 
 Kente.SlideShow.prototype = {
 	preload: function(){
-		this.load.image('slide1', 'assets/slide1.jpg');
-		this.load.image('slide2', 'assets/slide2.jpg');
-		this.load.image('slide3', 'assets/slide3.jpg');
-		this.load.image('slide4', 'assets/slide4.jpg');
-		this.load.image('slide5', 'assets/slide5.jpg');
-		this.load.image('slide6', 'assets/slide6.jpg');
+		this.load.image('slide1', 'assets/slide1.png');
+		this.load.image('slide2', 'assets/slide2.png');
+		this.load.image('slide3', 'assets/slide3.png');
+		this.load.image('slide4', 'assets/slide4.png');
+		this.load.image('slide5', 'assets/slide5.png');
+		// this.load.image('slide6', 'assets/slide6.png');
 	},
 	create: function () {
 		console.log('::SlideShow Loaded');
@@ -69,12 +69,12 @@ Kente.SlideShow.prototype = {
 	    // var warpPlahceholderSprite = this.game.make.sprite(0,0,'warp_placeholder');
 	    // this.lowerContainer.addChild(warpPlahceholderSprite); 
 
-	    for(var i=0;i<6;i++){
+	    for(var i=0;i<5;i++){
 	    	var slide = this.make.sprite(this.game.world.centerX,this.game.world.centerY,'slide'+(i+1));
 	    	slide.anchor.x = 0.5; slide.anchor.y = 0.5;
 	    	this.photos.addChild(slide);
-	    	slide.width = this.game.world._width+300;
-	    	slide.height = this.game.world._height+300;
+	    	// slide.width = this.game.world._width+300;
+	    	// slide.height = this.game.world._height+300;
 	    	slide.twAlpha = this.add.tween(slide).to( { alpha: 0 }, 3000, "Linear",undefined,3000);
 	    	var x = Phaser.Utils.randomChoice(100, -100);
 	    	var y = Phaser.Utils.randomChoice(100, -100);
@@ -84,8 +84,8 @@ Kente.SlideShow.prototype = {
 	    	this.slides[i] = slide;
 	    };
 
-	    this.slides[5].twAlpha.start();
-	    this.slides[5].twPos.start();
+	    this.slides[4].twAlpha.start();
+	    this.slides[4].twPos.start();
 	    // console.log(this.slides);
 		
 
@@ -116,7 +116,7 @@ Kente.SlideShow.prototype = {
 			this.add.tween(this.welcomeText).to({alpha: 0},1000,Phaser.Easing.Quadratic.InOut, true, 200);	
 			this.add.tween(this.upperContainer).to({alpha: 0},1000,Phaser.Easing.Quadratic.InOut, true, 200).onComplete.add(function(){
 				// this.game.state.start('Tutorial', true, false);	
-				this.game.state.start('Game', true, false);	
+				this.game.state.start('Tutorial', true, false);	
 			},this);
 			
 
