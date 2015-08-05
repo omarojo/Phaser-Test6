@@ -117,8 +117,8 @@ Kente.Game.prototype = {
 		if(this.instruction_step == 1){ // PICKING YOUR BACKGROUND COLOR
 			this.stopCurrentAudio();
 			if(this.tempSelectedColor == data.color){ // They selected the color for second time.. lets go for next color selection
-				this.selectedBackgroundColor = this.getColorCode(data.color);
-				console.log(">> Selected Background Color: "+ data.color + ' code: '+this.selectedBackgroundColor);
+				this.selectedBackgroundColor = data.color;//this.getColorCode(data.color);
+				console.log(">> Selected Background Color: "+ data.color);
 				//Play audio to ask for pattern color
 				this.playInstructionAudio(6);
 
@@ -137,8 +137,8 @@ Kente.Game.prototype = {
 		else if(this.instruction_step == 2){ // PICKING YOUR Pattern COLOR
 			this.stopCurrentAudio();
 			if(this.tempSelectedColor == data.color){ // They selected the color for second time.. lets go for next color selection
-				this.selectedPatternColor = this.getColorCode(data.color);
-				console.log(">> Selected Pattern Color: "+ data.color + ' code: '+this.selectedPatternColor);
+				this.selectedPatternColor = data.color//this.getColorCode(data.color);
+				console.log(">> Selected Pattern Color: "+ data.color);
 				//Play audio to suggest pattern to be weaved or do your own
 				this.playInstructionAudio(7);
 				//Show patterns on screen for suggestion
@@ -380,10 +380,10 @@ Kente.Game.prototype = {
 			}
 			case 8:{
 				this.game.time.events.remove(this.timer_AreYouThere);
-				console.log(':: Playing: Remember to move beater up .. 5-1-1');
-				Kente.theSounds["5-1-1"].play();
-				this.currentPlayingInstruction = Kente.theSounds["5-1-1"];
-				Kente.theSounds["5-1-1"].onStop.addOnce(function(){
+				console.log(':: Playing: Remember to move beater up .. 8-3');
+				Kente.theSounds["8-3"].play();
+				this.currentPlayingInstruction = Kente.theSounds["8-3"];
+				Kente.theSounds["8-3"].onStop.addOnce(function(){
 					this.resetAreYouThere();
 				},this);
 				break;
@@ -426,10 +426,10 @@ Kente.Game.prototype = {
 			}
 			case 12:{
 				this.game.time.events.remove(this.timer_AreYouThere);
-				console.log(':: Playing: Thanks for sharing .. 10-0');
-				Kente.theSounds["10-0"].play();
-				this.currentPlayingInstruction = Kente.theSounds["10-0"];
-				Kente.theSounds["10-0"].onStop.addOnce(function(){
+				console.log(':: Playing: Thanks for sharing .. 10');
+				Kente.theSounds["10"].play();
+				this.currentPlayingInstruction = Kente.theSounds["10"];
+				Kente.theSounds["10"].onStop.addOnce(function(){
 					console.log(':: Playing: We hope you enjoyed learning .. 11-0-1');
 					Kente.theSounds["11-0-1"].play();
 					this.currentPlayingInstruction = Kente.theSounds["11-0-1"];
@@ -462,10 +462,10 @@ Kente.Game.prototype = {
 		}
 	},
 	getColorCode: function(colorWord){
-		if(colorWord == 'red') return '0xCD0000';
-		if(colorWord == 'blue') return '0x0054a6';
-		if(colorWord == 'green') return '0x66aa00';
-		if(colorWord == 'yellow') return '0xffcc00';
+		if(colorWord == 'red') return '0xf44f45';
+		if(colorWord == 'blue') return '0x1a7df5';
+		if(colorWord == 'green') return '0x00f990';
+		if(colorWord == 'yellow') return '0xf7c73e';
 	}
 
 }

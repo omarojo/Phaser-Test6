@@ -85,9 +85,9 @@ Kente.Tutorial.prototype = {
 	    // this.upperContainer.addChild(this.subtitles);
 
 	    // TEXT TIME
-	   	var style = { font: "20px Arial", fill: "#fffeee", align: "center" };
-	    this.timeText = this.game.make.text(0, 0, "", style);
-	    this.upperContainer.addChild(this.timeText);
+	   	// var style = { font: "20px Arial", fill: "#fffeee", align: "center" };
+	    // this.timeText = this.game.make.text(0, 0, "", style);
+	    // this.upperContainer.addChild(this.timeText);
 
 	    //Shuttle Image
 	    this.shuttleSprite = this.game.make.sprite(this.game.world.centerX,this.game.world.centerY/2+200,'shuttle_vector');
@@ -95,7 +95,7 @@ Kente.Tutorial.prototype = {
 	    this.upperContainer.addChild(this.shuttleSprite);
 
 	    //Subtitles
-	    this.showInstruction("Welcome to the interactive weaving exhibit.\n Today you're going to experience a traditional weaving practice.\nThe principles of loom weaving are nearly universal to all cultures of the world.\nWhen you are ready to weave, touch the device to your right on the table.");
+	    this.showInstruction("Welcome to the virtual weaving loom where you can design your own patterned textile. Weaving is an interlocking of horizontal threads, called weft, with vertical threads called warp. Touch the shuttle to see how it works.");
 
 		//LOWER Container
 		
@@ -105,13 +105,15 @@ Kente.Tutorial.prototype = {
 		this.warp.onReadyForReplication.addOnce(function(){
 			console.log('>> READY FOR REPLICATION >>>>>>>>>>>>>>');
 			//Temporal callback, just for this time
-			Kente.theSounds["6-0-1"].onStop.addOnce(function(){ //
+			Kente.theSounds["6-0-1"].onStop.addOnce(function(){ // Great ! lets see a finished cloth.
 				//Lets Replicate, should be in tutorial step 15 by now
 				this.warp.replicatePattern();
 			},this);
+			Kente.theSounds["6-0-2"].onStop.addOnce(function(){ // As you can see, real kente
+				//show video
+				console.log(">> Will show video in this phase ?????");
+			},this);
 			
-			
-			// this.playInstructionAudio(11); // 9-0-1
 		},this);
 
 
@@ -122,16 +124,24 @@ Kente.Tutorial.prototype = {
 		
 
 		//Play Instruction #1
-		Kente.theSounds['1-start'].play();
-		this.currentPlayingInstruction = Kente.theSounds["1-start"]; 
-		Kente.theSounds['1-start'].onStop.addOnce(function(){ //Welcome to the interactive...
-			// this.timer_AreYouThere = this.game.time.events.add(10000, this.playInstructionAudio(3), this);
-			this.resetAreYouThere();
+		console.log(':: Playing: Welcome to the virtual weaving loom .. 1-0-1');
+		Kente.theSounds['1-0-1'].play();
+		this.currentPlayingInstruction = Kente.theSounds["1-0-1"]; 
+		Kente.theSounds['1-0-1'].onStop.addOnce(function(){ //Welcome to the interactive...
+			console.log(':: Playing: Weaving is an interlocking .. 1-0-2');
+					Kente.theSounds["1-0-2"].play();
+					this.currentPlayingInstruction = Kente.theSounds["1-0-2"];
+					Kente.theSounds["1-0-2"].onStop.addOnce(function(){	
+						console.log(':: Playing: Touch the shuttle to see  .. 1-0-3');
+						Kente.theSounds["1-0-3"].play();
+						this.currentPlayingInstruction = Kente.theSounds["1-0-3"];
+						this.resetAreYouThere();	
+					}, this);
 		}, this);
 	},
 	update: function(){
-		if(this.timer_resetGame != undefined)
-			this.timeText.text = this.timer_resetGame.tick;
+		// if(this.timer_resetGame != undefined)
+		// 	this.timeText.text = this.timer_resetGame.tick;
 	},
 	canisterTouched: function(data){
 		//Reset Global timer
@@ -160,102 +170,189 @@ Kente.Tutorial.prototype = {
 			Kente.beaterPosition = this.beaterPosition;
 		}
 		console.log('>> BeaterUP is ' + beaterUp.toString());
-		console.log('>> Tut step is ' + this.tutorial_step);
-		if(this.tutorial_step == 3 && beaterUp == false){ // Beater going down
+		console.log(':: (Beater section) Current Tutorial Step:'+ this.tutorial_step);
+		if(this.tutorial_step == 2 && beaterUp == false){ // Beater going down
 			if(this.warp != undefined){
 				console.log('>> Is waiting: '+this.warp.weftWaitingTobeTighten.toString());
 				if(this.warp.weftWaitingTobeTighten){
 					console.log('>> trying to beat down');
 					this.stopCurrentAudio();
 					this.warp.tightWeft();
-					this.tutorial_step = 4;
-					this.playInstructionAudio(4);
+					this.playInstructionAudio(3);
+					this.tutorial_step = 3;
 				}
 			}
 				
 		}
-		if(this.tutorial_step == 4 && beaterUp == true){ // Beater moving up
+		else if(this.tutorial_step == 3 && beaterUp == true){ // Beater moving up
 			this.stopCurrentAudio();
 			//Play next audio
 			if(this.warp != undefined){
-				this.playInstructionAudio(5);
+				this.playInstructionAudio(4);
 				//Glow the first threads to be lifted
 				this.warp.blinkThreads([4]); //blink middle thread starting from 0 
-				this.tutorial_step = 5;
+				this.tutorial_step = 4;
 				console.log('::Current Tutorial Step:'+ this.tutorial_step);
 			}	
 		}
-		if(this.tutorial_step == 6 && beaterUp == false){ //Corrects threads where lifted now lets move Beater is moving down.
+		else if(this.tutorial_step == 5 && beaterUp == false){ //Corrects threads where lifted now lets move Beater is moving down.
 			if(this.warp != undefined){
 				console.log('>> Is waiting: '+this.warp.weftWaitingTobeTighten.toString());
 				if(this.warp.weftWaitingTobeTighten){
 					console.log('>> trying to beat down');
 					this.warp.tightWeft();
 					this.stopCurrentAudio();
-					this.playInstructionAudio(7); //Lift the glowing threads
-					this.warp.blinkThreads([3,5]); //blinkthread starting from 0 
-					this.tutorial_step = 7;
+					this.playInstructionAudio(8); //This tighten the weft .. and lift center most
+					this.warp.blinkThreads([3,4,5]); //blinkthread starting from 0 
+					this.tutorial_step = 6;
+					console.log('::Current Tutorial Step:'+ this.tutorial_step);
 				}
 			}
 		}
-		if(this.tutorial_step == 8 && beaterUp == false){ //Corrects threads where lifted now lets move Beater is moving down.
+		else if(this.tutorial_step == 7 && beaterUp == false){ //Corrects threads where lifted now lets move Beater is moving down.
 			if(this.warp != undefined){
 				console.log('>> Is waiting: '+this.warp.weftWaitingTobeTighten.toString());
 				if(this.warp.weftWaitingTobeTighten){
 					console.log('>> trying to beat down');
 					this.warp.tightWeft();
 					this.stopCurrentAudio();
-					this.playInstructionAudio(7); //Lift the glowing threads
-					this.warp.blinkThreads([2,6]); //blinkthread starting from 0 
-					this.tutorial_step = 9;
+					this.playInstructionAudio(10); //Lift five
+					this.warp.blinkThreads([2,3,4,5,6]); //blinkthread starting from 0 
+					this.tutorial_step = 8;
+					console.log('::Current Tutorial Step:'+ this.tutorial_step);
 				}
 			}
 		}
-		if(this.tutorial_step == 10 && beaterUp == false){ //Corrects threads where lifted now lets move Beater is moving down.
+		else if(this.tutorial_step == 9 && beaterUp == false){ //Corrects threads where lifted now lets move Beater is moving down.
 			if(this.warp != undefined){
 				console.log('>> Is waiting: '+this.warp.weftWaitingTobeTighten.toString());
 				if(this.warp.weftWaitingTobeTighten){
 					console.log('>> trying to beat down');
 					this.warp.tightWeft();
 					this.stopCurrentAudio();
-					this.playInstructionAudio(7); //Lift the glowing threads
-					this.warp.blinkThreads([3,5]); //blinkthread starting from 0 
-					this.tutorial_step = 11;
+					this.playInstructionAudio(11); //Lift four
+					this.warp.blinkThreads([3,4,5]); //blinkthread starting from 0 
+					this.tutorial_step = 10;
+					console.log('::Current Tutorial Step:'+ this.tutorial_step);
 				}
 			}
 		}
-		if(this.tutorial_step == 12 && beaterUp == false){ //Corrects threads where lifted now lets move Beater is moving down.
+		else if(this.tutorial_step == 11 && beaterUp == false){ //Corrects threads where lifted now lets move Beater is moving down.
 			if(this.warp != undefined){
 				console.log('>> Is waiting: '+this.warp.weftWaitingTobeTighten.toString());
 				if(this.warp.weftWaitingTobeTighten){
 					console.log('>> trying to beat down');
 					this.warp.tightWeft();
 					this.stopCurrentAudio();
-					this.playInstructionAudio(7); //Lift the glowing threads
+					this.playInstructionAudio(12); //lift 3
 					this.warp.blinkThreads([4]); //blinkthread starting from 0 
-					this.tutorial_step = 13;
+					this.tutorial_step = 12;
+					console.log('::Current Tutorial Step:'+ this.tutorial_step);
 				}
 			}
 		}
-		if(this.tutorial_step == 14 && beaterUp == false){ //Corrects threads where lifted now lets move Beater is moving down.
+		else if(this.tutorial_step == 13 && beaterUp == false){ //Corrects threads where lifted now lets move Beater is moving down.
 			if(this.warp != undefined){
 				console.log('>> Is waiting: '+this.warp.weftWaitingTobeTighten.toString());
 				if(this.warp.weftWaitingTobeTighten){
 					console.log('>> trying to beat down');
 					this.warp.tightWeft();
 					this.stopCurrentAudio();
-					this.playInstructionAudio(10); //Lift the glowing threads
-					// this.warp.blinkThreads([4]); //blinkthread starting from 0 
-					this.tutorial_step = 15;
+					this.playInstructionAudio(13); //Great You just created your first
+					this.tutorial_step = 14;
+					console.log('::Current Tutorial Step:'+ this.tutorial_step);
 				}
 			}
 		}
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		// else if(this.tutorial_step == 6 && beaterUp == false){ //Corrects threads where lifted now lets move Beater is moving down.
+		// 	if(this.warp != undefined){
+		// 		console.log('>> Is waiting: '+this.warp.weftWaitingTobeTighten.toString());
+		// 		if(this.warp.weftWaitingTobeTighten){
+		// 			console.log('>> trying to beat down');
+		// 			this.warp.tightWeft();
+		// 			this.stopCurrentAudio();
+		// 			this.playInstructionAudio(7); //Lift the glowing threads
+		// 			this.warp.blinkThreads([3,5]); //blinkthread starting from 0 
+		// 			this.tutorial_step = 7;
+		// 		}
+		// 	}
+		// }
+		// if(this.tutorial_step == 8 && beaterUp == false){ //Corrects threads where lifted now lets move Beater is moving down.
+		// 	if(this.warp != undefined){
+		// 		console.log('>> Is waiting: '+this.warp.weftWaitingTobeTighten.toString());
+		// 		if(this.warp.weftWaitingTobeTighten){
+		// 			console.log('>> trying to beat down');
+		// 			this.warp.tightWeft();
+		// 			this.stopCurrentAudio();
+		// 			this.playInstructionAudio(7); //Lift the glowing threads
+		// 			this.warp.blinkThreads([2,6]); //blinkthread starting from 0 
+		// 			this.tutorial_step = 9;
+		// 		}
+		// 	}
+		// }
+		// if(this.tutorial_step == 10 && beaterUp == false){ //Corrects threads where lifted now lets move Beater is moving down.
+		// 	if(this.warp != undefined){
+		// 		console.log('>> Is waiting: '+this.warp.weftWaitingTobeTighten.toString());
+		// 		if(this.warp.weftWaitingTobeTighten){
+		// 			console.log('>> trying to beat down');
+		// 			this.warp.tightWeft();
+		// 			this.stopCurrentAudio();
+		// 			this.playInstructionAudio(7); //Lift the glowing threads
+		// 			this.warp.blinkThreads([3,5]); //blinkthread starting from 0 
+		// 			this.tutorial_step = 11;
+		// 		}
+		// 	}
+		// }
+		// if(this.tutorial_step == 12 && beaterUp == false){ //Corrects threads where lifted now lets move Beater is moving down.
+		// 	if(this.warp != undefined){
+		// 		console.log('>> Is waiting: '+this.warp.weftWaitingTobeTighten.toString());
+		// 		if(this.warp.weftWaitingTobeTighten){
+		// 			console.log('>> trying to beat down');
+		// 			this.warp.tightWeft();
+		// 			this.stopCurrentAudio();
+		// 			this.playInstructionAudio(7); //Lift the glowing threads
+		// 			this.warp.blinkThreads([4]); //blinkthread starting from 0 
+		// 			this.tutorial_step = 13;
+		// 		}
+		// 	}
+		// }
+		// if(this.tutorial_step == 14 && beaterUp == false){ //Corrects threads where lifted now lets move Beater is moving down.
+		// 	if(this.warp != undefined){
+		// 		console.log('>> Is waiting: '+this.warp.weftWaitingTobeTighten.toString());
+		// 		if(this.warp.weftWaitingTobeTighten){
+		// 			console.log('>> trying to beat down');
+		// 			this.warp.tightWeft();
+		// 			this.stopCurrentAudio();
+		// 			this.playInstructionAudio(10); //Lift the glowing threads
+		// 			// this.warp.blinkThreads([4]); //blinkthread starting from 0 
+		// 			this.tutorial_step = 15;
+		// 		}
+		// 	}
+		// }
 
 	},
 	threadTouched: function(data){
 		//Reset Global timer
 		this.resetGameResetTimer();
-
+		//Reset Are you there
+		this.resetAreYouThere();
 		if(this.warp != undefined){
 			this.warp.threadTouched(data);
 		}
@@ -272,111 +369,189 @@ Kente.Tutorial.prototype = {
 		this.resetGameResetTimer();
 
 		var colors = [];
-		colors[1] = '0xFFFF00'; //yellow
-		colors[0] = '0x47D147'; //green
+		colors[1] = 'yellow'; //yellow
+		colors[0] = 'green'; //green
 		
 		
 		if(this.tutorial_step == 1){ //Finished - Welcome to the interactive.. 
 			this.stopCurrentAudio();
-			this.playInstructionAudio(2); //Play - These vertical threads here are called...
-			//Animate the warp
-			this.warp.showAttention();
-			this.tutorial_step = 2;
-		}
-		else if(this.tutorial_step == 2 ){ //
-			this.stopCurrentAudio();
+			this.playInstructionAudio(2); 
 			//Sending the shuttle for demonstration
-			console.log(':: Step 3 > Sending demonstration shuttle');
+			console.log('>> Sending demonstration shuttle');
 			this.warp.sendShuttles(null,colors);
 
-			this.playInstructionAudio(3); // 
-			this.tutorial_step = 3;
+			this.tutorial_step = 2;
 		}
-		//Step 3 is the Beater
-		// ....
-		//////
-		else if(this.tutorial_step == 5) //holding the first thread for pattern
-		{
+		else if(this.tutorial_step == 4){ 
 			if(this.beaterPosition == 'up'){
 				if(this.checkTutorialThreadsLifted([5])){ //Check if thread 5 (starting from 1) is lifted
 					console.log('>> GOOD JOB !');
 					this.warp.stopBlinkingAllThreads();
 					//PLay next threads to be lifted
 					this.stopCurrentAudio();
-					this.playInstructionAudio(8); //Move the beater down and up... 
+					this.playInstructionAudio(5); //Move the beater down and up... 
 					//Send shuttle
 					this.warp.sendShuttles(null, colors);
-					this.tutorial_step = 6;
+					this.tutorial_step = 5;
 				}else this.announceWrongThreads();//Play wrong threads try again
-			}else{ this.stopCurrentAudio(); this.playInstructionAudio(9);}
+			}else{ this.stopCurrentAudio(); this.playInstructionAudio(7);}
 		}
-		else if(this.tutorial_step == 7) //holding threads
-		{
-			// console.log(this.beaterPosition);
+		else if(this.tutorial_step == 6){ 
 			if(this.beaterPosition == 'up'){
-				if(this.checkTutorialThreadsLifted([4,6])){ //Check if threads 4 and 5 (starting from 1) are lifted
+				if(this.checkTutorialThreadsLifted([4,5,6])){ 
 					console.log('>> GOOD JOB !');
 					this.warp.stopBlinkingAllThreads();
 					//PLay next threads to be lifted
 					this.stopCurrentAudio();
-					this.playInstructionAudio(8); //Move the beater down and up... 
+					this.playInstructionAudio(9); //Move the beater down and up... 
 					//Send shuttle
 					this.warp.sendShuttles(null, colors);
-					this.tutorial_step = 8;
+					this.tutorial_step = 7;
 				}else this.announceWrongThreads();//Play wrong threads try again
-			}else{ this.stopCurrentAudio(); this.playInstructionAudio(9);}
+			}else{ this.stopCurrentAudio(); this.playInstructionAudio(7);}
 		}
-		else if(this.tutorial_step == 9) //holding threads
-		{
-			// console.log(this.beaterPosition);
+		else if(this.tutorial_step == 8){ 
 			if(this.beaterPosition == 'up'){
-				if(this.checkTutorialThreadsLifted([3,7])){ //Check if threads 4 and 5 (starting from 1) are lifted
+				if(this.checkTutorialThreadsLifted([4,5,6])){  //CORRECT HERE after keyboard limitaion
 					console.log('>> GOOD JOB !');
 					this.warp.stopBlinkingAllThreads();
 					//PLay next threads to be lifted
 					this.stopCurrentAudio();
-					this.playInstructionAudio(8); //Move the beater down and up... 
+					this.playInstructionAudio(9); //Move the beater down and up... 
 					//Send shuttle
 					this.warp.sendShuttles(null, colors);
-					this.tutorial_step = 10;
+					this.tutorial_step = 9;
 				}else this.announceWrongThreads();//Play wrong threads try again
-			}else{ this.stopCurrentAudio(); this.playInstructionAudio(9);}
+			}else{ this.stopCurrentAudio(); this.playInstructionAudio(7);}
 		}
-		else if(this.tutorial_step == 11) //holding threads
-		{
-			// console.log(this.beaterPosition);
+		else if(this.tutorial_step == 10){ 
 			if(this.beaterPosition == 'up'){
-				if(this.checkTutorialThreadsLifted([4,6])){ //Check if threads 4 and 5 (starting from 1) are lifted
+				if(this.checkTutorialThreadsLifted([4,5,6])){ 
 					console.log('>> GOOD JOB !');
 					this.warp.stopBlinkingAllThreads();
 					//PLay next threads to be lifted
 					this.stopCurrentAudio();
-					this.playInstructionAudio(8); //Move the beater down and up... 
+					this.playInstructionAudio(9); //Move the beater down and up... 
 					//Send shuttle
 					this.warp.sendShuttles(null, colors);
-					this.tutorial_step = 12;
+					this.tutorial_step = 11;
 				}else this.announceWrongThreads();//Play wrong threads try again
-			}else{ this.stopCurrentAudio(); this.playInstructionAudio(9);}
+			}else{ this.stopCurrentAudio(); this.playInstructionAudio(7);}
 		}
-		else if(this.tutorial_step == 13) //holding threads
-		{
-			// console.log(this.beaterPosition);
+		else if(this.tutorial_step == 12){ 
 			if(this.beaterPosition == 'up'){
-				if(this.checkTutorialThreadsLifted([5])){ //Check if threads 4 and 5 (starting from 1) are lifted
+				if(this.checkTutorialThreadsLifted([5])){ 
 					console.log('>> GOOD JOB !');
 					this.warp.stopBlinkingAllThreads();
 					//PLay next threads to be lifted
 					this.stopCurrentAudio();
-					this.playInstructionAudio(8); //Move the beater down and up..
+					this.playInstructionAudio(9); //Move the beater down and up... 
 					//Send shuttle
 					this.warp.sendShuttles(null, colors);
-					this.tutorial_step = 14;
+					this.tutorial_step = 13;
 				}else this.announceWrongThreads();//Play wrong threads try again
-			}else{ this.stopCurrentAudio(); this.playInstructionAudio(9);}
-		}else if(this.tutorial_step == 15) // Lets leave the Tutorial
+			}else{ this.stopCurrentAudio(); this.playInstructionAudio(7);}
+		}
+		else if(this.tutorial_step == 14) // Lets leave the Tutorial
 		{	
+			this.game.time.removeAll();
 			this.game.state.start('Game', true, false);	
 		}
+
+		// else if(this.tutorial_step == 2 ){ //
+		// 	this.stopCurrentAudio();
+		// 	//Sending the shuttle for demonstration
+		// 	console.log(':: Step 3 > Sending demonstration shuttle');
+		// 	this.warp.sendShuttles(null,colors);
+
+		// 	this.playInstructionAudio(3); // 
+		// 	this.tutorial_step = 3;
+		// }
+		// //Step 3 is the Beater
+		// // ....
+		// //////
+		// else if(this.tutorial_step == 5) //holding the first thread for pattern
+		// {
+		// 	if(this.beaterPosition == 'up'){
+		// 		if(this.checkTutorialThreadsLifted([5])){ //Check if thread 5 (starting from 1) is lifted
+		// 			console.log('>> GOOD JOB !');
+		// 			this.warp.stopBlinkingAllThreads();
+		// 			//PLay next threads to be lifted
+		// 			this.stopCurrentAudio();
+		// 			this.playInstructionAudio(8); //Move the beater down and up... 
+		// 			//Send shuttle
+		// 			this.warp.sendShuttles(null, colors);
+		// 			this.tutorial_step = 6;
+		// 		}else this.announceWrongThreads();//Play wrong threads try again
+		// 	}else{ this.stopCurrentAudio(); this.playInstructionAudio(9);}
+		// }
+		// else if(this.tutorial_step == 7) //holding threads
+		// {
+		// 	// console.log(this.beaterPosition);
+		// 	if(this.beaterPosition == 'up'){
+		// 		if(this.checkTutorialThreadsLifted([4,6])){ //Check if threads 4 and 5 (starting from 1) are lifted
+		// 			console.log('>> GOOD JOB !');
+		// 			this.warp.stopBlinkingAllThreads();
+		// 			//PLay next threads to be lifted
+		// 			this.stopCurrentAudio();
+		// 			this.playInstructionAudio(8); //Move the beater down and up... 
+		// 			//Send shuttle
+		// 			this.warp.sendShuttles(null, colors);
+		// 			this.tutorial_step = 8;
+		// 		}else this.announceWrongThreads();//Play wrong threads try again
+		// 	}else{ this.stopCurrentAudio(); this.playInstructionAudio(9);}
+		// }
+		// else if(this.tutorial_step == 9) //holding threads
+		// {
+		// 	// console.log(this.beaterPosition);
+		// 	if(this.beaterPosition == 'up'){
+		// 		if(this.checkTutorialThreadsLifted([3,7])){ //Check if threads 4 and 5 (starting from 1) are lifted
+		// 			console.log('>> GOOD JOB !');
+		// 			this.warp.stopBlinkingAllThreads();
+		// 			//PLay next threads to be lifted
+		// 			this.stopCurrentAudio();
+		// 			this.playInstructionAudio(8); //Move the beater down and up... 
+		// 			//Send shuttle
+		// 			this.warp.sendShuttles(null, colors);
+		// 			this.tutorial_step = 10;
+		// 		}else this.announceWrongThreads();//Play wrong threads try again
+		// 	}else{ this.stopCurrentAudio(); this.playInstructionAudio(9);}
+		// }
+		// else if(this.tutorial_step == 11) //holding threads
+		// {
+		// 	// console.log(this.beaterPosition);
+		// 	if(this.beaterPosition == 'up'){
+		// 		if(this.checkTutorialThreadsLifted([4,6])){ //Check if threads 4 and 5 (starting from 1) are lifted
+		// 			console.log('>> GOOD JOB !');
+		// 			this.warp.stopBlinkingAllThreads();
+		// 			//PLay next threads to be lifted
+		// 			this.stopCurrentAudio();
+		// 			this.playInstructionAudio(8); //Move the beater down and up... 
+		// 			//Send shuttle
+		// 			this.warp.sendShuttles(null, colors);
+		// 			this.tutorial_step = 12;
+		// 		}else this.announceWrongThreads();//Play wrong threads try again
+		// 	}else{ this.stopCurrentAudio(); this.playInstructionAudio(9);}
+		// }
+		// else if(this.tutorial_step == 13) //holding threads
+		// {
+		// 	// console.log(this.beaterPosition);
+		// 	if(this.beaterPosition == 'up'){
+		// 		if(this.checkTutorialThreadsLifted([5])){ //Check if threads 4 and 5 (starting from 1) are lifted
+		// 			console.log('>> GOOD JOB !');
+		// 			this.warp.stopBlinkingAllThreads();
+		// 			//PLay next threads to be lifted
+		// 			this.stopCurrentAudio();
+		// 			this.playInstructionAudio(8); //Move the beater down and up..
+		// 			//Send shuttle
+		// 			this.warp.sendShuttles(null, colors);
+		// 			this.tutorial_step = 14;
+		// 		}else this.announceWrongThreads();//Play wrong threads try again
+		// 	}else{ this.stopCurrentAudio(); this.playInstructionAudio(9);}
+		// }else if(this.tutorial_step == 15) // Lets leave the Tutorial
+		// {	
+		// 	this.game.state.start('Game', true, false);	
+		// }
 
 		
 		if(Kente.theSounds["1-1"].isPlaying){ //Are you there ?
@@ -457,38 +632,27 @@ Kente.Tutorial.prototype = {
 			}
 			case 2:{
 				this.game.time.events.remove(this.timer_AreYouThere);
-				console.log(':: Playing: These Vertical Threads .. 2-0-1');
-				Kente.theSounds["2-0-1"].play();
-				this.currentPlayingInstruction = Kente.theSounds["2-0-1"];
-				Kente.theSounds["2-0-1"].onStop.addOnce(function(){
-					console.log(":: Playing: The device you just pressed is called a Shuttle")
-					Kente.theSounds["2-0-2"].play();
-					this.currentPlayingInstruction = Kente.theSounds["2-0-2"];
-					Kente.theSounds["2-0-2"].onStop.addOnce(function(){
-						console.log(':: Playing: Touch the shuttle now to see it in action');
-						Kente.theSounds["2-0-3"].play();
-						this.currentPlayingInstruction = Kente.theSounds["2-0-3"];
-						this.resetAreYouThere();		
+				console.log(':: Playing: The shuttle is used to weave a weft .. 2-0');
+				Kente.theSounds["2-0"].play();
+				this.currentPlayingInstruction = Kente.theSounds["2-0"];
+				Kente.theSounds["2-0"].onStop.addOnce(function(){
+					console.log(':: Playing: A wooden piece placed .. 3-0-1');
+					Kente.theSounds["3-0-1"].play();
+					this.currentPlayingInstruction = Kente.theSounds["3-0-1"];
+					Kente.theSounds["3-0-1"].onStop.addOnce(function(){
+						console.log(':: Playing: Pull the beater all .. 3-0-2');
+						Kente.theSounds["3-0-2"].play();
+						this.currentPlayingInstruction = Kente.theSounds["3-0-2"];
+						Kente.theSounds["3-0-2"].onStop.addOnce(function(){
+							this.resetAreYouThere();		
+						},this);
 					},this);
 				},this);
 				break;
 			}
 			case 3:{
 				this.game.time.events.remove(this.timer_AreYouThere);
-				console.log(':: Playing: Great ! Weavers use a device called the beater .. 3-0-1');
-				Kente.theSounds["3-0-1"].play();
-				this.currentPlayingInstruction = Kente.theSounds["3-0-1"];
-				Kente.theSounds["3-0-1"].onStop.addOnce(function(){
-					console.log(":: Playing: Hold the beater down... 3-0-2")
-					Kente.theSounds["3-0-2"].play();
-					this.currentPlayingInstruction = Kente.theSounds["3-0-2"];
-					this.resetAreYouThere();
-				},this);
-				break;
-			}
-			case 4:{
-				this.game.time.events.remove(this.timer_AreYouThere);
-				console.log(':: Playing: Now ! move the beater up .. 3-0-3');
+				console.log(':: Playing: Now move the beater up .. 3-0-3');
 				Kente.theSounds["3-0-3"].play();
 				this.currentPlayingInstruction = Kente.theSounds["3-0-3"];
 				Kente.theSounds["3-0-3"].onStop.addOnce(function(){
@@ -496,24 +660,154 @@ Kente.Tutorial.prototype = {
 				},this);
 				break;
 			}
-			case 5:{
+			case 4:{
 				this.game.time.events.remove(this.timer_AreYouThere);
-				console.log(':: Playing: Great, now lets use this process .. 4-0');
+				console.log(':: Playing: Great ! Now youre ready .. 4-0');
 				Kente.theSounds["4-0"].play();
 				this.currentPlayingInstruction = Kente.theSounds["4-0"];
 				Kente.theSounds["4-0"].onStop.addOnce(function(){
-					console.log(':: Playing: To make a pattern .. 5-0-1');
+					console.log(':: Playing: Lift the center warp thread.. and touch shuttle 5-0-1');
 					Kente.theSounds["5-0-1"].play();
 					this.currentPlayingInstruction = Kente.theSounds["5-0-1"];
-					Kente.theSounds["5-0-1"].onStop.addOnce(function(){	
-						console.log(':: Playing: With your left hand .. 5-0-2');
-						Kente.theSounds["5-0-2"].play();
-						this.currentPlayingInstruction = Kente.theSounds["5-0-2"];
-						this.resetAreYouThere();	
-					}, this);
+					Kente.theSounds["5-0-1"].onStop.addOnce(function(){
+						this.resetAreYouThere();
+					},this);
 				},this);
 				break;
 			}
+			case 5:{
+				this.game.time.events.remove(this.timer_AreYouThere);
+				console.log(':: Playing: The green weft threads pass under .. 5-0-2');
+				Kente.theSounds["5-0-2"].play();
+				this.currentPlayingInstruction = Kente.theSounds["5-0-2"];
+				Kente.theSounds["5-0-2"].onStop.addOnce(function(){
+					console.log(':: Playing: Now, pull the beater down and up .. 5-1-1-a');
+					Kente.theSounds["5-1-1-a"].play();
+					this.currentPlayingInstruction = Kente.theSounds["5-1-1-a"];
+					Kente.theSounds["5-1-1-a"].onStop.addOnce(function(){
+							this.resetAreYouThere();
+					},this);
+				},this);
+				break;
+			}
+			case 6:{
+				this.game.time.events.remove(this.timer_AreYouThere);
+				console.log(':: Playing: Those werent the right threads .. 5-1-2');
+				Kente.theSounds["5-1-2"].play();
+				this.currentPlayingInstruction = Kente.theSounds["5-1-2"];
+				Kente.theSounds["5-1-2"].onStop.addOnce(function(){
+						this.resetAreYouThere();
+				},this);
+				break;
+			}
+			case 7:{
+				this.game.time.events.remove(this.timer_AreYouThere);
+				console.log(':: Playing: Remember to push the beater up .. 5-1-4');
+				Kente.theSounds["5-1-4"].play();
+				this.currentPlayingInstruction = Kente.theSounds["5-1-4"];
+				Kente.theSounds["5-1-4"].onStop.addOnce(function(){
+						this.resetAreYouThere();
+				},this);
+				break;
+			}
+			case 8:{
+				this.game.time.events.remove(this.timer_AreYouThere);
+				console.log(':: Playing: This tighten the weft thread into place .. 5-1-1-b');
+				Kente.theSounds["5-1-1-b"].play();
+				this.currentPlayingInstruction = Kente.theSounds["5-1-1-b"];
+				Kente.theSounds["5-1-1-b"].onStop.addOnce(function(){
+					console.log(':: Playing: Now lift the three .. 5-2');
+					Kente.theSounds["5-2"].play();
+					this.currentPlayingInstruction = Kente.theSounds["5-2"];
+					Kente.theSounds["5-2"].onStop.addOnce(function(){
+							this.resetAreYouThere();
+					},this);
+				},this);
+				break;
+			}
+			case 9:{
+				this.game.time.events.remove(this.timer_AreYouThere);
+				console.log(':: Playing: Now pull the beater down and up again .. 5-1-1-a');
+				Kente.theSounds["5-1-1-a"].play();
+				this.currentPlayingInstruction = Kente.theSounds["5-1-1-a"];
+				Kente.theSounds["5-1-1-a"].onStop.addOnce(function(){
+						this.resetAreYouThere();
+				},this);
+				break;
+			}
+			case 10:{
+				this.game.time.events.remove(this.timer_AreYouThere);
+				console.log(':: Playing: Now lift the 5 .. 5-3');
+				Kente.theSounds["5-3"].play();
+				this.currentPlayingInstruction = Kente.theSounds["5-3"];
+				Kente.theSounds["5-3"].onStop.addOnce(function(){
+						this.resetAreYouThere();
+				},this);
+				break;
+			}
+			case 11:{
+				this.game.time.events.remove(this.timer_AreYouThere);
+				console.log(':: Playing: Good ! Once again lift  .. 5-4');
+				Kente.theSounds["5-4"].play();
+				this.currentPlayingInstruction = Kente.theSounds["5-4"];
+				Kente.theSounds["5-4"].onStop.addOnce(function(){
+						this.resetAreYouThere();
+				},this);
+				break;
+			}
+			case 12:{
+				this.game.time.events.remove(this.timer_AreYouThere);
+				console.log(':: Playing: Finally ! Lift threads  .. 5-5');
+				Kente.theSounds["5-5"].play();
+				this.currentPlayingInstruction = Kente.theSounds["5-5"];
+				Kente.theSounds["5-5"].onStop.addOnce(function(){
+						this.resetAreYouThere();
+				},this);
+				break;
+			}
+			case 13:{
+				this.game.time.events.remove(this.timer_AreYouThere);
+				console.log(':: Playing: Great you just created your first pattern  .. 6-0-1');
+				Kente.theSounds["6-0-1"].play();
+				this.currentPlayingInstruction = Kente.theSounds["6-0-1"];
+				Kente.theSounds["6-0-1"].onStop.addOnce(function(){
+					console.log(':: Playing: This is called a Kente cloth  .. 6-0-2');
+					Kente.theSounds["6-0-2"].play();
+					this.currentPlayingInstruction = Kente.theSounds["6-0-2"];
+					Kente.theSounds["6-0-2"].onStop.addOnce(function(){
+						console.log(':: Playing: As you can see, real Kente  .. 6-0-3');
+						Kente.theSounds["6-0-3"].play();
+						this.currentPlayingInstruction = Kente.theSounds["6-0-3"];
+						Kente.theSounds["6-0-3"].onStop.addOnce(function(){
+							console.log(':: Playing: Noew youre ready to make your own  .. 6-0-4');
+							Kente.theSounds["6-0-4"].play();
+							this.currentPlayingInstruction = Kente.theSounds["6-0-4"];
+							Kente.theSounds["6-0-4"].onStop.addOnce(function(){
+									this.resetAreYouThere();
+							},this);
+						},this);
+					},this);
+				},this);
+				break;
+			}
+			// case 5:{
+			// 	this.game.time.events.remove(this.timer_AreYouThere);
+			// 	console.log(':: Playing: Great, now lets use this process .. 4-0');
+			// 	Kente.theSounds["4-0"].play();
+			// 	this.currentPlayingInstruction = Kente.theSounds["4-0"];
+			// 	Kente.theSounds["4-0"].onStop.addOnce(function(){
+			// 		console.log(':: Playing: To make a pattern .. 5-0-1');
+			// 		Kente.theSounds["5-0-1"].play();
+			// 		this.currentPlayingInstruction = Kente.theSounds["5-0-1"];
+			// 		Kente.theSounds["5-0-1"].onStop.addOnce(function(){	
+			// 			console.log(':: Playing: With your left hand .. 5-0-2');
+			// 			Kente.theSounds["5-0-2"].play();
+			// 			this.currentPlayingInstruction = Kente.theSounds["5-0-2"];
+			// 			this.resetAreYouThere();	
+			// 		}, this);
+			// 	},this);
+			// 	break;
+			// }
 			case 6: {
 				this.game.time.events.remove(this.timer_AreYouThere);
 				console.log(':: Playing: WRONG THREADS .. 5-2');
@@ -540,7 +834,12 @@ Kente.Tutorial.prototype = {
 				Kente.theSounds["5-1-0"].play();
 				this.currentPlayingInstruction = Kente.theSounds["5-1-0"];
 				Kente.theSounds["5-1-0"].onStop.addOnce(function(){
-					this.resetAreYouThere();
+					console.log(':: Playing: Now lift the three center .. 5-2');
+					Kente.theSounds["5-2"].play();
+					this.currentPlayingInstruction = Kente.theSounds["5-2"];
+					Kente.theSounds["5-2"].onStop.addOnce(function(){
+						this.resetAreYouThere();
+					},this);
 				},this);
 				break;
 			}

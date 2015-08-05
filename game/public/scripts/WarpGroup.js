@@ -41,7 +41,7 @@ WarpGroup = function (game, tutorial) {
 	this.shuttle2.width = sWidth;
 	this.shuttle2.height = sHeight;
 	this.shuttle2.isRight = false;
-	this.shuttle2.tint = Math.random() * 0xffffff;
+	// this.shuttle2.tint = Math.random() * 0xffffff;
 
 	//Counter
 	var style = { font: "25px Arial", fill: "#fffeee", align: "center", wordWrap: true, wordWrapWidth: 550};
@@ -157,7 +157,7 @@ WarpGroup.prototype.glowThread = function(threadnum, status){
 	if(threadnum >= 0 && threadnum <= this.threads.length){
 		if(status == true){
 			// this.threads[threadnum].blendMode = PIXI.blendModes.ADD;}
-			this.threads[threadnum].tint = '0x996633';
+			this.threads[threadnum].tint = '0xbce7f4';
 		}
 		else{
 			// this.threads[threadnum].blendMode = PIXI.blendModes.NORMAL;	
@@ -191,7 +191,8 @@ WarpGroup.prototype.sendShuttles = function(liftedThreads, colors){
 		
 		var lockedLiftedThreads = this.liftedThreads; //Lets lock the threads that are liften when the shuttle was pressed
 		//Draw the Thread #1
-		var thread_low = new ThreadGroup(this.thegame, lockedLiftedThreads, colors[0]);
+		var thread_low = new ThreadGroup(this.thegame, lockedLiftedThreads, this.getColorCode(colors[0]));
+		this.shuttle1.loadTexture(colors[0]);
 		thread_low.y = this.shuttle1.y + this.shuttle1.height/2; 
 		this.weftContainer.addChild(thread_low);
 		thread_low.revealToLeft();
@@ -208,7 +209,8 @@ WarpGroup.prototype.sendShuttles = function(liftedThreads, colors){
 		tween1 = this.thegame.add.tween(this.shuttle1).to( { x: this.shuttle2.x }, 1500, Phaser.Easing.Quadratic.In, true);
 		tween1.onComplete.addOnce(function(){
 			//Draw the Thread #2
-			var thread_upper = new ThreadGroup(this.thegame, lockedLiftedThreads, colors[1], true);
+			var thread_upper = new ThreadGroup(this.thegame, lockedLiftedThreads, this.getColorCode(colors[1]), true);
+			this.shuttle2.loadTexture(colors[1]);
 			thread_upper.y = this.shuttle2.y + this.shuttle1.height/2; 
 			this.weftContainer.addChild(thread_upper);
 			thread_upper.revealToRight();
@@ -390,6 +392,13 @@ WarpGroup.prototype.showAttention = function(){
 
 
 
+}
+
+WarpGroup.prototype.getColorCode = function(colorWord){
+		if(colorWord == 'red') return '0xf44f45';
+		if(colorWord == 'blue') return '0x1a7df5';
+		if(colorWord == 'green') return '0x00f990';
+		if(colorWord == 'yellow') return '0xf7c73e';
 }
 
 
