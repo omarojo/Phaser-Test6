@@ -90,7 +90,7 @@ ThreadGroup.prototype.glowThread = function(threadnum, status){
 }
 ThreadGroup.prototype.revealToLeft = function(){
 	this.isWeaving = true;
-	var maskTween = this.thegame.add.tween(this.mask).to( { x: -672 }, 1500, Phaser.Easing.Quadratic.In, true, 200);
+	var maskTween = this.thegame.add.tween(this.mask).to( { x: -672 }, 700, Phaser.Easing.Quadratic.In, true, 200);
 	maskTween.onComplete.addOnce(function(){
 		this.isWeaving = false;
 	},this);
@@ -99,7 +99,7 @@ ThreadGroup.prototype.revealToRight = function(){
 	this.isWeaving = true;
 	this.mask.x = -(this.game.world.width+672); //First move the mask all the way to the left outside screen, because its default position is on the right
 	//Then we animate it back to the right
-	var maskTween = this.thegame.add.tween(this.mask).to( { x: 0 }, 1500, Phaser.Easing.Quadratic.In, true, 200);
+	var maskTween = this.thegame.add.tween(this.mask).to( { x: 0 }, 700, Phaser.Easing.Quadratic.In, true, 200);
 	maskTween.onComplete.addOnce(function(){
 		this.isWeaving = false;
 	},this);

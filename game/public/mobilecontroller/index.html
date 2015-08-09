@@ -60,6 +60,10 @@
 	<div id="thread3" class="thread">Thread 3</div>
 	<div id="thread4" class="thread">Thread 4</div>
 	<div id="thread5" class="thread">thread 5</div>
+	<div id="thread6" class="thread">thread 6</div>
+	<div id="thread7" class="thread">thread 7</div>
+	<div id="thread8" class="thread">thread 8</div>
+	<div id="thread9" class="thread">thread 9</div>
 
 	<div id="beaterDown" class="beater">BEATER Down</div>
 	<div id="beaterUp" class="beater">BEATER Up</div>
@@ -69,7 +73,7 @@
 
 <script type="text/javascript">
 window.onload = function () {
-	var socket = io('http://localhost:3000');
+	var socket = io();
 
 	$('#thread1').on('tapstart', function(e) { 
 		console.log('::Thread1 tapstart');
@@ -123,6 +127,46 @@ window.onload = function () {
 	$('#thread5').on('tapend', function(e) { 
 		console.log('::Thread5 tapsEnd');
 		socket.emit('threadTouch', {thread:5,state:'loose'});
+		$( this ).css( 'background-color', 'red' );
+	});
+	$('#thread6').on('tapstart', function(e) {
+		console.log('::Thread6 tapstart');
+		socket.emit('threadTouch', {thread:6,state:'held'});
+		$( this ).css( 'background-color', 'blue' );
+	});
+	$('#thread6').on('tapend', function(e) { 
+		console.log('::Thread6 tapsEnd');
+		socket.emit('threadTouch', {thread:6,state:'loose'});
+		$( this ).css( 'background-color', 'red' );
+	});
+	$('#thread7').on('tapstart', function(e) {
+		console.log('::Thread7 tapstart');
+		socket.emit('threadTouch', {thread:7,state:'held'});
+		$( this ).css( 'background-color', 'blue' );
+	});
+	$('#thread7').on('tapend', function(e) { 
+		console.log('::Thread7 tapsEnd');
+		socket.emit('threadTouch', {thread:7,state:'loose'});
+		$( this ).css( 'background-color', 'red' );
+	});
+	$('#thread8').on('tapstart', function(e) {
+		console.log('::Thread8 tapstart');
+		socket.emit('threadTouch', {thread:8,state:'held'});
+		$( this ).css( 'background-color', 'blue' );
+	});
+	$('#thread8').on('tapend', function(e) { 
+		console.log('::Thread8 tapsEnd');
+		socket.emit('threadTouch', {thread:8,state:'loose'});
+		$( this ).css( 'background-color', 'red' );
+	});
+	$('#thread9').on('tapstart', function(e) {
+		console.log('::Thread9 tapstart');
+		socket.emit('threadTouch', {thread:9,state:'held'});
+		$( this ).css( 'background-color', 'blue' );
+	});
+	$('#thread9').on('tapend', function(e) { 
+		console.log('::Thread9 tapsEnd');
+		socket.emit('threadTouch', {thread:9,state:'loose'});
 		$( this ).css( 'background-color', 'red' );
 	});
 

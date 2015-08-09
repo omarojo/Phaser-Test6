@@ -59,7 +59,7 @@ Kente.Boot.prototype = {
         this.load.image('wooden_divider', 'assets/woodendivider.png');
         this.load.image('kente_bg', 'assets/kentebg.png');
         this.load.image('halfbg', 'assets/half-background.png');
-        
+        this.load.video('kentevideo', 'assets/kente_video.mp4');
         //Load all Sounds
         // this.load.audio('1-start', 'assets/audio/1-start.mp3');// 0 Welcome to the interactive weaving exhibit
         // this.load.audio('1-1', 'assets/audio/1-1.mp3');// Are you still there

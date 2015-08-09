@@ -454,8 +454,9 @@ Kente.Tutorial.prototype = {
 		}
 		else if(this.tutorial_step == 14) // Lets leave the Tutorial
 		{	
+			this.stopCurrentAudio();
 			this.game.time.removeAll();
-			this.game.state.start('Game', true, false);	
+			this.game.state.start('VideoPlayer', true, false);	
 		}
 
 		// else if(this.tutorial_step == 2 ){ //
@@ -594,7 +595,7 @@ Kente.Tutorial.prototype = {
 			// this.timer_resetGame = this.game.time.create(false);
 			// this.timer_resetGame.add(60000, this.resetGame, this);
 			// this.timer_resetGame.start();
-			this.timer_resetGame = this.game.time.events.add(240000, this.resetGame, this);
+			this.timer_resetGame = this.game.time.events.add(60000, this.resetGame, this);
 			console.log(':: Global Timer reseted');
 	},
 	resetGame: function(){

@@ -9,6 +9,7 @@ Kente.SlideShow = function (game) {
 
 Kente.SlideShow.prototype = {
 	preload: function(){
+		this.game.stage.disableVisibilityChange = true;
 		this.load.image('slide1', 'assets/slide1.png');
 		this.load.image('slide2', 'assets/slide2.png');
 		this.load.image('slide3', 'assets/slide3.png');
@@ -25,8 +26,28 @@ Kente.SlideShow.prototype = {
 			self.threadTouched(data);
 		});
 		
+		//Canisters
 		this.keyQ = this.game.input.keyboard.addKey(Phaser.Keyboard.Q);
 	    this.keyQ.onDown.add(this.threadTouched, this);
+	    this.keyW = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
+	    this.keyW.onDown.add(this.threadTouched, this);
+	    this.keyE = this.game.input.keyboard.addKey(Phaser.Keyboard.E);
+	    this.keyE.onDown.add(this.threadTouched, this);
+	    this.keyR = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
+	    this.keyR.onDown.add(this.threadTouched, this);
+
+	    //Shuttle
+	    this.keyZ = this.game.input.keyboard.addKey(Phaser.Keyboard.Z);
+	    this.keyZ.onDown.add(this.threadTouched, this);
+
+	    //Beater Down
+	    this.keyB = this.game.input.keyboard.addKey(Phaser.Keyboard.B);
+	    this.keyB.onDown.add(this.threadTouched, this);
+
+	    //Beater Up
+	    this.keyU = this.game.input.keyboard.addKey(Phaser.Keyboard.U);
+	    this.keyU.onDown.add(this.threadTouched, this);
+
 
 	    //Send Screenshot
 		var keyScreenshot = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
@@ -116,7 +137,7 @@ Kente.SlideShow.prototype = {
 			this.add.tween(this.welcomeText).to({alpha: 0},1000,Phaser.Easing.Quadratic.InOut, true, 200);	
 			this.add.tween(this.upperContainer).to({alpha: 0},1000,Phaser.Easing.Quadratic.InOut, true, 200).onComplete.add(function(){
 				// this.game.state.start('Tutorial', true, false);	
-				this.game.state.start('Game', true, false);	
+				this.game.state.start('Tutorial', true, false);	
 			},this);
 			
 

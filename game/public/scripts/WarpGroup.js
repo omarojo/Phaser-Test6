@@ -6,7 +6,7 @@ WarpGroup = function (game, tutorial) {
 	this.thegame = game;
 	this.threads = [];
 	this.liftedThreads = [];
-	this.requiredThreadsToWeave = 17;
+	this.requiredThreadsToWeave = 17; //number of threads to be weaved
 	this.currentWovenThreads = 0;
 	this.upperT = null; //The horizontal weaved thread
 	this.lowerT = null; // The lower horizontal weaved thread, this are the ones that get tighten down in the warp
@@ -188,8 +188,11 @@ WarpGroup.prototype.stopBlinkingAllThreads = function(){
 WarpGroup.prototype.sendShuttles = function(liftedThreads, colors){
 	console.log("Sending shuttles");
 	if(this.shuttle1.isRight == true && this.currentWovenThreads <this.requiredThreadsToWeave && this.weftWaitingTobeTighten == false){ //With this, we prevent the user from overlaping thread animations
-		
-		var lockedLiftedThreads = this.liftedThreads; //Lets lock the threads that are liften when the shuttle was pressed
+		var lockedLiftedThreads = [];
+		for (var i=0; i<this.liftedThreads.length; i++ ){
+			lockedLiftedThreads[i] = this.liftedThreads[i];
+		}
+		// var lockedLiftedThreads = this.liftedThreads; //Lets lock the threads that are liften when the shuttle was pressed
 		//Draw the Thread #1
 		var thread_low = new ThreadGroup(this.thegame, lockedLiftedThreads, this.getColorCode(colors[0]));
 		this.shuttle1.loadTexture(colors[0]);
@@ -206,7 +209,7 @@ WarpGroup.prototype.sendShuttles = function(liftedThreads, colors){
 
 		this.shuttle1.isRight = false;
 		//Animate shuttle 1 to the left
-		tween1 = this.thegame.add.tween(this.shuttle1).to( { x: this.shuttle2.x }, 1500, Phaser.Easing.Quadratic.In, true);
+		tween1 = this.thegame.add.tween(this.shuttle1).to( { x: this.shuttle2.x }, 700, Phaser.Easing.Quadratic.In, true);
 		tween1.onComplete.addOnce(function(){
 			//Draw the Thread #2
 			var thread_upper = new ThreadGroup(this.thegame, lockedLiftedThreads, this.getColorCode(colors[1]), true);
@@ -220,7 +223,7 @@ WarpGroup.prototype.sendShuttles = function(liftedThreads, colors){
 			// this.setChildIndex(this.shuttle2,this.children.length-1);
 
 			//Animate shuttle 2 to the right
-			tween2 = this.thegame.add.tween(this.shuttle2).to( { x: this.thegame.world.width }, 1500, Phaser.Easing.Quadratic.In, true);
+			tween2 = this.thegame.add.tween(this.shuttle2).to( { x: this.thegame.world.width }, 700, Phaser.Easing.Quadratic.In, true);
 			tween2.onComplete.addOnce(function(){
 				this.shuttle1.x = this.thegame.world.width;
 				this.shuttle2.x = -this.shuttle2.width;

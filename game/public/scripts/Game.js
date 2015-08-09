@@ -251,7 +251,7 @@ Kente.Game.prototype = {
 	showInstruction: function(text) {
 		if(this.currentInstruction) this.currentInstruction.destroy();
 		var intrBox = new InstructionsGroup(this.game, text,
-	    					25);
+	    					50);
 		intrBox.present();
 		this.currentInstruction = intrBox;
 	},
@@ -262,7 +262,7 @@ Kente.Game.prototype = {
 			//Reset are you there timer
 			this.resetAreYouThere();
 			// 2 minutes timer
-			this.timer_resetGame = this.game.time.events.add(240000, this.resetGame, this);
+			this.timer_resetGame = this.game.time.events.add(60000, this.resetGame, this);
 			console.log(':: Global Timer reseted');
 	},
 	resetAreYouThere: function(){
