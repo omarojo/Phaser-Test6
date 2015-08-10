@@ -30,7 +30,7 @@ server.listen(3000);
 *********************************************************/
 var options = { server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } }, 
                 replset: { socketOptions: { keepAlive: 1, connectTimeoutMS : 30000 } } };
-mongoose.connect('mongodb://localhost:'+'27017'+'/kentedb', options, function (error) { //Local
+mongoose.connect('mongodb://localhost:'+'27017'+'/kentedb', options, function (error) { //Localf
 // mongoose.connect('mongodb://omarojo:connyojo@novus.modulusmongo.net:27017/ogU4vasy', function (error) {    // MODULUS
     if (error) {
         console.log("Cant Connect to mongoDB: "+error);
@@ -68,7 +68,7 @@ app.route('/kente') //standard response
                    // width:260, height:260,
                    cropwidth:426, cropheight:426,
                    gravity: 'NorthWest',
-                   x:387, y:1494
+                   x:387, y:1495
                 }).then(
                 function(image) {
                     console.log('Cropped');
@@ -113,149 +113,149 @@ Arduino + Johnny Five module to read states of sensors
 
 ************************************************************/
 // Johnny-Five module install
-// var five = require("johnny-five");
+var five = require("johnny-five");
 
-// // A board needs to be initialized for handling components using Johnny-Five
-// var board = new five.Board();;
+// A board needs to be initialized for handling components using Johnny-Five
+var board = new five.Board();;
 
-// // Defining pin numbers for switches. Change following values to reflect connection of switches attached to pins on the board
-// var thread1Pin = 2;
-// var thread2Pin = 3;
-// var thread3Pin = 4;
-// var thread4Pin = 5;
-// var thread5Pin = 6;
-// var thread6Pin = 7;
-// var thread7Pin = 8;
-// var thread8Pin = 9;
-// var thread9Pin = 10;
+// Defining pin numbers for switches. Change following values to reflect connection of switches attached to pins on the board
+var thread1Pin = 2;
+var thread2Pin = 3;
+var thread3Pin = 4;
+var thread4Pin = 5;
+var thread5Pin = 6;
+var thread6Pin = 7;
+var thread7Pin = 8;
+var thread8Pin = 9;
+var thread9Pin = 10;
 
-// var beaterBottomPin = 11;
-// var beaterTopPin = 12;
+var beaterBottomPin = 11;
+var beaterTopPin = 12;
 
-// board.on("ready", function() {
+board.on("ready", function() {
 
-//   	console.log(">> Board is on");
+  	console.log(">> Board is on");
 
-// //  Initializing Components of Johnny-Five
-// //  Note - Switches are READ-ONLY
-//     var thread1 = new five.Switch(thread1Pin);
-//     var thread2 = new five.Switch(thread2Pin);
-//     var thread3 = new five.Switch(thread3Pin);
-//     var thread4 = new five.Switch(thread4Pin);
-//     var thread5 = new five.Switch(thread5Pin);
-//     var thread6 = new five.Switch(thread6Pin);
-//     var thread7 = new five.Switch(thread7Pin);
-//     var thread8 = new five.Switch(thread8Pin);
-//     var thread9 = new five.Switch(thread9Pin);
+//  Initializing Components of Johnny-Five
+//  Note - Switches are READ-ONLY
+    var thread1 = new five.Switch(thread1Pin);
+    var thread2 = new five.Switch(thread2Pin);
+    var thread3 = new five.Switch(thread3Pin);
+    var thread4 = new five.Switch(thread4Pin);
+    var thread5 = new five.Switch(thread5Pin);
+    var thread6 = new five.Switch(thread6Pin);
+    var thread7 = new five.Switch(thread7Pin);
+    var thread8 = new five.Switch(thread8Pin);
+    var thread9 = new five.Switch(thread9Pin);
 
-//     var beaterTop = new five.Switch(beaterTopPin);
-//     var beaterBottom = new five.Switch(beaterBottomPin);
-// /*
-// // Events are triggered based on the state of switches attached to board.
-// // Switch.on("open", function() {
-//       // Switch is read open
-// // })
-// // Switch.on("close", function() {
-//       // Switch is read close
-// // })
-// */
-//     thread1.on("open", function() {
-//       console.log("Thread 1 state open");
-//       emitSocket_ThreadState(1,'held');
-//     });
-//     thread1.on("close", function() {
-//       console.log("Thread 1 state close");
-//       emitSocket_ThreadState(1,'loose');
-//     });
+    var beaterTop = new five.Switch(beaterTopPin);
+    var beaterBottom = new five.Switch(beaterBottomPin);
+/*
+// Events are triggered based on the state of switches attached to board.
+// Switch.on("open", function() {
+      // Switch is read open
+// })
+// Switch.on("close", function() {
+      // Switch is read close
+// })
+*/
+    thread1.on("open", function() {
+      console.log("Thread 1 state open");
+      emitSocket_ThreadState(1,'held');
+    });
+    thread1.on("close", function() {
+      console.log("Thread 1 state close");
+      emitSocket_ThreadState(1,'loose');
+    });
 
-//     thread2.on("open", function() {
-//       console.log("Thread 2 state open");
-//       emitSocket_ThreadState(2,'held');
-//     });
-//     thread2.on("close", function() {
-//       console.log("Thread 2 state close");
-//       emitSocket_ThreadState(2,'loose');
-//     });
+    thread2.on("open", function() {
+      console.log("Thread 2 state open");
+      emitSocket_ThreadState(2,'held');
+    });
+    thread2.on("close", function() {
+      console.log("Thread 2 state close");
+      emitSocket_ThreadState(2,'loose');
+    });
 
-//     thread3.on("open", function() {
-//       console.log("Thread 3 state open");
-//       emitSocket_ThreadState(3,'held');
-//     });
-//     thread3.on("close", function() {
-//       console.log("Thread 3 state close");
-//       emitSocket_ThreadState(3,'loose');
-//     });
+    thread3.on("open", function() {
+      console.log("Thread 3 state open");
+      emitSocket_ThreadState(3,'held');
+    });
+    thread3.on("close", function() {
+      console.log("Thread 3 state close");
+      emitSocket_ThreadState(3,'loose');
+    });
 
-//     thread4.on("open", function() {
-//       console.log("Thread 4 state open");
-//       emitSocket_ThreadState(4,'held');
-//     });
-//     thread4.on("close", function() {
-//       console.log("Thread 4 state close");
-//       emitSocket_ThreadState(4,'loose');
-//     });
+    thread4.on("open", function() {
+      console.log("Thread 4 state open");
+      emitSocket_ThreadState(4,'held');
+    });
+    thread4.on("close", function() {
+      console.log("Thread 4 state close");
+      emitSocket_ThreadState(4,'loose');
+    });
 
-//     thread5.on("open", function() {
-//       console.log("Thread 5 state open");
-//       emitSocket_ThreadState(5,'held');
-//     });
-//     thread5.on("close", function() {
-//       console.log("Thread 5 state close");
-//       emitSocket_ThreadState(5,'loose');
-//     });
+    thread5.on("open", function() {
+      console.log("Thread 5 state open");
+      emitSocket_ThreadState(5,'held');
+    });
+    thread5.on("close", function() {
+      console.log("Thread 5 state close");
+      emitSocket_ThreadState(5,'loose');
+    });
 
-//     thread6.on("open", function() {
-//       console.log("Thread 6 state open");
-//       emitSocket_ThreadState(6,'held');
-//     });
-//     thread6.on("close", function() {
-//       console.log("Thread 6 state close");
-//       emitSocket_ThreadState(6,'loose');
-//     });
+    thread6.on("open", function() {
+      console.log("Thread 6 state open");
+      emitSocket_ThreadState(6,'held');
+    });
+    thread6.on("close", function() {
+      console.log("Thread 6 state close");
+      emitSocket_ThreadState(6,'loose');
+    });
 
-//     thread7.on("open", function() {
-//       console.log("Thread 7 state open");
-//       emitSocket_ThreadState(7,'held');
-//     });
-//     thread7.on("close", function() {
-//       console.log("Thread 7 state close");
-//       emitSocket_ThreadState(7,'loose');
-//     });
+    thread7.on("open", function() {
+      console.log("Thread 7 state open");
+      emitSocket_ThreadState(7,'held');
+    });
+    thread7.on("close", function() {
+      console.log("Thread 7 state close");
+      emitSocket_ThreadState(7,'loose');
+    });
 
-//     thread8.on("open", function() {
-//       console.log("Thread 8 state open");
-//       emitSocket_ThreadState(8,'held');
-//     });
-//     thread8.on("close", function() {
-//       console.log("Thread 8 state close");
-//       emitSocket_ThreadState(8,'loose');
-//     });
+    thread8.on("open", function() {
+      console.log("Thread 8 state open");
+      emitSocket_ThreadState(8,'held');
+    });
+    thread8.on("close", function() {
+      console.log("Thread 8 state close");
+      emitSocket_ThreadState(8,'loose');
+    });
 
-//     thread9.on("open", function() {
-//       console.log("Thread 9 state open");
-//       emitSocket_ThreadState(9,'held');
-//     });
-//     thread9.on("close", function() {
-//       console.log("Thread 9 state close");
-//       emitSocket_ThreadState(9,'loose');
-//     });
+    thread9.on("open", function() {
+      console.log("Thread 9 state open");
+      emitSocket_ThreadState(9,'held');
+    });
+    thread9.on("close", function() {
+      console.log("Thread 9 state close");
+      emitSocket_ThreadState(9,'loose');
+    });
 
-//     beaterTop.on("open", function() {
-//       console.log("Top Beater state open");
-//       emitSocket_BeaterState('up');
-//     });
-//     beaterTop.on("close", function() {
-//       console.log("Top Beater state close");
-//     });
+    beaterTop.on("open", function() {
+      console.log("Top Beater state open");
+      emitSocket_BeaterState('up');
+    });
+    beaterTop.on("close", function() {
+      console.log("Top Beater state close");
+    });
 
-//     beaterBottom.on("open", function() {
-//       console.log("Bottom Beater state open");
-//       emitSocket_BeaterState('down');
-//     });
-//     beaterBottom.on("close", function() {
-//       console.log("Bottom Beater state close");
-//     });
-// });
+    beaterBottom.on("open", function() {
+      console.log("Bottom Beater state open");
+      emitSocket_BeaterState('down');
+    });
+    beaterBottom.on("close", function() {
+      console.log("Bottom Beater state close");
+    });
+});
 
 
 /**********************************************************

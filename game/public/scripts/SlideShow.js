@@ -26,6 +26,10 @@ Kente.SlideShow.prototype = {
 			self.threadTouched(data);
 		});
 		
+		//ShortCut to Game
+		this.keyG = this.game.input.keyboard.addKey(Phaser.Keyboard.G);
+	    this.keyG.onDown.add(this.goToGame, this);
+
 		//Canisters
 		this.keyQ = this.game.input.keyboard.addKey(Phaser.Keyboard.Q);
 	    this.keyQ.onDown.add(this.threadTouched, this);
@@ -72,13 +76,16 @@ Kente.SlideShow.prototype = {
 	    this.upperContainer.mask = mask;
 
 	    // TEXT
-	   	var style = { font: "50px Arial", fill: "#ffffff", align: "center" };
-	    this.welcomeText = this.game.add.text(this.game.world.centerX, 500, "Touch any canister\nto create your own Kente-inspired pattern", style);
-	    this.welcomeText.anchor.set(0.5);
+	   	// var style = { font: "50px Arial", fill: "#ffffff", align: "center" };
+	    // this.welcomeText = this.game.add.text(this.game.world.centerX, 500, "Touch any canister\nto create your own Kente-inspired pattern", style);
+	    // this.welcomeText.anchor.set(0.5);
 
 	    
 	    this.photos = this.add.group();
 	    this.upperContainer.addChild(this.photos);
+
+	    //TITLE
+	    this.upperContainer.create(280, 500, 'title_slideshow');
 
 	    //LOWER CONTAINER
 	    this.lowerContainer.y = this.game.world.height-50//this.game.world.centerY;
@@ -86,6 +93,8 @@ Kente.SlideShow.prototype = {
 		// this.lowerContainer.create(0,905,'wooden_divider');
 		this.lowerContainer.create(0,52,'halfbg');
 		this.lowerContainer.create(0,-52,'wooden_divider');
+
+
 
 	    // var warpPlahceholderSprite = this.game.make.sprite(0,0,'warp_placeholder');
 	    // this.lowerContainer.addChild(warpPlahceholderSprite); 
@@ -132,17 +141,18 @@ Kente.SlideShow.prototype = {
 	threadTouched: function(data){
 		console.log(data);
 		
-		var tween = this.add.tween(this.lowerContainer).to({y: this.game.world.centerY},2000,Phaser.Easing.Quadratic.InOut, true, 200);
+		var tween = this.add.tween(this.lowerContainer).to({y: this.game.world.centerY-3},2000,Phaser.Easing.Quadratic.InOut, true, 200);
 		tween.onComplete.add(function(){
-			this.add.tween(this.welcomeText).to({alpha: 0},1000,Phaser.Easing.Quadratic.InOut, true, 200);	
+			// this.add.tween(this.welcomeText).to({alpha: 0},1000,Phaser.Easing.Quadratic.InOut, true, 200);	
 			this.add.tween(this.upperContainer).to({alpha: 0},1000,Phaser.Easing.Quadratic.InOut, true, 200).onComplete.add(function(){
 				// this.game.state.start('Tutorial', true, false);	
 				this.game.state.start('Tutorial', true, false);	
 			},this);
-			
-
-			
+						
 		},this);
+	},
+	goToGame: function(){
+		this.game.state.start('Game', true, false);	
 	},
 	crop:function(){
 		// var second_game = new Phaser.Game(175, 300, Phaser.CANVAS, 'second_game');
