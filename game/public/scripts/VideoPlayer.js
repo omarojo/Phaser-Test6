@@ -33,24 +33,32 @@ Kente.VideoPlayer.prototype = {
 
 		this.video = this.game.add.video('kentevideo');
 
+		
+
 	    //  See the docs for the full parameters
 	    //  But it goes x, y, anchor x, anchor y, scale x, scale y
 	    this.video.addToWorld(this.game.world.centerX, this.game.world.centerY, 0.5, 0.5, 1, 1);
 
+	    //BLACK COVER
+	    this.mygraphics = this.game.add.graphics(0, 0);
+	    // set a fill and line style
+	    this.mygraphics.beginFill(0x00000);
+	    this.mygraphics.drawRect(0, 0, this.game.world.width, this.game.world.height);
+	    this.mygraphics.alpha = 0.0;
+
 	    this.counter = 0;
 	    //  true = loop
-	    this.video.play(true);
+	    // this.video.play(true);
 
-	    // this.video.play(false);
-	    // var self = this;
-	    // this.video.onComplete.addOnce(function(){
-	    // 	self.video.play(false);
-	    // 	self.video.onComplete.addOnce(function(){
-	    // 		console.log('>> VIDEO ENDED for Second Time');
-		   //  		self.goToGame();
-	    // 	});	
-	    // });
-
+	    this.video.play(false);
+	    var self = this;
+	    this.video.onComplete.addOnce(function(){
+	    	self.video.play(false);
+	    	self.video.onComplete.addOnce(function(){
+	    		console.log('>> VIDEO ENDED for Second Time');
+		    		self.goToGame();
+	    	});	
+	    });
 
 	    ///AUDIO INSTRUCTIONS
 	    console.log(':: Playing: As you can see, real Kente  .. 6-0-3');
@@ -71,9 +79,13 @@ Kente.VideoPlayer.prototype = {
 
 	},
 	goToGame: function(){
-		this.stopCurrentAudio();
-		// this.game.time.events.removeAll();
-		this.game.state.start('Game', true, false);
+		var fadeTween = this.game.add.tween(this.mygraphics).to({alpha: 1},
+				2000,Phaser.Easing.Linear.None,true);
+		var self = this;
+		fadeTween.onComplete.addOnce(function(){
+			self.stopCurrentAudio();
+			self.game.state.start('Game', true, false);	
+		});
 	},
 	canisterTouched: function(data){
 		this.video.stop();

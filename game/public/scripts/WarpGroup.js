@@ -19,7 +19,12 @@ WarpGroup = function (game, tutorial) {
 	}
 
 
-	 this.weftContainer = this.game.make.group();
+	this.weftContainer = this.game.make.group();
+
+	//Add Wood Piece marker
+	var tiny_wood = this.game.make.sprite(this.game.world.centerX,this.game.world.centerY+ 500,'tiny_wood_piece');
+	tiny_wood.anchor.set(0.5,0.5);
+	this.addChild(tiny_wood);
 
 	//Add the weft threads on screen
 	for(var i= 0; i<9; i++){
@@ -49,6 +54,7 @@ WarpGroup = function (game, tutorial) {
 	this.tcounter.anchor.set(0.5);
 	this.tcounter.y = 955;
 	this.tcounter.x = this.game.world.centerX;
+	this.tcounter.alpha = 0.0;
 	// this.add(tcounter);
 
 
@@ -153,7 +159,6 @@ WarpGroup.prototype.threadTouched = function(data){
 	}
 }
 WarpGroup.prototype.glowThread = function(threadnum, status){
-	// console.log(this.liftedThreads);
 	if(threadnum >= 0 && threadnum <= this.threads.length){
 		if(status == true){
 			// this.threads[threadnum].blendMode = PIXI.blendModes.ADD;}

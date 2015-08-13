@@ -68,6 +68,8 @@ Kente.Boot.prototype = {
         this.load.image('title_game', 'assets/title_game.png');
         this.load.image('title_tutorial', 'assets/title_tutorial.png');
         this.load.image('title_slideshow', 'assets/title_slideshow.png');
+        this.load.image('title_thank', 'assets/title_thank.png');
+        this.load.image('tiny_wood_piece', 'assets/tiny_wood_piece.png');
 
 
         this.load.video('kentevideo', 'assets/kente_video.mp4');

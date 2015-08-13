@@ -74,6 +74,11 @@ Kente.Game.prototype = {
 	    // UI
 	    //Add the Background
 		this.add.sprite(0,0,'background');
+
+		
+
+
+
 		//CONTAINER SETUP
 		this.upperContainer = this.add.group();
 		this.lowerContainer = this.add.group();
@@ -141,9 +146,26 @@ Kente.Game.prototype = {
 	    //Start the Global timer
 		this.resetGameResetTimer();
 
+
+		//SHOW THE CANISTERS ANIMATION
+		this.showCanisters();
+
 		//Play Instruction #1
 		this.playInstructionAudio(1);
 		this.firstInstructionIsPlaying = true;
+
+
+		//BLACK COVER
+	    this.blackCover = this.game.add.graphics(0, 0);
+	    this.blackCover.beginFill(0x00000);
+	    this.blackCover.drawRect(0, 0, this.game.world.width, this.game.world.height);
+	    this.blackCover.alpha = 1;
+
+	    //Reveal content
+	    var fadeTween = this.game.add.tween(this.blackCover).to({alpha: 0},
+				2000,Phaser.Easing.Linear.None,true);
+
+	    
 	},
 	update: function(){
 
@@ -444,6 +466,18 @@ Kente.Game.prototype = {
 			this.currentPlayingInstruction.stop();
 		}
 	},
+	showThankYou: function(){
+		var thankSprite = this.game.make.sprite(this.game.world.centerX,500,"title_thank");
+		thankSprite.anchor.set(0.5);
+		thankSprite.alpha = 0.0;
+
+		this.game.add.existing(thankSprite);
+
+		var thankTween = this.game.add.tween(thankSprite).to({alpha: 1},
+				3000,Phaser.Easing.Linear.None,true);
+
+
+	},
 	showInstruction: function(text) {
 		if(this.currentInstruction) this.currentInstruction.destroy();
 		var intrBox = new InstructionsGroup(this.game, text,
@@ -486,8 +520,6 @@ Kente.Game.prototype = {
 					Kente.theSounds["7-0-2"].onStop.addOnce(function(){	
 						console.log(':: Playing: Tap any of the dyes .. 7-0-3');
 						Kente.theSounds["7-0-3"].play();
-						//SHOW THE CANISTERS ANIMATION
-						this.showCanisters();
 						this.currentPlayingInstruction = Kente.theSounds["7-0-3"];
 						Kente.theSounds["7-0-3"].onStop.addOnce(function(){
 							this.firstInstructionIsPlaying = false;	
@@ -619,6 +651,8 @@ Kente.Game.prototype = {
 				Kente.theSounds["10-0"].onStop.addOnce(function(){
 					console.log(':: Playing: We hope you enjoyed learning .. 11-0-1');
 					Kente.theSounds["11-0-1"].play();
+					//SHOW THANKYOU MESSAGE
+					this.showThankYou();
 					this.currentPlayingInstruction = Kente.theSounds["11-0-1"];
 					Kente.theSounds["11-0-1"].onStop.addOnce(function(){
 						console.log(':: Playing: Enjoy the rest of your visit at MOA .. 11-0-2');
@@ -635,6 +669,8 @@ Kente.Game.prototype = {
 				this.game.time.events.remove(this.timer_AreYouThere);
 				console.log(':: Playing: We hope you enjoyed learning .. 11-0-1');
 				Kente.theSounds["11-0-1"].play();
+				//SHOW THANKYOU MESSAGE
+				this.showThankYou();				
 				this.currentPlayingInstruction = Kente.theSounds["11-0-1"];
 				Kente.theSounds["11-0-1"].onStop.addOnce(function(){
 					console.log(':: Playing: Enjoy the rest of your visit at MOA .. 11-0-2');

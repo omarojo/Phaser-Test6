@@ -9,7 +9,7 @@ Kente.SlideShow = function (game) {
 
 Kente.SlideShow.prototype = {
 	preload: function(){
-		this.game.stage.disableVisibilityChange = true;
+		// this.game.stage.disableVisibilityChange = true;
 		this.load.image('slide1', 'assets/slide1.png');
 		this.load.image('slide2', 'assets/slide2.png');
 		this.load.image('slide3', 'assets/slide3.png');
@@ -85,7 +85,7 @@ Kente.SlideShow.prototype = {
 	    this.upperContainer.addChild(this.photos);
 
 	    //TITLE
-	    this.upperContainer.create(280, 500, 'title_slideshow');
+	    this.upperContainer.create(310, 500, 'title_slideshow');
 
 	    //LOWER CONTAINER
 	    this.lowerContainer.y = this.game.world.height-50//this.game.world.centerY;
@@ -146,7 +146,7 @@ Kente.SlideShow.prototype = {
 			// this.add.tween(this.welcomeText).to({alpha: 0},1000,Phaser.Easing.Quadratic.InOut, true, 200);	
 			this.add.tween(this.upperContainer).to({alpha: 0},1000,Phaser.Easing.Quadratic.InOut, true, 200).onComplete.add(function(){
 				// this.game.state.start('Tutorial', true, false);	
-				this.game.state.start('Tutorial', true, false);	
+				this.game.state.start('VideoPlayer', true, false);	
 			},this);
 						
 		},this);
