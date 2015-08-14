@@ -39,13 +39,10 @@ Kente = {
     setFPSbalance: function(){
 
         // modify the game desired fps to match the current suggested fps
-        if(this.game.time.suggestedFps != null){
-            if(this.game.time.suggestedFps >=40)
-                this.game.time.desiredFps = this.game.time.suggestedFps;
-            else
-                this.game.time.desiredFps = 40;
-        }
-        console.log(this.game.time.suggestedFps);
+        // if(this.game.time.suggestedFps != null){
+            this.game.time.desiredFps = 40;
+        // }
+        // console.log(this.game.time.suggestedFps);
     
     }
 
@@ -58,7 +55,7 @@ Kente.Boot.prototype = {
 
     preload: function () {
 
-        this.game.time.advancedTiming = true;
+        // this.game.time.advancedTiming = true;
         this.game.fpsProblemNotifier.add(Kente.setFPSbalance, this);
     
        

@@ -22,7 +22,7 @@ WarpGroup = function (game, tutorial) {
 	this.weftContainer = this.game.make.group();
 
 	//Add Wood Piece marker
-	var tiny_wood = this.game.make.sprite(this.game.world.centerX,this.game.world.centerY+ 500,'tiny_wood_piece');
+	var tiny_wood = this.game.make.sprite(this.game.world.centerX,this.game.world.centerY+ 300,'tiny_wood_piece');
 	tiny_wood.anchor.set(0.5,0.5);
 	this.addChild(tiny_wood);
 
@@ -37,12 +37,14 @@ WarpGroup = function (game, tutorial) {
 	var sWidth = 672;
 	var sHeight = 144;
 	//Add the shuttle 1 on screen (THE LOWER one)
-	this.shuttle1 = this.create(game.world.width, 1300, 'shuttle_vector');
+	// this.shuttle1 = this.create(game.world.width, 1300, 'shuttle_vector');
+	this.shuttle1 = this.create(game.world.width, 1400, 'shuttle_vector');
 	this.shuttle1.width = sWidth;
 	this.shuttle1.height = sHeight;
 	this.shuttle1.isRight = true;
 	//Add the shuttle 2 on screen (THE UPPER one)
-	this.shuttle2 = this.create(-this.shuttle1.width,1250, 'shuttle_vector');
+	// this.shuttle2 = this.create(-this.shuttle1.width,1250, 'shuttle_vector');
+	this.shuttle2 = this.create(-this.shuttle1.width,1350, 'shuttle_vector');
 	this.shuttle2.width = sWidth;
 	this.shuttle2.height = sHeight;
 	this.shuttle2.isRight = false;

@@ -105,6 +105,7 @@ ThreadGroup.prototype.revealToRight = function(){
 	},this);
 }
 ThreadGroup.prototype.tightUpTo_Y = function(ypos, currentWovenThreads, parentWarp){
+	
 	if(this.isTight == false)//Thread is still up.. lets bring it down.
 	{	
 		var animDuration = 2000 - (currentWovenThreads/30)*2000;

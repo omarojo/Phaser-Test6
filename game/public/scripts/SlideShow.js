@@ -9,7 +9,9 @@ Kente.SlideShow = function (game) {
 
 Kente.SlideShow.prototype = {
 	preload: function(){
-		// this.game.stage.disableVisibilityChange = true;
+		//Allow the game NOT to pause, when the browser window gets unfocused.
+		this.game.stage.disableVisibilityChange = true;
+
 		this.load.image('slide1', 'assets/slide1.png');
 		this.load.image('slide2', 'assets/slide2.png');
 		this.load.image('slide3', 'assets/slide3.png');
