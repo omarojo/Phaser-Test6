@@ -146,7 +146,7 @@ Kente.SlideShow.prototype = {
 			// this.add.tween(this.welcomeText).to({alpha: 0},1000,Phaser.Easing.Quadratic.InOut, true, 200);	
 			this.add.tween(this.upperContainer).to({alpha: 0},1000,Phaser.Easing.Quadratic.InOut, true, 200).onComplete.add(function(){
 				// this.game.state.start('Tutorial', true, false);	
-				this.game.state.start('VideoPlayer', true, false);	
+				this.game.state.start('Tutorial', true, false);	
 			},this);
 						
 		},this);

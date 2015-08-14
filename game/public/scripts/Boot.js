@@ -78,6 +78,7 @@ Kente.Boot.prototype = {
 
         this.load.audio('1-0-1','assets/audio/1-0-1.mp3');
         this.load.audio('1-0-2','assets/audio/1-0-2.mp3');
+        this.load.audio('1-0-3','assets/audio/1-0-3.mp3');
         this.load.audio('1-1','assets/audio/1-1.mp3');
         this.load.audio('2-0','assets/audio/2-0.mp3');
         this.load.audio('3-0-1','assets/audio/3-0-1.mp3');
@@ -129,6 +130,7 @@ Kente.Boot.prototype = {
         
             '1-0-1': this.game.add.audio('1-0-1'),
             '1-0-2': this.game.add.audio('1-0-2'),
+            '1-0-3': this.game.add.audio('1-0-3'),
             '1-1': this.game.add.audio('1-1'),
             '2-0': this.game.add.audio('2-0'),
             '3-0-1': this.game.add.audio('3-0-1'),
@@ -178,6 +180,7 @@ Kente.Boot.prototype = {
 
         Kente.sounds.push(Kente.theSounds['1-0-1']);
         Kente.sounds.push(Kente.theSounds['1-0-2']);
+        Kente.sounds.push(Kente.theSounds['1-0-3']);
         Kente.sounds.push(Kente.theSounds['1-1']);
         Kente.sounds.push(Kente.theSounds['2-0']);
         Kente.sounds.push(Kente.theSounds['3-0-1']);

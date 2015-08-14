@@ -160,11 +160,18 @@ Kente.Tutorial.prototype = {
 		this.currentPlayingInstruction = Kente.theSounds["1-0-1"]; 
 		Kente.theSounds['1-0-1'].onStop.addOnce(function(){ //Welcome to the interactive...
 			console.log(':: Playing: Lets begin with a quick tutorial .. 1-0-2');
-					//Show Shuttle
-					this.showShuttle();
-					Kente.theSounds["1-0-2"].play();
-					this.currentPlayingInstruction = Kente.theSounds["1-0-2"];
+			//Show Shuttle
+			this.showShuttle();
+			Kente.theSounds["1-0-2"].play();
+			this.currentPlayingInstruction = Kente.theSounds["1-0-2"];
+			Kente.theSounds['1-0-2'].onStop.addOnce(function(){	
+				console.log(':: Playing: Touch the shuttle to see how it works .. 1-0-3');
+				Kente.theSounds["1-0-3"].play();
+				this.currentPlayingInstruction = Kente.theSounds["1-0-3"];
+				Kente.theSounds['1-0-3'].onStop.addOnce(function(){
 					this.resetAreYouThere();	
+				},this);	
+			}, this);
 		}, this);
 	},
 	update: function(){
