@@ -62,7 +62,6 @@ app.route('/kente') //standard response
 	        var filename = Date.now();
 	        fs.writeFile(__dirname + "/public/community_uploads/"+filename+".png", buff, function(err) {
 	          if(err == null){
-
               easyimg.crop({
                    src: __dirname + "/public/community_uploads/"+filename+".png", dst: __dirname + "/public/community_uploads/"+filename+".png",
                    // width:260, height:260,
@@ -95,12 +94,26 @@ app.route('/kente') //standard response
 		          
             	}else console.log("Error Saving to Disk Image: "+ err);
 	        });
-    }else{
-    	return sendErrorResponse(res, 400, 'Missing base 64 image');
-    }
+        }else{
+        	return sendErrorResponse(res, 400, 'Missing base 64 image');
+        }
     });
 
+app.route('/kente') //standard response
+    .get(function(req,res, next){
+      console.log("::: Sending recent Patterns"); 
+      PatternModel.find().sort('-created_at').limit(13).exec(function(err, posts){
+          if(err == null){
+            res.status(200).send({'patterns':posts.reverse()});
+          }
+          else{
+            return sendErrorResponse(res, 400, err);
+          }
 
+          
+      });
+
+    });
 
 function sendErrorResponse(res, statuscode, message){
     var feedback = {'message': message};

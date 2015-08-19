@@ -90,6 +90,7 @@
 var p = [];
 var oldestPindex = 1;
 $( document ).ready(function() {
+
 	 $("body").keyup(function(e){
         
         if (e.which == 65) {// a
@@ -132,6 +133,7 @@ $( document ).ready(function() {
     p[20] = $('#p20');
     p[21] = $('#p21');
 
+    getRecentPatterns();
 
 });
 
@@ -145,7 +147,17 @@ function newPatternReceived(url){
 	for(var i=13;i<=21; i++){
 		p[i].attr('src','/community_uploads/'+url);
 	}
+}
 
+
+function getRecentPatterns(){
+	$.get( "/kente", function( data ) {
+	  console.log(data);
+	  
+	  data.patterns.forEach(function(entry) {
+    		newPatternReceived(entry.url);
+    	});
+	});
 }
 
 </script>
