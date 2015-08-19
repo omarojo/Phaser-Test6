@@ -129,7 +129,7 @@ Arduino + Johnny Five module to read states of sensors
 var five = require("johnny-five");
 
 // A board needs to be initialized for handling components using Johnny-Five
-var board = new five.Board();;
+var board = new five.Board({port: "/dev/cu.usbmodem1471"});//{ port: "/dev/cu.usbmodem****" }
 
 // Defining pin numbers for switches. Change following values to reflect connection of switches attached to pins on the board
 var thread1Pin = 2;
@@ -269,7 +269,55 @@ board.on("ready", function() {
       console.log("Bottom Beater state close");
     });
 });
+/**********************************************************
 
+Johnny-Five board information messages
+
+************************************************************/
+board.on("info", function(event) {
+  /*
+    Event {
+      type: "info"|"warn"|"fail",
+      timestamp: Time of event in milliseconds,
+      class: name of relevant component class,
+      message: message [+ ...detail]
+    }
+  */
+  console.log("%s sent an 'info' message: %s", event.class, event.message);
+});
+board.on("warn", function(event) {
+  /*
+    Event {
+      type: "info"|"warn"|"fail",
+      timestamp: Time of event in milliseconds,
+      class: name of relevant component class,
+      message: message [+ ...detail]
+    }
+  */
+  console.log("%s sent a 'warn' message: %s", event.class, event.message);
+});
+board.on("fail", function(event) {
+  /*
+    Event {
+      type: "info"|"warn"|"fail",
+      timestamp: Time of event in milliseconds,
+      class: name of relevant component class,
+      message: message [+ ...detail]
+    }
+  */
+  console.log("%s sent a 'fail' message: %s", event.class, event.message);
+});
+board.on("message", function(event) {
+  /*
+    Event {
+      type: "info"|"warn"|"fail",
+      timestamp: Time of event in milliseconds,
+      class: name of relevant component class,
+      message: message [+ ...detail]
+    }
+  */
+  console.log("Received a %s message, from %s, reporting: %s", event.type, event.class, event.message);
+});
 
 /**********************************************************
 
