@@ -55,11 +55,11 @@ Kente.Game.prototype = {
 	    //CANISTERS
 	    this.keyQ = this.game.input.keyboard.addKey(Phaser.Keyboard.Q);
 	    this.keyQ.onDown.add(function(){
-	    	this.canisterTouched({color:'red'});
+	    	this.canisterTouched({color:'blue'});
 	    }, this);
 	    this.keyW = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
 	    this.keyW.onDown.add(function(){
-	    	this.canisterTouched({color:'blue'});
+	    	this.canisterTouched({color:'red'});
 	    }, this);
 	    this.keyE = this.game.input.keyboard.addKey(Phaser.Keyboard.E);
 	    this.keyE.onDown.add(function(){

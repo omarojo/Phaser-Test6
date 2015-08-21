@@ -142,8 +142,8 @@ var thread7Pin = 8;
 var thread8Pin = 9;
 var thread9Pin = 10;
 
-var beaterBottomPin = 11;
-var beaterTopPin = 12;
+var beaterBottomPin = 12;
+var beaterTopPin = 11;
 
 board.on("ready", function() {
 

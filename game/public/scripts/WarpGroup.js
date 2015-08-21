@@ -22,7 +22,7 @@ WarpGroup = function (game, tutorial) {
 	this.weftContainer = this.game.make.group();
 
 	//Add Wood Piece marker
-	var tiny_wood = this.game.make.sprite(this.game.world.centerX,this.game.world.centerY+ 300,'tiny_wood_piece');
+	var tiny_wood = this.game.make.sprite(this.game.world.centerX,this.game.world.centerY+450,'tiny_wood_piece');
 	tiny_wood.anchor.set(0.5,0.5);
 	this.addChild(tiny_wood);
 
