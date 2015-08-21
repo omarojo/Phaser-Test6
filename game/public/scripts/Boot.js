@@ -245,6 +245,8 @@ Kente.Boot.prototype = {
 
 
         this.game.sound.setDecodedCallback(Kente.sounds, this.loadMainMenuState, this);
+
+         $("canvas").css("cursor", "none");
     }, 
     loadMainMenuState : function(){
         this.state.start('SlideShow',true,false);

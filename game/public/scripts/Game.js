@@ -22,6 +22,7 @@ Kente.Game.prototype = {
 		this.currentlySelecting = 'background';
 		this.firstInstructionIsPlaying = false;
 		this.isSayingColourDefinitions = false;
+		this.replicationIsOnScreen = false;
 	},
 	create: function(){
 		console.log('::Game Loaded');
@@ -134,6 +135,7 @@ Kente.Game.prototype = {
 			Kente.theSounds["9-0-1"].onStop.addOnce(function(){ //Instruction 11
 				//Lets Replicate
 				this.warp.replicatePattern();
+				this.replicationIsOnScreen = true;
 			},this);
 			
 			this.instruction_step++; 
@@ -213,7 +215,7 @@ Kente.Game.prototype = {
 				}
 			}	
 		}
-		else if(this.instruction_step == 7){ // GAME IS OVER.. RESET EVERYTHING
+		else if(this.instruction_step == 7 && this.replicationIsOnScreen == true){ // GAME IS OVER.. RESET EVERYTHING
 			this.stopCurrentAudio();
 			this.playInstructionAudio(13); //Say goodbye
 			Kente.theSounds["11-0-2"].onStop.addOnce(function(){
@@ -393,7 +395,7 @@ Kente.Game.prototype = {
 			}	
 		}
 
-		else if(this.instruction_step == 7){
+		else if(this.instruction_step == 7 && this.replicationIsOnScreen == true){
 			//SEND IMAGE TO COMMUNITY WALL
 			this.stopCurrentAudio();
 			this.playInstructionAudio(12);
