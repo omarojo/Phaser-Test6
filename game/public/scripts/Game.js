@@ -286,8 +286,8 @@ Kente.Game.prototype = {
 			if(this.warp.weftWaitingTobeTighten && Kente.beaterPosition == 'down'){
 				this.warp.tightWeft();
 				
-				this.stopCurrentAudio();
-				this.playInstructionAudio(8); //Youll nneed to move the beack back up
+				// this.stopCurrentAudio();
+				// this.playInstructionAudio(8); //Youll nneed to move the beack back up
 				this.instruction_step++;
 				console.log(">> Current Instruction:" + this.instruction_step);
 			}	
@@ -361,7 +361,7 @@ Kente.Game.prototype = {
 					//Send shuttle
 					var colors = [this.selectedBackgroundColor, this.selectedPatternColor];
 					this.warp.sendShuttles(null,colors);
-					this.playInstructionAudio(10);
+					// this.playInstructionAudio(10);
 					this.instruction_step++;
 				}else{
 					//Advice to move the beater down
@@ -386,8 +386,8 @@ Kente.Game.prototype = {
 					}
 				}else{
 					//Advice to move the beater down
-					this.stopCurrentAudio();
-					this.playInstructionAudio(10);
+					// this.stopCurrentAudio();
+					// this.playInstructionAudio(10);
 				}
 			}else{
 				this.stopCurrentAudio();
@@ -610,9 +610,9 @@ Kente.Game.prototype = {
 			}
 			case 9:{
 				console.log(':: Playing are you there');
-				this.currentPlayingInstruction.play();
-				// Kente.theSounds['1-1'].play(); //are you there
-				// this.currentPlayingInstruction = Kente.theSounds["1-1"];
+				// this.currentPlayingInstruction.play();
+				Kente.theSounds['12-optional'].play(); //Remember the steps blah blah
+				this.currentPlayingInstruction = Kente.theSounds["12-optional"];
 				break;
 			}
 			case 10:{
@@ -695,23 +695,23 @@ Kente.Game.prototype = {
 				break;
 			}
 			case 15: {
-				this.game.time.events.remove(this.timer_AreYouThere);
+				//this.game.time.events.remove(this.timer_AreYouThere);
 				console.log(':: Playing: Youll need to touch the shuttle .. 8-1');
-				Kente.theSounds["8-1"].play();
-				this.currentPlayingInstruction = Kente.theSounds["8-1"];
-				Kente.theSounds["8-1"].onStop.addOnce(function(){	
-					this.resetAreYouThere();	
-				}, this);
+				// Kente.theSounds["8-1"].play();
+				// this.currentPlayingInstruction = Kente.theSounds["8-1"];
+				// Kente.theSounds["8-1"].onStop.addOnce(function(){	
+				// 	this.resetAreYouThere();	
+				// }, this);
 				break;	
 			}
 			case 16: {
-				this.game.time.events.remove(this.timer_AreYouThere);
+				//this.game.time.events.remove(this.timer_AreYouThere);
 				console.log(':: Playing: Now you can move into the next line .. 8-4');
-				Kente.theSounds["8-4"].play();
-				this.currentPlayingInstruction = Kente.theSounds["8-4"];
-				Kente.theSounds["8-4"].onStop.addOnce(function(){	
-					this.resetAreYouThere();	
-				}, this);
+				// Kente.theSounds["8-4"].play();
+				// this.currentPlayingInstruction = Kente.theSounds["8-4"];
+				// Kente.theSounds["8-4"].onStop.addOnce(function(){	
+				// 	this.resetAreYouThere();	
+				// }, this);
 				break;	
 			}
 			case 17: {
@@ -774,9 +774,9 @@ Kente.Game.prototype = {
 		}
 	},
 	getColorCode: function(colorWord){
-		if(colorWord == 'red') return '0xf44f45';
+		if(colorWord == 'red') return '0xdd3125';//'0xf44f45';
 		if(colorWord == 'blue') return '0x1a7df5';
-		if(colorWord == 'green') return '0x00f990';
+		if(colorWord == 'green') return '0x27ab49';//'0x00f990';
 		if(colorWord == 'yellow') return '0xf7c73e';
 	}
 

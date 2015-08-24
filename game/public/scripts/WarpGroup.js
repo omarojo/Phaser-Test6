@@ -405,9 +405,9 @@ WarpGroup.prototype.showAttention = function(){
 }
 
 WarpGroup.prototype.getColorCode = function(colorWord){
-		if(colorWord == 'red') return '0xf44f45';
+		if(colorWord == 'red') return '0xdd3125';//'0xf44f45';
 		if(colorWord == 'blue') return '0x1a7df5';
-		if(colorWord == 'green') return '0x00f990';
+		if(colorWord == 'green') return '0x27ab49';//'0x00f990';
 		if(colorWord == 'yellow') return '0xf7c73e';
 }
 
