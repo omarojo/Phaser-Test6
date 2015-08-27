@@ -131,6 +131,10 @@ var five = require("johnny-five");
 // A board needs to be initialized for handling components using Johnny-Five
 var board = new five.Board({port: "/dev/cu.usbmodem1471"});//{ port: "/dev/cu.usbmodem****" }
 
+process.on('uncaughtException', function(err) {
+  console.log('Caught exception: ' + err);
+});
+
 // Defining pin numbers for switches. Change following values to reflect connection of switches attached to pins on the board
 var thread1Pin = 2;
 var thread2Pin = 3;

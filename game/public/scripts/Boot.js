@@ -140,6 +140,7 @@ Kente.Boot.prototype = {
         this.load.audio('11-0-1','assets/audio/11-0-1.mp3');
         this.load.audio('11-0-2','assets/audio/11-0-2.mp3');
         this.load.audio('12-optional','assets/audio/12-optional.mp3');
+        this.load.audio('skip-tut','assets/audio/skip-tut.mp3');
 
     },
     create: function () {
@@ -191,7 +192,8 @@ Kente.Boot.prototype = {
             '10-0': this.game.add.audio('10-0'),
             '11-0-1': this.game.add.audio('11-0-1'),
             '11-0-2': this.game.add.audio('11-0-2'),
-            '12-optional': this.game.add.audio('12-optional')
+            '12-optional': this.game.add.audio('12-optional'),
+            'skip-tut': this.game.add.audio('skip-tut')
 
          };
 
@@ -242,6 +244,7 @@ Kente.Boot.prototype = {
         Kente.sounds.push(Kente.theSounds['11-0-1']);
         Kente.sounds.push(Kente.theSounds['11-0-2']);
         Kente.sounds.push(Kente.theSounds['12-optional']);
+        Kente.sounds.push(Kente.theSounds['skip-tut']);
 
 
         this.game.sound.setDecodedCallback(Kente.sounds, this.loadMainMenuState, this);
