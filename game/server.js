@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({limit: '50mb',extended: true })); // for parsing 
 //CROSS DOMAIN
 app.use(cors());
 //Start server
-server.listen(3000);
+server.listen(process.env.PORT || 3000);
 
 /********************************************************
  * Database connection configuracion
