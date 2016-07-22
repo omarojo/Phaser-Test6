@@ -22,6 +22,7 @@ Kente.Game.prototype = {
 		this.currentlySelecting = 'background';
 		this.firstInstructionIsPlaying = false;
 		this.isSayingColourDefinitions = false;
+		this.stopperInstructionIsPlaying = false; //stopperInstrucctionIsPlaying means there is a audio instruction that needs to finish playing before letting the user do anything else, so the game most not listen to user inputs. until this one is false.
 		this.replicationIsOnScreen = false;
 	},
 	create: function(){

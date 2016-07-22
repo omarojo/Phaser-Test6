@@ -126,202 +126,213 @@ Arduino + Johnny Five module to read states of sensors
 
 ************************************************************/
 //Johnny-Five module install
-var five = require("johnny-five");
+// var five = require("johnny-five");
 
-// A board needs to be initialized for handling components using Johnny-Five
-var board = new five.Board({port: "/dev/cu.usbmodem1471"});//{ port: "/dev/cu.usbmodem****" }
+// // A board needs to be initialized for handling components using Johnny-Five
+// var board = new five.Board({port: "/dev/cu.usbmodem1471"});//{ port: "/dev/cu.usbmodem****" }
 
-process.on('uncaughtException', function(err) {
-  console.log('Caught exception: ' + err);
-});
+// process.on('uncaughtException', function(err) {
+//   console.log('Caught exception: ' + err);
+// });
 
-// Defining pin numbers for switches. Change following values to reflect connection of switches attached to pins on the board
-var thread1Pin = 2;
-var thread2Pin = 3;
-var thread3Pin = 4;
-var thread4Pin = 5;
-var thread5Pin = 6;
-var thread6Pin = 7;
-var thread7Pin = 8;
-var thread8Pin = 9;
-var thread9Pin = 10;
+// // Defining pin numbers for switches. Change following values to reflect connection of switches attached to pins on the board
+// // var thread1Pin = 2;
+// // var thread2Pin = 3;
+// // var thread3Pin = 4;
+// // var thread4Pin = 5;
+// // var thread5Pin = 6;
+// // var thread6Pin = 7;
+// // var thread7Pin = 8;
+// // var thread8Pin = 9;
+// // var thread9Pin = 10;
 
-var beaterBottomPin = 12;
-var beaterTopPin = 11;
+// //inverted threads because of erroneus physical installation
+// var thread1Pin = 10;
+// var thread2Pin = 9;
+// var thread3Pin = 8;
+// var thread4Pin = 7;
+// var thread5Pin = 6;
+// var thread6Pin = 5;
+// var thread7Pin = 4;
+// var thread8Pin = 3;
+// var thread9Pin = 2;
 
-board.on("ready", function() {
+// var beaterBottomPin = 12;
+// var beaterTopPin = 11;
 
-  	console.log(">> Board is on");
+// board.on("ready", function() {
 
-//  Initializing Components of Johnny-Five
-//  Note - Switches are READ-ONLY
-    var thread1 = new five.Switch(thread1Pin);
-    var thread2 = new five.Switch(thread2Pin);
-    var thread3 = new five.Switch(thread3Pin);
-    var thread4 = new five.Switch(thread4Pin);
-    var thread5 = new five.Switch(thread5Pin);
-    var thread6 = new five.Switch(thread6Pin);
-    var thread7 = new five.Switch(thread7Pin);
-    var thread8 = new five.Switch(thread8Pin);
-    var thread9 = new five.Switch(thread9Pin);
+//   	console.log(">> Board is on");
 
-    var beaterTop = new five.Switch(beaterTopPin);
-    var beaterBottom = new five.Switch(beaterBottomPin);
-/*
-// Events are triggered based on the state of switches attached to board.
-// Switch.on("open", function() {
-      // Switch is read open
-// })
-// Switch.on("close", function() {
-      // Switch is read close
-// })
-*/
-    thread1.on("open", function() {
-      console.log("Thread 1 state open");
-      emitSocket_ThreadState(1,'loose');
-    });
-    thread1.on("close", function() {
-      console.log("Thread 1 state close");
-      emitSocket_ThreadState(1,'held');
-    });
+// //  Initializing Components of Johnny-Five
+// //  Note - Switches are READ-ONLY
+//     var thread1 = new five.Switch(thread1Pin);
+//     var thread2 = new five.Switch(thread2Pin);
+//     var thread3 = new five.Switch(thread3Pin);
+//     var thread4 = new five.Switch(thread4Pin);
+//     var thread5 = new five.Switch(thread5Pin);
+//     var thread6 = new five.Switch(thread6Pin);
+//     var thread7 = new five.Switch(thread7Pin);
+//     var thread8 = new five.Switch(thread8Pin);
+//     var thread9 = new five.Switch(thread9Pin);
 
-    thread2.on("open", function() {
-      console.log("Thread 2 state open");
-      emitSocket_ThreadState(2,'loose');
-    });
-    thread2.on("close", function() {
-      console.log("Thread 2 state close");
-      emitSocket_ThreadState(2,'held');
-    });
+//     var beaterTop = new five.Switch(beaterTopPin);
+//     var beaterBottom = new five.Switch(beaterBottomPin);
+// /*
+// // Events are triggered based on the state of switches attached to board.
+// // Switch.on("open", function() {
+//       // Switch is read open
+// // })
+// // Switch.on("close", function() {
+//       // Switch is read close
+// // })
+// */
+//     thread1.on("open", function() {
+//       console.log("Thread 1 state open");
+//       emitSocket_ThreadState(1,'loose');
+//     });
+//     thread1.on("close", function() {
+//       console.log("Thread 1 state close");
+//       emitSocket_ThreadState(1,'held');
+//     });
 
-    thread3.on("open", function() {
-      console.log("Thread 3 state open");
-      emitSocket_ThreadState(3,'loose');
-    });
-    thread3.on("close", function() {
-      console.log("Thread 3 state close");
-      emitSocket_ThreadState(3,'held');
-    });
+//     thread2.on("open", function() {
+//       console.log("Thread 2 state open");
+//       emitSocket_ThreadState(2,'loose');
+//     });
+//     thread2.on("close", function() {
+//       console.log("Thread 2 state close");
+//       emitSocket_ThreadState(2,'held');
+//     });
 
-    thread4.on("open", function() {
-      console.log("Thread 4 state open");
-      emitSocket_ThreadState(4,'loose');
-    });
-    thread4.on("close", function() {
-      console.log("Thread 4 state close");
-      emitSocket_ThreadState(4,'held');
-    });
+//     thread3.on("open", function() {
+//       console.log("Thread 3 state open");
+//       emitSocket_ThreadState(3,'loose');
+//     });
+//     thread3.on("close", function() {
+//       console.log("Thread 3 state close");
+//       emitSocket_ThreadState(3,'held');
+//     });
 
-    thread5.on("open", function() {
-      console.log("Thread 5 state open");
-      emitSocket_ThreadState(5,'loose');
-    });
-    thread5.on("close", function() {
-      console.log("Thread 5 state close");
-      emitSocket_ThreadState(5,'held');
-    });
+//     thread4.on("open", function() {
+//       console.log("Thread 4 state open");
+//       emitSocket_ThreadState(4,'loose');
+//     });
+//     thread4.on("close", function() {
+//       console.log("Thread 4 state close");
+//       emitSocket_ThreadState(4,'held');
+//     });
 
-    thread6.on("open", function() {
-      console.log("Thread 6 state open");
-      emitSocket_ThreadState(6,'loose');
-    });
-    thread6.on("close", function() {
-      console.log("Thread 6 state close");
-      emitSocket_ThreadState(6,'held');
-    });
+//     thread5.on("open", function() {
+//       console.log("Thread 5 state open");
+//       emitSocket_ThreadState(5,'loose');
+//     });
+//     thread5.on("close", function() {
+//       console.log("Thread 5 state close");
+//       emitSocket_ThreadState(5,'held');
+//     });
 
-    thread7.on("open", function() {
-      console.log("Thread 7 state open");
-      emitSocket_ThreadState(7,'loose');
-    });
-    thread7.on("close", function() {
-      console.log("Thread 7 state close");
-      emitSocket_ThreadState(7,'held');
-    });
+//     thread6.on("open", function() {
+//       console.log("Thread 6 state open");
+//       emitSocket_ThreadState(6,'loose');
+//     });
+//     thread6.on("close", function() {
+//       console.log("Thread 6 state close");
+//       emitSocket_ThreadState(6,'held');
+//     });
 
-    thread8.on("open", function() {
-      console.log("Thread 8 state open");
-      emitSocket_ThreadState(8,'loose');
-    });
-    thread8.on("close", function() {
-      console.log("Thread 8 state close");
-      emitSocket_ThreadState(8,'held');
-    });
+//     thread7.on("open", function() {
+//       console.log("Thread 7 state open");
+//       emitSocket_ThreadState(7,'loose');
+//     });
+//     thread7.on("close", function() {
+//       console.log("Thread 7 state close");
+//       emitSocket_ThreadState(7,'held');
+//     });
 
-    thread9.on("open", function() {
-      console.log("Thread 9 state open");
-      emitSocket_ThreadState(9,'loose');
-    });
-    thread9.on("close", function() {
-      console.log("Thread 9 state close");
-      emitSocket_ThreadState(9,'held');
-    });
+//     thread8.on("open", function() {
+//       console.log("Thread 8 state open");
+//       emitSocket_ThreadState(8,'loose');
+//     });
+//     thread8.on("close", function() {
+//       console.log("Thread 8 state close");
+//       emitSocket_ThreadState(8,'held');
+//     });
 
-    beaterTop.on("open", function() {
-      console.log("Top Beater state open");
-      emitSocket_BeaterState('up');
-    });
-    beaterTop.on("close", function() {
-      console.log("Top Beater state close");
-    });
+//     thread9.on("open", function() {
+//       console.log("Thread 9 state open");
+//       emitSocket_ThreadState(9,'loose');
+//     });
+//     thread9.on("close", function() {
+//       console.log("Thread 9 state close");
+//       emitSocket_ThreadState(9,'held');
+//     });
 
-    beaterBottom.on("open", function() {
-      console.log("Bottom Beater state open");
-      emitSocket_BeaterState('down');
-    });
-    beaterBottom.on("close", function() {
-      console.log("Bottom Beater state close");
-    });
-});
-/**********************************************************
+//     beaterTop.on("open", function() {
+//       console.log("Top Beater state open");
+//       emitSocket_BeaterState('up');
+//     });
+//     beaterTop.on("close", function() {
+//       console.log("Top Beater state close");
+//     });
 
-Johnny-Five board information messages
+//     beaterBottom.on("open", function() {
+//       console.log("Bottom Beater state open");
+//       emitSocket_BeaterState('down');
+//     });
+//     beaterBottom.on("close", function() {
+//       console.log("Bottom Beater state close");
+//     });
+// });
+// /**********************************************************
 
-************************************************************/
-board.on("info", function(event) {
-  /*
-    Event {
-      type: "info"|"warn"|"fail",
-      timestamp: Time of event in milliseconds,
-      class: name of relevant component class,
-      message: message [+ ...detail]
-    }
-  */
-  console.log("%s sent an 'info' message: %s", event.class, event.message);
-});
-board.on("warn", function(event) {
-  /*
-    Event {
-      type: "info"|"warn"|"fail",
-      timestamp: Time of event in milliseconds,
-      class: name of relevant component class,
-      message: message [+ ...detail]
-    }
-  */
-  console.log("%s sent a 'warn' message: %s", event.class, event.message);
-});
-board.on("fail", function(event) {
-  /*
-    Event {
-      type: "info"|"warn"|"fail",
-      timestamp: Time of event in milliseconds,
-      class: name of relevant component class,
-      message: message [+ ...detail]
-    }
-  */
-  console.log("%s sent a 'fail' message: %s", event.class, event.message);
-});
-board.on("message", function(event) {
-  /*
-    Event {
-      type: "info"|"warn"|"fail",
-      timestamp: Time of event in milliseconds,
-      class: name of relevant component class,
-      message: message [+ ...detail]
-    }
-  */
-  console.log("Received a %s message, from %s, reporting: %s", event.type, event.class, event.message);
-});
+// Johnny-Five board information messages
+
+// ************************************************************/
+// board.on("info", function(event) {
+//   /*
+//     Event {
+//       type: "info"|"warn"|"fail",
+//       timestamp: Time of event in milliseconds,
+//       class: name of relevant component class,
+//       message: message [+ ...detail]
+//     }
+//   */
+//   console.log("%s sent an 'info' message: %s", event.class, event.message);
+// });
+// board.on("warn", function(event) {
+//   /*
+//     Event {
+//       type: "info"|"warn"|"fail",
+//       timestamp: Time of event in milliseconds,
+//       class: name of relevant component class,
+//       message: message [+ ...detail]
+//     }
+//   */
+//   console.log("%s sent a 'warn' message: %s", event.class, event.message);
+// });
+// board.on("fail", function(event) {
+//   /*
+//     Event {
+//       type: "info"|"warn"|"fail",
+//       timestamp: Time of event in milliseconds,
+//       class: name of relevant component class,
+//       message: message [+ ...detail]
+//     }
+//   */
+//   console.log("%s sent a 'fail' message: %s", event.class, event.message);
+// });
+// board.on("message", function(event) {
+//   /*
+//     Event {
+//       type: "info"|"warn"|"fail",
+//       timestamp: Time of event in milliseconds,
+//       class: name of relevant component class,
+//       message: message [+ ...detail]
+//     }
+//   */
+//   console.log("Received a %s message, from %s, reporting: %s", event.type, event.class, event.message);
+// });
 
 /**********************************************************
 
