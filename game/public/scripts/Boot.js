@@ -1,5 +1,5 @@
 Kente = {
-	socket : io('http://localhost:3000'),
+	socket : io(),
     removeAllSocketListeners: function(){
         Kente.socket.removeAllListeners('threadTouch'); //Remove all previous listeners
         Kente.socket.removeAllListeners('shuttleTouch'); //Remove all previous listeners
