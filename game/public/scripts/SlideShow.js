@@ -32,6 +32,46 @@ Kente.SlideShow.prototype = {
 		this.keyG = this.game.input.keyboard.addKey(Phaser.Keyboard.G);
 	    this.keyG.onDown.add(this.goToGame, this);
 
+	    //Keyboard Threads Buttons
+	    this.key1 = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
+		this.key1.onDown.add(this.threadTouched, this);
+		this.key1.onUp.add(this.threadTouched, this);
+		
+		this.key2 = this.game.input.keyboard.addKey(Phaser.Keyboard.TWO);
+		this.key2.onDown.add(this.threadTouched, this);
+		this.key2.onUp.add(this.threadTouched, this);
+
+		this.key3 = this.game.input.keyboard.addKey(Phaser.Keyboard.THREE);
+		this.key3.onDown.add(this.threadTouched, this);
+		this.key3.onUp.add(this.threadTouched, this);
+
+		this.key4 = this.game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
+		this.key4.onDown.add(this.threadTouched, this);
+		this.key4.onUp.add(this.threadTouched, this);
+
+		this.key5 = this.game.input.keyboard.addKey(Phaser.Keyboard.FIVE);
+		this.key5.onDown.add(this.threadTouched, this);
+		this.key5.onUp.add(this.threadTouched, this);
+
+		this.key6 = this.game.input.keyboard.addKey(Phaser.Keyboard.SIX);
+		this.key6.onDown.add(this.threadTouched, this);
+		this.key6.onUp.add(this.threadTouched, this);
+
+		this.key7 = this.game.input.keyboard.addKey(Phaser.Keyboard.SEVEN);
+		this.key7.onDown.add(this.threadTouched, this);
+		this.key7.onUp.add(this.threadTouched, this);
+
+		this.key8 = this.game.input.keyboard.addKey(Phaser.Keyboard.EIGHT);
+		this.key8.onDown.add(this.threadTouched, this);
+		this.key8.onUp.add(this.threadTouched, this);
+
+		this.key9 = this.game.input.keyboard.addKey(Phaser.Keyboard.NINE);
+		this.key9.onDown.add(this.threadTouched, this);
+		this.key9.onUp.add(this.threadTouched, this);
+		
+
+
+
 		//Canisters
 		this.keyQ = this.game.input.keyboard.addKey(Phaser.Keyboard.Q);
 	    this.keyQ.onDown.add(this.threadTouched, this);

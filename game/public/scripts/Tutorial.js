@@ -66,6 +66,7 @@ Kente.Tutorial.prototype = {
 
 		//Add the Background
 		this.add.sprite(0,0,'background');
+		//this.add.sprite(0,0,'bg_dottedguides');
 		//CONTAINER SETUP
 		this.upperContainer = this.add.group();
 		this.lowerContainer = this.add.group();
