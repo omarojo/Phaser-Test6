@@ -37,10 +37,42 @@ Kente.Game.prototype = {
 			self.beaterMoved(data);
 		});
 		
-		this.keyONE = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
-		this.keyONE.onDown.add(function(){
-			this.threadTouched({thread:1,state:'held'});
-		}, this);
+		//Keyboard Threads Buttons
+	    this.key1 = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
+		this.key1.onDown.add(function(){ this.threadTouched({thread:1,state:'held'} )}, this);
+		this.key1.onUp.add(function(){ this.threadTouched({thread:1,state:'loose'} )}, this);
+		
+		this.key2 = this.game.input.keyboard.addKey(Phaser.Keyboard.TWO);
+		this.key2.onDown.add(function(){ this.threadTouched({thread:2,state:'held'} )}, this);
+		this.key2.onUp.add(function(){ this.threadTouched({thread:2,state:'loose'} )}, this);
+
+		this.key3 = this.game.input.keyboard.addKey(Phaser.Keyboard.THREE);
+		this.key3.onDown.add(function(){ this.threadTouched({thread:3,state:'held'} )}, this);
+		this.key3.onUp.add(function(){ this.threadTouched({thread:3,state:'loose'} )}, this);
+
+		this.key4 = this.game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
+		this.key4.onDown.add(function(){ this.threadTouched({thread:4,state:'held'} )}, this);
+		this.key4.onUp.add(function(){ this.threadTouched({thread:4,state:'loose'} )}, this);
+
+		this.key5 = this.game.input.keyboard.addKey(Phaser.Keyboard.FIVE);
+		this.key5.onDown.add(function(){ this.threadTouched({thread:5,state:'held'} )}, this);
+		this.key5.onUp.add(function(){ this.threadTouched({thread:5,state:'loose'} )}, this);
+
+		this.key6 = this.game.input.keyboard.addKey(Phaser.Keyboard.SIX);
+		this.key6.onDown.add(function(){ this.threadTouched({thread:6,state:'held'} )}, this);
+		this.key6.onUp.add(function(){ this.threadTouched({thread:6,state:'loose'} )}, this);
+
+		this.key7 = this.game.input.keyboard.addKey(Phaser.Keyboard.SEVEN);
+		this.key7.onDown.add(function(){ this.threadTouched({thread:7,state:'held'} )}, this);
+		this.key7.onUp.add(function(){ this.threadTouched({thread:7,state:'loose'} )}, this);
+
+		this.key8 = this.game.input.keyboard.addKey(Phaser.Keyboard.EIGHT);
+		this.key8.onDown.add(function(){ this.threadTouched({thread:8,state:'held'} )}, this);
+		this.key8.onUp.add(function(){ this.threadTouched({thread:8,state:'loose'} )}, this);
+
+		this.key9 = this.game.input.keyboard.addKey(Phaser.Keyboard.NINE);
+		this.key9.onDown.add(function(){ this.threadTouched({thread:9,state:'held'} )}, this);
+		this.key9.onUp.add(function(){ this.threadTouched({thread:9,state:'loose'} )}, this);
 
 		////// KEYBOARD
 		this.keyZ = this.game.input.keyboard.addKey(Phaser.Keyboard.Z);
@@ -298,7 +330,7 @@ Kente.Game.prototype = {
 			if(Kente.beaterPosition == 'up'){
 
 				this.stopCurrentAudio();
-				this.playInstructionAudio(16);
+				// this.playInstructionAudio(16); //now you can move into the next line
 				this.instruction_step++;
 				console.log(">> Current Instruction:" + this.instruction_step);
 			}	
@@ -321,8 +353,8 @@ Kente.Game.prototype = {
 
 		if(this.instruction_step == 2 && this.warp.liftedThreads.length > 0){
 			//Play 8.1 - You will need to touch the shuttle
-			this.stopCurrentAudio();
-			this.playInstructionAudio(15);
+			// this.stopCurrentAudio();
+			// this.playInstructionAudio(15);
 			this.instruction_step++;
 		} 
 	},
@@ -698,21 +730,21 @@ Kente.Game.prototype = {
 			case 15: {
 				//this.game.time.events.remove(this.timer_AreYouThere);
 				console.log(':: Playing: Youll need to touch the shuttle .. 8-1');
-				// Kente.theSounds["8-1"].play();
-				// this.currentPlayingInstruction = Kente.theSounds["8-1"];
-				// Kente.theSounds["8-1"].onStop.addOnce(function(){	
-				// 	this.resetAreYouThere();	
-				// }, this);
+				Kente.theSounds["8-1"].play();
+				this.currentPlayingInstruction = Kente.theSounds["8-1"];
+				Kente.theSounds["8-1"].onStop.addOnce(function(){	
+					this.resetAreYouThere();	
+				}, this);
 				break;	
 			}
 			case 16: {
 				//this.game.time.events.remove(this.timer_AreYouThere);
 				console.log(':: Playing: Now you can move into the next line .. 8-4');
-				// Kente.theSounds["8-4"].play();
-				// this.currentPlayingInstruction = Kente.theSounds["8-4"];
-				// Kente.theSounds["8-4"].onStop.addOnce(function(){	
-				// 	this.resetAreYouThere();	
-				// }, this);
+				Kente.theSounds["8-4"].play();
+				this.currentPlayingInstruction = Kente.theSounds["8-4"];
+				Kente.theSounds["8-4"].onStop.addOnce(function(){	
+					this.resetAreYouThere();	
+				}, this);
 				break;	
 			}
 			case 17: {
