@@ -92,7 +92,13 @@ Kente.Tutorial.prototype = {
 	    // this.upperContainer.addChild(this.timeText);
 
 	    //Shuttle Image
-	    this.shuttleSprite = this.game.make.sprite(this.game.world.centerX,this.game.world.centerY/2,'shuttle_vector');
+	    // this.shuttleSprite = this.game.make.sprite(this.game.world.centerX,this.game.world.centerY/2,'shuttle_vector');
+	    // this.shuttleSprite.anchor.set(0.5);
+	    // this.shuttleSprite.alpha = 0.0;
+	    // this.upperContainer.addChild(this.shuttleSprite);
+	    this.shuttleSprite = this.game.make.sprite(this.game.world.centerX,this.game.world.centerY/2,'shuttle_spriteAnim');
+	    this.shuttleSprite.animations.add('touching');
+	    this.shuttleSprite.animations.play('touching', 1, true); //1 fps instead of 30fps and repeat
 	    this.shuttleSprite.anchor.set(0.5);
 	    this.shuttleSprite.alpha = 0.0;
 	    this.upperContainer.addChild(this.shuttleSprite);
@@ -355,7 +361,6 @@ Kente.Tutorial.prototype = {
 			this.playInstructionAudio(2); 
 			//Sending the shuttle for demonstration
 			console.log('>> Sending demonstration shuttle');
-			this.shuttleSprite.alpha = 0;
 			this.warp.sendShuttles(null,colors);
 			this.tutorial_step = 2;
 			//stop Show Shuttle animation, in case the user was rushing at the beginning of the game
@@ -517,6 +522,7 @@ Kente.Tutorial.prototype = {
 			case 2:{
 				this.game.time.events.remove(this.timer_AreYouThere);
 				console.log(':: Playing: The shuttle is used to weave a weft .. 2-0');
+				this.shuttleSprite.animations.stop('touching'); 
 				this.showWeftSample(); //animation
 				Kente.theSounds["2-0"].play();
 				this.currentPlayingInstruction = Kente.theSounds["2-0"];

@@ -66,6 +66,7 @@ Kente.Boot.prototype = {
         this.load.image('background', 'assets/background.png');
         this.load.image('bg_dottedguides', 'assets/BG_Threads_and_Dotted_Line.png');
         this.load.image('shuttle_vector', 'assets/shuttleVector.png');
+        this.load.spritesheet('shuttle_spriteAnim', 'assets/hand_Shuttle_Sprite_Sheet_v02.png',600, 600, 2); 
         this.load.image('red', 'assets/shuttleVector_red.png');
         this.load.image('blue', 'assets/shuttleVector_blue.png');
         this.load.image('green', 'assets/shuttleVector_green.png');
