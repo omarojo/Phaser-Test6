@@ -112,9 +112,9 @@ Kente.Tutorial.prototype = {
 	    this.beaterSprite = this.game.make.sprite(this.game.world.centerX,this.game.world.centerY/2,'beater_spriteAnim');
 	    this.beaterSprite.animations.add('touching');
 	    this.beaterSprite.animations.play('touching', 2, true); //made this run 2fps cause it's 3 frames total
-	    this.shuttleSprite.anchor.set(0.5);
-	    this.shuttleSprite.alpha = 0.0;
-	    this.upperContainer.addChild(this.beaterSprite);
+	    this.beaterSprite.anchor.set(0.5);
+	    this.beaterSprite.alpha = 0.0;
+
 
 	    //Weft Sample Group
 	    this.weftSampleGroup = this.add.group();
@@ -133,10 +133,10 @@ Kente.Tutorial.prototype = {
 	    this.upperContainer.addChild(this.weftSampleGroup);
 
 	    //Beater Image
-	    this.beaterSprite = this.game.make.sprite(this.game.world.centerX,this.game.world.centerY/2,'beater');
-	    this.beaterSprite.anchor.set(0.5);
-	    this.beaterSprite.alpha = 0.0;
-	    this.upperContainer.addChild(this.beaterSprite);
+	    // this.beaterSprite = this.game.make.sprite(this.game.world.centerX,this.game.world.centerY/2,'beater');
+	    // this.beaterSprite.anchor.set(0.5);
+	    // this.beaterSprite.alpha = 0.0;
+	    // this.upperContainer.addChild(this.beaterSprite);
 
 	    //Subtitles
 	    // this.showInstruction("Welcome to the virtual weaving loom where you can design your own patterned textile. Weaving is an interlocking of horizontal threads, called weft, with vertical threads called warp. Touch the shuttle to see how it works.");
@@ -540,7 +540,6 @@ Kente.Tutorial.prototype = {
 					this.currentPlayingInstruction = Kente.theSounds["3-0-1"];
 					Kente.theSounds["3-0-1"].onStop.addOnce(function(){
 						console.log(':: Playing: Pull the beater all .. 3-0-2');
-						this.beaterSprite.animations.stop('touching'); //added by Tim -- is this correct?
 						Kente.theSounds["3-0-2"].play();
 						this.currentPlayingInstruction = Kente.theSounds["3-0-2"];
 						Kente.theSounds["3-0-2"].onStop.addOnce(function(){
