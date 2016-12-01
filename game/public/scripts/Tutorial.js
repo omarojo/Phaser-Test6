@@ -114,7 +114,7 @@ Kente.Tutorial.prototype = {
 	    this.beaterSprite.animations.play('touching', 2, true); //made this run 2fps cause it's 3 frames total
 	    this.beaterSprite.anchor.set(0.5);
 	    this.beaterSprite.alpha = 0.0;
-
+	    this.upperContainer.addChild(this.beaterSprite);
 
 	    //Weft Sample Group
 	    this.weftSampleGroup = this.add.group();
