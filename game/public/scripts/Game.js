@@ -644,8 +644,10 @@ Kente.Game.prototype = {
 			case 9:{
 				console.log(':: Playing are you there');
 				// this.currentPlayingInstruction.play();
-				Kente.theSounds['12-optional'].play(); //Remember the steps blah blah
-				this.currentPlayingInstruction = Kente.theSounds["12-optional"];
+				if(!this.replicationIsOnScreen){
+					Kente.theSounds['12-optional'].play(); //Remember the steps blah blah
+					this.currentPlayingInstruction = Kente.theSounds["12-optional"];	
+				}
 				break;
 			}
 			case 10:{
