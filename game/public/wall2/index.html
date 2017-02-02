@@ -7,10 +7,28 @@
 		border:15px;
 		border-style: none;
 	}
+	.headerImage {
+		width: 1820px;
+		height: 200px;
+		margin-left: 50px ;
+		background-color: black;
+
+	}
+	#titleImage {
+		display: block;
+    margin: 0 auto;
+		padding-top: 30px;
+  	width: 900px;
+  	height: 169px;
+		min-width: 0%;
+		min-height: 0%;
+	}
 	.container {
+		display:block;
 		max-width: 1920px;
 		width: 1870px;
-		margin-top: 200px;
+		/*margin-top: 200px;*/
+		margin-top: 0px;
 		margin-left: 50px ;
   		margin-right: auto ;
   		position: fixed;
@@ -32,20 +50,21 @@
 		height: 260px;
 		min-width:100%;
 		min-height:100%;
-		
+
 		/*background: url(http://c1.staticflickr.com/7/6101/6853156632_fc5d96cf0a_h.jpg) no-repeat center;*/
 		/*background-size: cover;*/
 	}
 	.mark {
+		display:block;
 		background-color: black;
-		position: absolute;
+		/*position: absolute;*/
 		width: 1920;
 		height: 1080;
 		/*z-index: 1;*/
 		/*background-image: url('../assets/kentebg.png');
 		background-repeat: no-repeat;
 		background-size:100%;*/
-		
+
 	}
 </style>
 <script src="../scripts/vendor/jquery-2.1.4.min.js"></script>
@@ -53,6 +72,7 @@
 <html>
 <body>
 <div class="mark">
+	<div class="headerImage"><img id='titleImage' src='/wall2/Community_Quilt_Title.png'></img></div>
 	<div class='container'>
 		<div class='row row-1'>
 			<div class="tile"><img id='p1' src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA"/></div>
@@ -92,16 +112,16 @@ var oldestPindex = 1;
 $( document ).ready(function() {
 
 	 $("body").keyup(function(e){
-        
+
         if (e.which == 65) {// a
 	     e.preventDefault();
 	     // console.log(e);
-	     newPatternReceived('1436162348481.png');
+	     newPatternReceived('placeholder.png');
    		}
    		if (e.which == 13) {// ENTER
 	     e.preventDefault();
 	     // console.log(e);
-	     newPatternReceived('http://intercambiocultural.org.ar/wp-content/uploads/bosques-canada.jpg');
+	     newPatternReceived('placeholder.png');
    		}
     });
 
@@ -110,7 +130,7 @@ $( document ).ready(function() {
 		console.log(data);
 		newPatternReceived(data.url);
 	});
-    
+
     p[1] = $('#p1');
     p[2] = $('#p2');
     p[3] = $('#p3');
@@ -153,7 +173,7 @@ function newPatternReceived(url){
 function getRecentPatterns(){
 	$.get( "/kente", function( data ) {
 	  console.log(data);
-	  
+
 	  data.patterns.forEach(function(entry) {
     		newPatternReceived(entry.url);
     	});
