@@ -6,3 +6,4 @@ After you have installed homebrew.. install imagemagick
 
 then install the npm packages
 
+end
