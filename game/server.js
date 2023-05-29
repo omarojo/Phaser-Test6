@@ -31,12 +31,12 @@ server.listen(process.env.PORT || 3000);
 var options = { server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } }, 
                 replset: { socketOptions: { keepAlive: 1, connectTimeoutMS : 30000 } } };
 //commented for testing purposes
-//mongoose.connect('mongodb://localhost:'+'27017'+'/kentedb', options, function (error) { //Localf
-// mongoose.connect('mongodb://omarojo:connyojo@novus.modulusmongo.net:27017/ogU4vasy', function (error) {    // MODULUS
-    if (error) {
-        console.log("Cant Connect to mongoDB: "+error);
-    }
-});
+// mongoose.connect('mongodb://localhost:'+'27017'+'/kentedb', options, function (error) { //Localf
+// // mongoose.connect('mongodb://omarojo:connyojo@novus.modulusmongo.net:27017/ogU4vasy', function (error) {    // MODULUS
+//     if (error) {
+//         console.log("Cant Connect to mongoDB: "+error);
+//     }
+// });
 // Mongoose Schema definition
 var Schema = mongoose.Schema;
 var PatternSchema = new Schema({
