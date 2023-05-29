@@ -32,9 +32,9 @@ Kente.Tutorial.prototype = {
 		Kente.socket.on('beaterClick', function(data){
 			self.beaterMoved(data);
 		});
-		// Kente.socket.on('shuttleTouch', function(data){
-		// 	self.shuttleTouched(data);
-		// });
+		Kente.socket.on('shuttleTouch', function(data){
+			self.shuttleTouched(data);
+		});
 		//Send Screenshot
 		var keyScreenshot = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
     	keyScreenshot.onDown.add(function(){Kente.postImage(this.game)}, this);
